@@ -95,7 +95,8 @@ test('an announcement reaches the ticker live', async ({ page }) => {
 
 test('kiosk page rotates board pages and cycles floors', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 720 });
-  await page.goto('/kiosk?floorCycle=2s&page=8s');
+  // 1) floors cycle on their own
+  await page.goto('/kiosk?floorCycle=2s');
   await expect(page.getByTestId('shell')).toHaveClass(/is-kiosk/);
   await expect(page.getByTestId('admin-toggle')).toHaveCount(0);
   await expect(page.getByTestId('time-travel')).toHaveCount(0);
@@ -106,10 +107,12 @@ test('kiosk page rotates board pages and cycles floors', async ({ page }) => {
     await page.waitForTimeout(2100);
   }
   expect(new Set(views).size).toBeGreaterThan(1);
-  // the NEXT section has more than one page at 720p and its page dot moves on its own
+
+  // 2) board pages rotate on their own (floor cycling parked so the page count is stable)
+  await page.goto('/kiosk?floorCycle=10m&page=3s');
   const dots = page.getByTestId('board-next').getByTestId('pager');
   await expect(dots).toBeVisible();
   const active = () => dots.locator('i.is-active').evaluate((el) => [...el.parentElement!.children].indexOf(el));
   const a = await active();
-  await expect.poll(active, { timeout: 12_000 }).not.toBe(a);
+  await expect.poll(active, { timeout: 10_000 }).not.toBe(a);
 });
