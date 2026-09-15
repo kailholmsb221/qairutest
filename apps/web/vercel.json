@@ -1,0 +1,11 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "nextjs",
+  "installCommand": "pnpm install --frozen-lockfile",
+  "buildCommand": "pnpm --filter @campuslive/web build",
+  "outputDirectory": ".next",
+  "regions": ["fra1"],
+  "env": {
+    "NEXT_TELEMETRY_DISABLED": "1"
+  }
+}

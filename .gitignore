@@ -1,3 +1,17 @@
 node_modules
 dist
+.next
+.turbo
 .vite
+coverage
+*.tsbuildinfo
+test-results
+playwright-report
+.env
+.env.local
+services/api/bin
+services/api/tmp
+docs/status/traces/*.json
+*.log
+apps/web/e2e/_*.mjs
+services/api/bin

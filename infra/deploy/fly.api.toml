@@ -1,0 +1,40 @@
+# Fly.io — API + scheduler + SSE. Deploy from the repo root:
+#   fly launch --config infra/deploy/fly.api.toml --dockerfile services/api/Dockerfile --no-deploy
+#   fly postgres create --name campuslive-pg && fly postgres attach campuslive-pg
+#   fly secrets set ADMIN_API_KEY=... CORS_ORIGINS=https://<your-vercel-app>.vercel.app
+#   fly deploy --config infra/deploy/fly.api.toml
+app = "campuslive-api"
+primary_region = "fra"
+
+[build]
+  dockerfile = "../../services/api/Dockerfile"
+
+[env]
+  PORT = "8080"
+  MIGRATE_ON_START = "true"
+  SEED_ON_START = "true"          # first boot seeds the demo data set into the attached Postgres
+  MAP_PATH = "/app/map-data/building-a.json"
+  CLOCK_MODE = "real"
+  LOG_LEVEL = "info"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = "off"      # the scheduler + SSE hub must stay up
+  auto_start_machines = true
+  min_machines_running = 1
+  [http_service.concurrency]
+    type = "connections"
+    soft_limit = 400
+    hard_limit = 800
+
+[[http_service.checks]]
+  interval = "15s"
+  timeout = "3s"
+  grace_period = "20s"
+  method = "GET"
+  path = "/readyz"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "512mb"

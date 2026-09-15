@@ -1,29 +1,28 @@
 {
-  "name": "building-vector-map",
+  "name": "campuslive",
   "private": true,
   "version": "0.1.0",
-  "type": "module",
+  "packageManager": "pnpm@10.28.0",
+  "engines": { "node": ">=20" },
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "preview": "vite preview",
-    "typecheck": "tsc -b --noEmit",
-    "gen:floors": "tsx tools/generateFloors.ts",
-    "check:geometry": "tsx tools/checkGeometry.ts"
-  },
-  "dependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "zod": "^3.23.8",
-    "zustand": "^4.5.5"
+    "dev": "turbo run dev --parallel",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "e2e": "pnpm --filter @campuslive/web e2e",
+    "map:build": "pnpm --filter @campuslive/map-data build",
+    "vector:build": "pnpm --filter @campuslive/map-data build",
+    "contracts:gen": "pnpm --filter @campuslive/contracts gen",
+    "seed": "cd services/api && go run ./cmd/seed",
+    "api": "cd services/api && go run ./cmd/api",
+    "db:up": "docker compose -f infra/docker-compose.yml up -d postgres",
+    "db:down": "docker compose -f infra/docker-compose.yml down",
+    "demo": "node infra/demo/demo.mjs",
+    "demo:script": "node infra/demo/demo-script.mjs"
   },
   "devDependencies": {
-    "@types/node": "^22.20.2",
-    "@types/react": "^18.3.5",
-    "@types/react-dom": "^18.3.0",
-    "@vitejs/plugin-react": "^4.3.1",
-    "tsx": "^4.19.1",
-    "typescript": "^5.5.4",
-    "vite": "^5.4.8"
+    "turbo": "^2.10.13",
+    "typescript": "^5.9.3"
   }
 }

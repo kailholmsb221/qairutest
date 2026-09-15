@@ -1,0 +1,394 @@
+{
+  "Building": "A",
+  "At": "2026-09-08T06:05:00Z",
+  "Date": {
+    "Year": 2026,
+    "Month": 9,
+    "Day": 8
+  },
+  "NextTransitionAt": "2026-09-08T06:15:00Z",
+  "Stats": {
+    "RoomsTotal": 3,
+    "RoomsBusy": 1,
+    "SessionsToday": 4,
+    "SessionsDone": 2
+  },
+  "Rooms": [
+    {
+      "Room": {
+        "ID": "room-101",
+        "MapID": "f1-class20a",
+        "Code": "101",
+        "Name": "Учебный класс на 20 уч.",
+        "MapLabel": "",
+        "Floor": 1,
+        "Type": "seminar",
+        "MapType": "",
+        "Wing": "east",
+        "Schedulable": true,
+        "Capacity": 20,
+        "Area": null,
+        "Geometry": {
+          "path": "",
+          "label": {
+            "X": 0,
+            "Y": 0
+          },
+          "bbox": {
+            "X": 0,
+            "Y": 0,
+            "W": 0,
+            "H": 0
+          }
+        }
+      },
+      "Phase": "free",
+      "Current": null,
+      "Next": null,
+      "FreeUntil": null,
+      "Conflict": false
+    },
+    {
+      "Room": {
+        "ID": "room-102",
+        "MapID": "f1-class20b",
+        "Code": "102",
+        "Name": "Учебный класс на 20 уч.",
+        "MapLabel": "",
+        "Floor": 1,
+        "Type": "seminar",
+        "MapType": "",
+        "Wing": "east",
+        "Schedulable": true,
+        "Capacity": 20,
+        "Area": null,
+        "Geometry": {
+          "path": "",
+          "label": {
+            "X": 0,
+            "Y": 0
+          },
+          "bbox": {
+            "X": 0,
+            "Y": 0,
+            "W": 0,
+            "H": 0
+          }
+        }
+      },
+      "Phase": "soon",
+      "Current": null,
+      "Next": {
+        "ID": "l-5:2026-09-08",
+        "LessonID": "l-5",
+        "Course": {
+          "ID": "c-math",
+          "Code": "MA101",
+          "Title": "Математический анализ",
+          "Department": null
+        },
+        "Teacher": {
+          "ID": "t-ivanova",
+          "FullName": "Иванова Мария Сергеевна",
+          "ShortName": "Иванова М.С.",
+          "Department": null
+        },
+        "Room": {
+          "ID": "room-102",
+          "MapID": "f1-class20b",
+          "Code": "102",
+          "Name": "Учебный класс на 20 уч.",
+          "MapLabel": "",
+          "Floor": 1,
+          "Type": "seminar",
+          "MapType": "",
+          "Wing": "east",
+          "Schedulable": true,
+          "Capacity": 20,
+          "Area": null,
+          "Geometry": {
+            "path": "",
+            "label": {
+              "X": 0,
+              "Y": 0
+            },
+            "bbox": {
+              "X": 0,
+              "Y": 0,
+              "W": 0,
+              "H": 0
+            }
+          }
+        },
+        "Groups": [
+          "ПО2302"
+        ],
+        "Type": "lab",
+        "StartAt": "2026-09-08T06:15:00Z",
+        "EndAt": "2026-09-08T07:05:00Z",
+        "Status": "delayed",
+        "MovedFrom": {
+          "ID": "room-201",
+          "MapID": "f2-201",
+          "Code": "201",
+          "Name": "Аудитория",
+          "MapLabel": "",
+          "Floor": 2,
+          "Type": "seminar",
+          "MapType": "",
+          "Wing": "west",
+          "Schedulable": true,
+          "Capacity": 30,
+          "Area": null,
+          "Geometry": {
+            "path": "",
+            "label": {
+              "X": 0,
+              "Y": 0
+            },
+            "bbox": {
+              "X": 0,
+              "Y": 0,
+              "W": 0,
+              "H": 0
+            }
+          }
+        },
+        "DelayMinutes": 15,
+        "Note": null,
+        "Conflict": false,
+        "Phase": "soon"
+      },
+      "FreeUntil": "2026-09-08T06:15:00Z",
+      "Conflict": false
+    },
+    {
+      "Room": {
+        "ID": "room-201",
+        "MapID": "f2-201",
+        "Code": "201",
+        "Name": "Аудитория",
+        "MapLabel": "",
+        "Floor": 2,
+        "Type": "seminar",
+        "MapType": "",
+        "Wing": "west",
+        "Schedulable": true,
+        "Capacity": 30,
+        "Area": null,
+        "Geometry": {
+          "path": "",
+          "label": {
+            "X": 0,
+            "Y": 0
+          },
+          "bbox": {
+            "X": 0,
+            "Y": 0,
+            "W": 0,
+            "H": 0
+          }
+        }
+      },
+      "Phase": "live",
+      "Current": {
+        "ID": "x:o-extra",
+        "LessonID": null,
+        "Course": {
+          "ID": "c-db",
+          "Code": "CS201",
+          "Title": "Базы данных",
+          "Department": null
+        },
+        "Teacher": {
+          "ID": "t-ivanova",
+          "FullName": "Иванова Мария Сергеевна",
+          "ShortName": "Иванова М.С.",
+          "Department": null
+        },
+        "Room": {
+          "ID": "room-201",
+          "MapID": "f2-201",
+          "Code": "201",
+          "Name": "Аудитория",
+          "MapLabel": "",
+          "Floor": 2,
+          "Type": "seminar",
+          "MapType": "",
+          "Wing": "west",
+          "Schedulable": true,
+          "Capacity": 30,
+          "Area": null,
+          "Geometry": {
+            "path": "",
+            "label": {
+              "X": 0,
+              "Y": 0
+            },
+            "bbox": {
+              "X": 0,
+              "Y": 0,
+              "W": 0,
+              "H": 0
+            }
+          }
+        },
+        "Groups": [
+          "ПО2301"
+        ],
+        "Type": "practice",
+        "StartAt": "2026-09-08T06:00:00Z",
+        "EndAt": "2026-09-08T06:50:00Z",
+        "Status": "extra",
+        "MovedFrom": null,
+        "DelayMinutes": null,
+        "Note": "Открытая лекция",
+        "Conflict": false,
+        "Phase": "live"
+      },
+      "Next": null,
+      "FreeUntil": null,
+      "Conflict": false
+    }
+  ],
+  "Now": [
+    {
+      "ID": "x:o-extra",
+      "LessonID": null,
+      "Course": {
+        "ID": "c-db",
+        "Code": "CS201",
+        "Title": "Базы данных",
+        "Department": null
+      },
+      "Teacher": {
+        "ID": "t-ivanova",
+        "FullName": "Иванова Мария Сергеевна",
+        "ShortName": "Иванова М.С.",
+        "Department": null
+      },
+      "Room": {
+        "ID": "room-201",
+        "MapID": "f2-201",
+        "Code": "201",
+        "Name": "Аудитория",
+        "MapLabel": "",
+        "Floor": 2,
+        "Type": "seminar",
+        "MapType": "",
+        "Wing": "west",
+        "Schedulable": true,
+        "Capacity": 30,
+        "Area": null,
+        "Geometry": {
+          "path": "",
+          "label": {
+            "X": 0,
+            "Y": 0
+          },
+          "bbox": {
+            "X": 0,
+            "Y": 0,
+            "W": 0,
+            "H": 0
+          }
+        }
+      },
+      "Groups": [
+        "ПО2301"
+      ],
+      "Type": "practice",
+      "StartAt": "2026-09-08T06:00:00Z",
+      "EndAt": "2026-09-08T06:50:00Z",
+      "Status": "extra",
+      "MovedFrom": null,
+      "DelayMinutes": null,
+      "Note": "Открытая лекция",
+      "Conflict": false,
+      "Phase": "live"
+    }
+  ],
+  "Next": [
+    {
+      "ID": "l-5:2026-09-08",
+      "LessonID": "l-5",
+      "Course": {
+        "ID": "c-math",
+        "Code": "MA101",
+        "Title": "Математический анализ",
+        "Department": null
+      },
+      "Teacher": {
+        "ID": "t-ivanova",
+        "FullName": "Иванова Мария Сергеевна",
+        "ShortName": "Иванова М.С.",
+        "Department": null
+      },
+      "Room": {
+        "ID": "room-102",
+        "MapID": "f1-class20b",
+        "Code": "102",
+        "Name": "Учебный класс на 20 уч.",
+        "MapLabel": "",
+        "Floor": 1,
+        "Type": "seminar",
+        "MapType": "",
+        "Wing": "east",
+        "Schedulable": true,
+        "Capacity": 20,
+        "Area": null,
+        "Geometry": {
+          "path": "",
+          "label": {
+            "X": 0,
+            "Y": 0
+          },
+          "bbox": {
+            "X": 0,
+            "Y": 0,
+            "W": 0,
+            "H": 0
+          }
+        }
+      },
+      "Groups": [
+        "ПО2302"
+      ],
+      "Type": "lab",
+      "StartAt": "2026-09-08T06:15:00Z",
+      "EndAt": "2026-09-08T07:05:00Z",
+      "Status": "delayed",
+      "MovedFrom": {
+        "ID": "room-201",
+        "MapID": "f2-201",
+        "Code": "201",
+        "Name": "Аудитория",
+        "MapLabel": "",
+        "Floor": 2,
+        "Type": "seminar",
+        "MapType": "",
+        "Wing": "west",
+        "Schedulable": true,
+        "Capacity": 30,
+        "Area": null,
+        "Geometry": {
+          "path": "",
+          "label": {
+            "X": 0,
+            "Y": 0
+          },
+          "bbox": {
+            "X": 0,
+            "Y": 0,
+            "W": 0,
+            "H": 0
+          }
+        }
+      },
+      "DelayMinutes": 15,
+      "Note": null,
+      "Conflict": false,
+      "Phase": "soon"
+    }
+  ]
+}

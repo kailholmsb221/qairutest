@@ -1,0 +1,695 @@
+openapi: 3.0.3
+info:
+  title: CampusLive API
+  version: 1.0.0
+  description: |
+    Realtime "airport board" for a university building. Status/phase logic lives in the Go engine;
+    clients only derive progress and countdowns from the timestamps in a Snapshot.
+servers:
+  - url: http://localhost:8080
+tags:
+  - name: buildings
+  - name: schedule
+  - name: search
+  - name: realtime
+  - name: admin
+  - name: system
+
+paths:
+  /healthz:
+    get:
+      tags: [system]
+      operationId: healthz
+      summary: Liveness probe
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Health' }
+  /readyz:
+    get:
+      tags: [system]
+      operationId: readyz
+      summary: Readiness probe (DB reachable, snapshot built)
+      responses:
+        '200':
+          description: Ready
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Health' }
+        '503':
+          description: Not ready
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Health' }
+
+  /api/v1/time:
+    get:
+      tags: [system]
+      operationId: getTime
+      summary: Server "now" and clock mode
+      responses:
+        '200':
+          description: Server time
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TimeInfo' }
+
+  /api/v1/buildings:
+    get:
+      tags: [buildings]
+      operationId: listBuildings
+      responses:
+        '200':
+          description: Buildings
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Building' }
+
+  /api/v1/buildings/{code}/map:
+    get:
+      tags: [buildings]
+      operationId: getBuildingMap
+      summary: Floors and rooms with geometry (cached, ETag)
+      parameters:
+        - $ref: '#/components/parameters/BuildingCode'
+      responses:
+        '200':
+          description: Map
+          headers:
+            ETag: { schema: { type: string } }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/BuildingMap' }
+        '304': { description: Not modified }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /api/v1/buildings/{code}/board:
+    get:
+      tags: [schedule]
+      operationId: getBoard
+      summary: Snapshot at a moment (server now by default) — used for SSR and time-travel
+      parameters:
+        - $ref: '#/components/parameters/BuildingCode'
+        - name: at
+          in: query
+          description: Instant to compute the snapshot for. Defaults to the server clock.
+          schema: { type: string, format: date-time }
+        - name: date
+          in: query
+          description: Local date (YYYY-MM-DD) of the timeline to materialise. Defaults to the local date of `at`.
+          schema: { type: string, format: date }
+      responses:
+        '200':
+          description: Snapshot
+          headers:
+            ETag: { schema: { type: string } }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Snapshot' }
+        '304': { description: Not modified }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /api/v1/buildings/{code}/timeline:
+    get:
+      tags: [schedule]
+      operationId: getTimeline
+      summary: All sessions of a day (time-travel bar, room panel)
+      parameters:
+        - $ref: '#/components/parameters/BuildingCode'
+        - $ref: '#/components/parameters/Date'
+      responses:
+        '200':
+          description: Day timeline
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/DayTimeline' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /api/v1/rooms/{code}/day:
+    get:
+      tags: [schedule]
+      operationId: getRoomDay
+      parameters:
+        - name: code
+          in: path
+          required: true
+          schema: { type: string }
+        - $ref: '#/components/parameters/Date'
+      responses:
+        '200':
+          description: Sessions of the room for the day
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/DaySchedule' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /api/v1/teachers/{id}/day:
+    get:
+      tags: [schedule]
+      operationId: getTeacherDay
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+        - $ref: '#/components/parameters/Date'
+      responses:
+        '200':
+          description: Sessions of the teacher for the day
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/DaySchedule' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /api/v1/groups/{code}/day:
+    get:
+      tags: [schedule]
+      operationId: getGroupDay
+      parameters:
+        - name: code
+          in: path
+          required: true
+          schema: { type: string }
+        - $ref: '#/components/parameters/Date'
+      responses:
+        '200':
+          description: Sessions of the group for the day
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/DaySchedule' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /api/v1/search:
+    get:
+      tags: [search]
+      operationId: search
+      summary: Unified search over teachers / groups / rooms / courses (5 per kind)
+      parameters:
+        - name: q
+          in: query
+          required: true
+          schema: { type: string, minLength: 1, maxLength: 64 }
+      responses:
+        '200':
+          description: Results
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/SearchResult' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+
+  /api/v1/events:
+    get:
+      tags: [realtime]
+      operationId: events
+      summary: |
+        Server-Sent Events stream. Events: `snapshot` (Snapshot), `announcement` (Announcement), `heartbeat` ({at}).
+        A full `snapshot` is sent on connect and after every transition or override.
+      parameters:
+        - name: building
+          in: query
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: SSE stream
+          content:
+            text/event-stream:
+              schema: { type: string }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /api/v1/admin/overrides:
+    post:
+      tags: [admin]
+      operationId: createOverride
+      security: [{ ApiKey: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/OverrideRequest' }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Override' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /api/v1/admin/overrides/{id}:
+    delete:
+      tags: [admin]
+      operationId: deleteOverride
+      security: [{ ApiKey: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '204': { description: Deleted }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /api/v1/admin/announcements:
+    post:
+      tags: [admin]
+      operationId: createAnnouncement
+      security: [{ ApiKey: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/AnnouncementRequest' }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Announcement' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+components:
+  securitySchemes:
+    ApiKey:
+      type: apiKey
+      in: header
+      name: X-Api-Key
+
+  parameters:
+    BuildingCode:
+      name: code
+      in: path
+      required: true
+      schema: { type: string }
+    Date:
+      name: date
+      in: query
+      description: Local date (YYYY-MM-DD). Defaults to today in the building timezone.
+      schema: { type: string, format: date }
+
+  responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    Unauthorized:
+      description: Missing or wrong API key
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+
+  schemas:
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: object
+          required: [code, message]
+          properties:
+            code: { type: string, example: not_found }
+            message: { type: string }
+
+    Health:
+      type: object
+      required: [status]
+      properties:
+        status: { type: string, enum: [ok, degraded, down] }
+        checks:
+          type: object
+          additionalProperties: { type: string }
+
+    ClockMode:
+      type: string
+      enum: [real, fixed, offset]
+
+    TimeInfo:
+      type: object
+      required: [now, mode, timezone, localDate, weekNumber, parity]
+      properties:
+        now: { type: string, format: date-time }
+        mode: { $ref: '#/components/schemas/ClockMode' }
+        timezone: { type: string, example: Asia/Almaty }
+        localDate: { type: string, format: date }
+        weekNumber: { type: integer, description: Week number within the semester (1-based); 0 outside the semester }
+        parity: { $ref: '#/components/schemas/Parity' }
+
+    Parity:
+      type: string
+      enum: [odd, even]
+
+    Building:
+      type: object
+      required: [code, name, timezone, floors]
+      properties:
+        code: { type: string, example: A }
+        name: { type: string }
+        timezone: { type: string }
+        floors: { type: integer }
+
+    RoomType:
+      type: string
+      enum: [lecture, seminar, lab, coworking, admin, service, void]
+
+    Wing:
+      type: string
+      enum: [west, east, core]
+
+    BBox:
+      type: object
+      required: [x, y, w, h]
+      properties:
+        x: { type: number }
+        y: { type: number }
+        w: { type: number }
+        h: { type: number }
+
+    Point:
+      type: object
+      required: [x, y]
+      properties:
+        x: { type: number }
+        y: { type: number }
+
+    MapRoom:
+      type: object
+      required: [id, code, name, mapLabel, type, mapType, wing, floor, schedulable, capacity, area, bbox, label, path]
+      properties:
+        id: { type: string, description: Stable id shared with vector-map.json }
+        code: { type: string, example: '103' }
+        name: { type: string }
+        mapLabel: { type: string, description: Label as printed on the plan }
+        type: { $ref: '#/components/schemas/RoomType' }
+        mapType: { type: string }
+        wing: { $ref: '#/components/schemas/Wing' }
+        floor: { type: integer }
+        schedulable: { type: boolean }
+        capacity: { type: integer, nullable: true }
+        area: { type: number, nullable: true }
+        bbox: { $ref: '#/components/schemas/BBox' }
+        label: { $ref: '#/components/schemas/Point' }
+        path: { type: string, description: SVG path in the building viewBox }
+
+    MapFloor:
+      type: object
+      required: [number, planKey, name, rooms]
+      properties:
+        number: { type: integer }
+        planKey: { type: string }
+        name: { type: string }
+        rooms:
+          type: array
+          items: { $ref: '#/components/schemas/MapRoom' }
+
+    BuildingMap:
+      type: object
+      required: [building, name, timezone, viewBox, floors]
+      properties:
+        building: { type: string }
+        name: { type: string }
+        timezone: { type: string }
+        viewBox:
+          type: array
+          items: { type: number }
+          minItems: 4
+          maxItems: 4
+        floors:
+          type: array
+          items: { $ref: '#/components/schemas/MapFloor' }
+
+    TeacherRef:
+      type: object
+      required: [id, shortName, fullName]
+      properties:
+        id: { type: string, format: uuid }
+        shortName: { type: string, example: Ахметов Д.Б. }
+        fullName: { type: string }
+        department: { type: string, nullable: true }
+
+    LessonType:
+      type: string
+      enum: [lecture, practice, lab]
+
+    SessionStatus:
+      type: string
+      description: Result of applying overrides to a lesson template
+      enum: [scheduled, cancelled, moved, delayed, extra]
+
+    Phase:
+      type: string
+      description: Phase of a session relative to `at`
+      enum: [upcoming, soon, live, ending, done, cancelled]
+
+    RoomPhase:
+      type: string
+      description: Phase of a room = phase of the owning session (live/ending > soon > free)
+      enum: [free, soon, live, ending]
+
+    SessionView:
+      type: object
+      required: [sessionId, lessonId, courseCode, courseTitle, lessonType, teacher, groups, roomCode, roomName, floor, startAt, endAt, status, phase, conflict]
+      properties:
+        sessionId: { type: string, description: '"{lessonId}:{date}" or "x:{overrideId}" for extra sessions' }
+        lessonId: { type: string, format: uuid, nullable: true }
+        courseCode: { type: string, example: CS201 }
+        courseTitle: { type: string, example: Базы данных }
+        lessonType: { $ref: '#/components/schemas/LessonType' }
+        teacher: { $ref: '#/components/schemas/TeacherRef' }
+        groups:
+          type: array
+          items: { type: string }
+        roomCode: { type: string }
+        roomName: { type: string }
+        floor: { type: integer }
+        startAt: { type: string, format: date-time }
+        endAt: { type: string, format: date-time }
+        status: { $ref: '#/components/schemas/SessionStatus' }
+        phase: { $ref: '#/components/schemas/Phase' }
+        conflict: { type: boolean }
+        movedFrom: { type: string, nullable: true, description: Original room code when status=moved }
+        delayMinutes: { type: integer, nullable: true }
+        note: { type: string, nullable: true }
+
+    RoomLiveState:
+      type: object
+      required: [roomId, roomCode, roomName, floor, phase, conflict, current, next, freeUntil]
+      properties:
+        roomId: { type: string }
+        roomCode: { type: string }
+        roomName: { type: string }
+        floor: { type: integer }
+        phase: { $ref: '#/components/schemas/RoomPhase' }
+        conflict: { type: boolean }
+        current:
+          nullable: true
+          allOf: [{ $ref: '#/components/schemas/SessionView' }]
+        next:
+          nullable: true
+          allOf: [{ $ref: '#/components/schemas/SessionView' }]
+        freeUntil: { type: string, format: date-time, nullable: true }
+
+    SnapshotStats:
+      type: object
+      required: [roomsTotal, roomsBusy, sessionsToday, sessionsDone]
+      properties:
+        roomsTotal: { type: integer }
+        roomsBusy: { type: integer }
+        sessionsToday: { type: integer }
+        sessionsDone: { type: integer }
+
+    Snapshot:
+      type: object
+      required: [building, at, date, nextTransitionAt, stats, rooms, now, next, announcements]
+      properties:
+        building: { type: string }
+        at: { type: string, format: date-time }
+        date: { type: string, format: date, description: Local date the timeline was materialised for }
+        nextTransitionAt: { type: string, format: date-time, nullable: true }
+        stats: { $ref: '#/components/schemas/SnapshotStats' }
+        rooms:
+          type: array
+          items: { $ref: '#/components/schemas/RoomLiveState' }
+        now:
+          type: array
+          description: Sessions in phase live|ending, sorted by endAt
+          items: { $ref: '#/components/schemas/SessionView' }
+        next:
+          type: array
+          description: Sessions in phase soon|upcoming starting within the NEXT horizon (+ cancelled/moved in the window), sorted by startAt
+          items: { $ref: '#/components/schemas/SessionView' }
+        announcements:
+          type: array
+          items: { $ref: '#/components/schemas/Announcement' }
+
+    DayTimeline:
+      type: object
+      required: [building, date, at, slots, sessions]
+      properties:
+        building: { type: string }
+        date: { type: string, format: date }
+        at: { type: string, format: date-time }
+        slots:
+          type: array
+          items: { $ref: '#/components/schemas/TimeSlot' }
+        sessions:
+          type: array
+          items: { $ref: '#/components/schemas/SessionView' }
+
+    TimeSlot:
+      type: object
+      required: [idx, startsAt, endsAt]
+      properties:
+        idx: { type: integer }
+        startsAt: { type: string, format: date-time }
+        endsAt: { type: string, format: date-time }
+
+    DaySchedule:
+      type: object
+      required: [date, at, subject, sessions]
+      properties:
+        date: { type: string, format: date }
+        at: { type: string, format: date-time }
+        subject:
+          type: object
+          required: [kind, id, label]
+          properties:
+            kind: { type: string, enum: [room, teacher, group] }
+            id: { type: string }
+            label: { type: string }
+        sessions:
+          type: array
+          items: { $ref: '#/components/schemas/SessionView' }
+
+    SearchTeacher:
+      type: object
+      required: [id, shortName, fullName]
+      properties:
+        id: { type: string, format: uuid }
+        shortName: { type: string }
+        fullName: { type: string }
+        department: { type: string, nullable: true }
+    SearchGroup:
+      type: object
+      required: [code]
+      properties:
+        code: { type: string }
+        program: { type: string, nullable: true }
+        courseYear: { type: integer, nullable: true }
+    SearchRoom:
+      type: object
+      required: [code, name, floor, type]
+      properties:
+        code: { type: string }
+        name: { type: string }
+        floor: { type: integer }
+        type: { $ref: '#/components/schemas/RoomType' }
+    SearchCourse:
+      type: object
+      required: [code, title]
+      properties:
+        code: { type: string }
+        title: { type: string }
+        department: { type: string, nullable: true }
+
+    SearchResult:
+      type: object
+      required: [q, teachers, groups, rooms, courses]
+      properties:
+        q: { type: string }
+        teachers:
+          type: array
+          items: { $ref: '#/components/schemas/SearchTeacher' }
+        groups:
+          type: array
+          items: { $ref: '#/components/schemas/SearchGroup' }
+        rooms:
+          type: array
+          items: { $ref: '#/components/schemas/SearchRoom' }
+        courses:
+          type: array
+          items: { $ref: '#/components/schemas/SearchCourse' }
+
+    OverrideKind:
+      type: string
+      enum: [cancel, move, delay, reassign_teacher, extra]
+
+    OverrideRequest:
+      type: object
+      required: [kind, date]
+      properties:
+        kind: { $ref: '#/components/schemas/OverrideKind' }
+        date: { type: string, format: date }
+        lessonId: { type: string, format: uuid, nullable: true, description: Required for every kind except extra }
+        newRoomCode: { type: string, nullable: true, description: move }
+        newTeacherId: { type: string, format: uuid, nullable: true, description: reassign_teacher }
+        delayMinutes: { type: integer, nullable: true, minimum: 1, maximum: 180, description: delay }
+        courseCode: { type: string, nullable: true, description: extra }
+        roomCode: { type: string, nullable: true, description: extra }
+        teacherId: { type: string, format: uuid, nullable: true, description: extra }
+        slotIdx: { type: integer, nullable: true, description: extra }
+        groups:
+          type: array
+          nullable: true
+          items: { type: string }
+          description: extra
+        note: { type: string, nullable: true }
+
+    Override:
+      type: object
+      required: [id, kind, date, lessonId, createdAt]
+      properties:
+        id: { type: string, format: uuid }
+        kind: { $ref: '#/components/schemas/OverrideKind' }
+        date: { type: string, format: date }
+        lessonId: { type: string, format: uuid, nullable: true }
+        newRoomCode: { type: string, nullable: true }
+        newTeacherId: { type: string, format: uuid, nullable: true }
+        delayMinutes: { type: integer, nullable: true }
+        note: { type: string, nullable: true }
+        createdAt: { type: string, format: date-time }
+
+    Severity:
+      type: string
+      enum: [info, warning, alert]
+
+    AnnouncementRequest:
+      type: object
+      required: [text]
+      properties:
+        text: { type: string, minLength: 1, maxLength: 280 }
+        severity: { $ref: '#/components/schemas/Severity' }
+        durationMinutes: { type: integer, minimum: 1, maximum: 1440, description: Show for N minutes from now (default 30) }
+
+    Announcement:
+      type: object
+      required: [id, text, severity, startsAt, endsAt]
+      properties:
+        id: { type: string, format: uuid }
+        text: { type: string }
+        severity: { $ref: '#/components/schemas/Severity' }
+        startsAt: { type: string, format: date-time }
+        endsAt: { type: string, format: date-time }
+
+    Heartbeat:
+      type: object
+      required: [at]
+      properties:
+        at: { type: string, format: date-time }

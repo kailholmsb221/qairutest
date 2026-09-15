@@ -1,0 +1,3500 @@
+{
+  "building": "A",
+  "name": "Главный учебный корпус",
+  "timezone": "Asia/Almaty",
+  "viewBox": [
+    0,
+    0,
+    1600,
+    1000
+  ],
+  "floors": [
+    {
+      "number": 1,
+      "planKey": "a-f1",
+      "name": "1 этаж",
+      "rooms": [
+        {
+          "id": "f1-pavilion",
+          "code": "104",
+          "name": "Съёмочный павильон",
+          "mapLabel": "Съёмочный павильон",
+          "type": "lab",
+          "mapType": "hall",
+          "wing": "west",
+          "schedulable": true,
+          "capacity": 30,
+          "area": 102.92,
+          "bbox": {
+            "x": 50.24,
+            "y": 50,
+            "w": 249.76,
+            "h": 250
+          },
+          "label": {
+            "x": 181.97,
+            "y": 179.15
+          },
+          "path": "M 300 50 L 300 150 L 300 245 L 300 290 L 300 300 L 63 300 L 50.66 182.54 A 120 120 0 0 1 170 50 L 300 50 Z"
+        },
+        {
+          "id": "f1-welcome",
+          "code": "f1-welcome",
+          "name": "Welcome-зона",
+          "mapLabel": "Welcome-зона",
+          "type": "service",
+          "mapType": "lobby",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": 63.72,
+          "bbox": {
+            "x": 63,
+            "y": 300,
+            "w": 237,
+            "h": 180
+          },
+          "label": {
+            "x": 193.44,
+            "y": 381.54
+          },
+          "path": "M 300 300 L 300 330 L 300 420 L 300 480 L 160 480 L 160 430 L 76.67 430 L 63 300 L 300 300 Z"
+        },
+        {
+          "id": "f1-tambour-w",
+          "code": "f1-tambour-w",
+          "name": "Тамбур",
+          "mapLabel": "Тамбур",
+          "type": "service",
+          "mapType": "lobby",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": 15.65,
+          "bbox": {
+            "x": 76.67,
+            "y": 430,
+            "w": 83.33,
+            "h": 50
+          },
+          "label": {
+            "x": 119.63,
+            "y": 454.73
+          },
+          "path": "M 160 430 L 160 480 L 81.92 480 L 76.67 430 L 160 430 Z"
+        },
+        {
+          "id": "f1-hall15a",
+          "code": "105",
+          "name": "Зал на 15 человек",
+          "mapLabel": "Зал на 15 человек",
+          "type": "seminar",
+          "mapType": "class",
+          "wing": "west",
+          "schedulable": true,
+          "capacity": 15,
+          "area": 77.84,
+          "bbox": {
+            "x": 81.92,
+            "y": 480,
+            "w": 218.08,
+            "h": 160
+          },
+          "label": {
+            "x": 195.25,
+            "y": 558.83
+          },
+          "path": "M 300 480 L 300 640 L 102.22 640 A 259.95 259.95 0 0 1 94.36 598.33 L 81.92 480 L 160 480 L 300 480 Z"
+        },
+        {
+          "id": "f1-hall15b",
+          "code": "106",
+          "name": "Зал на 15 человек",
+          "mapLabel": "Зал на 15 человек",
+          "type": "seminar",
+          "mapType": "class",
+          "wing": "west",
+          "schedulable": true,
+          "capacity": 15,
+          "area": 63.43,
+          "bbox": {
+            "x": 102.22,
+            "y": 640,
+            "w": 197.78,
+            "h": 199.8
+          },
+          "label": {
+            "x": 223.07,
+            "y": 715.34
+          },
+          "path": "M 300 640 L 300 730 L 300 839.8 A 1100.15 1100.15 0 0 1 214.56 791.27 A 260.01 260.01 0 0 1 102.22 640 L 300 640 Z"
+        },
+        {
+          "id": "f1-cowork",
+          "code": "f1-cowork",
+          "name": "Коворкинг",
+          "mapLabel": "Коворкинг",
+          "type": "admin",
+          "mapType": "office",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": 63.88,
+          "bbox": {
+            "x": 300,
+            "y": 730,
+            "w": 160,
+            "h": 176.14
+          },
+          "label": {
+            "x": 400,
+            "y": 800
+          },
+          "path": "M 300 730 L 370 730 L 430 730 L 460 730 L 460 906.14 A 1099.91 1099.91 0 0 1 300 839.8 L 300 730 Z"
+        },
+        {
+          "id": "f1-hall150",
+          "code": "107",
+          "name": "Зал на 150 человек",
+          "mapLabel": "Зал на 150 человек",
+          "type": "lecture",
+          "mapType": "hall",
+          "wing": "west",
+          "schedulable": true,
+          "capacity": 150,
+          "area": 126.27,
+          "bbox": {
+            "x": 460,
+            "y": 730,
+            "w": 240,
+            "h": 225.45
+          },
+          "label": {
+            "x": 584.79,
+            "y": 833.19
+          },
+          "path": "M 460 730 L 560 730 L 610 730 L 700 730 L 700 790 L 700 955.45 A 1099.97 1099.97 0 0 1 460 906.14 L 460 730 Z"
+        },
+        {
+          "id": "f1-room-11",
+          "code": "f1-room-11",
+          "name": "Помещение",
+          "mapLabel": "Помещение",
+          "type": "service",
+          "mapType": "service",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": 11.19,
+          "bbox": {
+            "x": 300,
+            "y": 50,
+            "w": 95,
+            "h": 100
+          },
+          "label": {
+            "x": 347.5,
+            "y": 100
+          },
+          "path": "M 300 50 L 395 50 L 395 150 L 300 150 L 300 50 Z"
+        },
+        {
+          "id": "f1-room-10",
+          "code": "f1-room-10",
+          "name": "Помещение",
+          "mapLabel": "Помещение",
+          "type": "service",
+          "mapType": "service",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": 10.18,
+          "bbox": {
+            "x": 300,
+            "y": 150,
+            "w": 95,
+            "h": 95
+          },
+          "label": {
+            "x": 347.5,
+            "y": 197.5
+          },
+          "path": "M 300 150 L 395 150 L 395 165 L 395 245 L 300 245 L 300 150 Z"
+        },
+        {
+          "id": "f1-workshop",
+          "code": "f1-workshop",
+          "name": "Мастерская",
+          "mapLabel": "Мастерская",
+          "type": "admin",
+          "mapType": "office",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": 15.56,
+          "bbox": {
+            "x": 395,
+            "y": 50,
+            "w": 120,
+            "h": 115
+          },
+          "label": {
+            "x": 455,
+            "y": 107.5
+          },
+          "path": "M 395 50 L 515 50 L 515 125 L 515 165 L 395 165 L 395 150 L 395 50 Z"
+        },
+        {
+          "id": "f1-sf1",
+          "code": "f1-sf1",
+          "name": "Зона безопасности SF-1",
+          "mapLabel": "Зона безопасности SF-1",
+          "type": "service",
+          "mapType": "tech",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": null,
+          "bbox": {
+            "x": 395,
+            "y": 165,
+            "w": 120,
+            "h": 80
+          },
+          "label": {
+            "x": 455,
+            "y": 205
+          },
+          "path": "M 395 165 L 515 165 L 515 200 L 515 245 L 395 245 L 395 165 Z"
+        },
+        {
+          "id": "f1-tambour-n1",
+          "code": "f1-tambour-n1",
+          "name": "Тамбур",
+          "mapLabel": "Тамбур",
+          "type": "service",
+          "mapType": "lobby",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": 14.66,
+          "bbox": {
+            "x": 515,
+            "y": 50,
+            "w": 95,
+            "h": 75
+          },
+          "label": {
+            "x": 562.5,
+            "y": 87.5
+          },
+          "path": "M 515 50 L 610 50 L 610 125 L 515 125 L 515 50 Z"
+        },
+        {
+          "id": "f1-tambour-n2",
+          "code": "f1-tambour-n2",
+          "name": "Тамбур",
+          "mapLabel": "Тамбур",
+          "type": "service",
+          "mapType": "lobby",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": 14.87,
+          "bbox": {
+            "x": 515,
+            "y": 125,
+            "w": 95,
+            "h": 75
+          },
+          "label": {
+            "x": 562.5,
+            "y": 162.5
+          },
+          "path": "M 515 125 L 610 125 L 610 190 L 610 200 L 515 200 L 515 165 L 515 125 Z"
+        },
+        {
+          "id": "f1-dispatch",
+          "code": "f1-dispatch",
+          "name": "Диспетчерская",
+          "mapLabel": "Диспетчерская",
+          "type": "service",
+          "mapType": "service",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": 19.58,
+          "bbox": {
+            "x": 610,
+            "y": 50,
+            "w": 90,
+            "h": 140
+          },
+          "label": {
+            "x": 655,
+            "y": 120
+          },
+          "path": "M 610 50 L 700 50 L 700 190 L 610 190 L 610 125 L 610 50 Z"
+        },
+        {
+          "id": "f1-stairs-1",
+          "code": "f1-stairs-1",
+          "name": "Лестничная клетка",
+          "mapLabel": "Лестничная клетка",
+          "type": "service",
+          "mapType": "stairs",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": 11.89,
+          "bbox": {
+            "x": 515,
+            "y": 200,
+            "w": 95,
+            "h": 130
+          },
+          "label": {
+            "x": 562.5,
+            "y": 265
+          },
+          "path": "M 515 200 L 610 200 L 610 330 L 540 330 L 515 330 L 515 245 L 515 200 Z"
+        },
+        {
+          "id": "f1-corr-core-l",
+          "code": "f1-corr-core-l",
+          "name": "Коридор",
+          "mapLabel": "Коридор",
+          "type": "service",
+          "mapType": "corridor",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": 14.54,
+          "bbox": {
+            "x": 610,
+            "y": 190,
+            "w": 90,
+            "h": 230
+          },
+          "label": {
+            "x": 658.33,
+            "y": 298.33
+          },
+          "path": "M 610 190 L 700 190 L 700 420 L 630 420 L 630 330 L 610 330 L 610 200 L 610 190 Z"
+        },
+        {
+          "id": "f1-pui-l",
+          "code": "f1-pui-l",
+          "name": "ПУИ",
+          "mapLabel": "ПУИ",
+          "type": "service",
+          "mapType": "tech",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": 4.96,
+          "bbox": {
+            "x": 300,
+            "y": 245,
+            "w": 95,
+            "h": 45
+          },
+          "label": {
+            "x": 347.5,
+            "y": 267.5
+          },
+          "path": "M 300 245 L 395 245 L 395 290 L 300 290 L 300 245 Z"
+        },
+        {
+          "id": "f1-chute-l",
+          "code": "f1-chute-l",
+          "name": "Мусоропровод",
+          "mapLabel": "Мусоропровод",
+          "type": "service",
+          "mapType": "tech",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": 5.16,
+          "bbox": {
+            "x": 300,
+            "y": 290,
+            "w": 95,
+            "h": 40
+          },
+          "label": {
+            "x": 347.5,
+            "y": 310
+          },
+          "path": "M 300 290 L 395 290 L 395 330 L 380 330 L 300 330 L 300 300 L 300 290 Z"
+        },
+        {
+          "id": "f1-lifthall-l",
+          "code": "f1-lifthall-l",
+          "name": "Лифтовой холл",
+          "mapLabel": "Лифтовой холл",
+          "type": "service",
+          "mapType": "lobby",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": 17.6,
+          "bbox": {
+            "x": 395,
+            "y": 245,
+            "w": 120,
+            "h": 85
+          },
+          "label": {
+            "x": 455,
+            "y": 287.5
+          },
+          "path": "M 395 245 L 515 245 L 515 330 L 460 330 L 395 330 L 395 290 L 395 245 Z"
+        },
+        {
+          "id": "f1-lift-1",
+          "code": "f1-lift-1",
+          "name": "Лифт",
+          "mapLabel": "Лифт",
+          "type": "service",
+          "mapType": "lift",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": null,
+          "bbox": {
+            "x": 300,
+            "y": 330,
+            "w": 80,
+            "h": 90
+          },
+          "label": {
+            "x": 340,
+            "y": 375
+          },
+          "path": "M 300 330 L 380 330 L 380 420 L 370 420 L 300 420 L 300 330 Z"
+        },
+        {
+          "id": "f1-lift-2",
+          "code": "f1-lift-2",
+          "name": "Лифт",
+          "mapLabel": "Лифт",
+          "type": "service",
+          "mapType": "lift",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": null,
+          "bbox": {
+            "x": 380,
+            "y": 330,
+            "w": 80,
+            "h": 90
+          },
+          "label": {
+            "x": 420,
+            "y": 375
+          },
+          "path": "M 380 330 L 395 330 L 460 330 L 460 420 L 450 420 L 380 420 L 380 330 Z"
+        },
+        {
+          "id": "f1-elec-l",
+          "code": "f1-elec-l",
+          "name": "Эл. щитовая",
+          "mapLabel": "Эл. щитовая",
+          "type": "service",
+          "mapType": "tech",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": 8.13,
+          "bbox": {
+            "x": 460,
+            "y": 330,
+            "w": 80,
+            "h": 90
+          },
+          "label": {
+            "x": 500,
+            "y": 375
+          },
+          "path": "M 460 330 L 515 330 L 540 330 L 540 420 L 460 420 L 460 330 Z"
+        },
+        {
+          "id": "f1-wc-staff-l",
+          "code": "f1-wc-staff-l",
+          "name": "С/У служебный",
+          "mapLabel": "С/У служебный",
+          "type": "service",
+          "mapType": "wc",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": 10.03,
+          "bbox": {
+            "x": 540,
+            "y": 330,
+            "w": 90,
+            "h": 90
+          },
+          "label": {
+            "x": 585,
+            "y": 375
+          },
+          "path": "M 540 330 L 610 330 L 630 330 L 630 420 L 575 420 L 540 420 L 540 330 Z"
+        },
+        {
+          "id": "f1-corr-l",
+          "code": "f1-corr-l",
+          "name": "Коридор",
+          "mapLabel": "Коридор",
+          "type": "service",
+          "mapType": "corridor",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": 71.88,
+          "bbox": {
+            "x": 300,
+            "y": 420,
+            "w": 400,
+            "h": 310
+          },
+          "label": {
+            "x": 335,
+            "y": 575
+          },
+          "path": "M 300 420 L 370 420 L 370 500 L 370 580 L 450 580 L 575 580 L 700 580 L 700 615 L 610 615 L 560 615 L 430 615 L 370 615 L 370 670 L 370 730 L 300 730 L 300 640 L 300 480 L 300 420 Z"
+        },
+        {
+          "id": "f1-storage",
+          "code": "f1-storage",
+          "name": "Кладовая",
+          "mapLabel": "Кладовая",
+          "type": "service",
+          "mapType": "storage",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": 12.3,
+          "bbox": {
+            "x": 370,
+            "y": 420,
+            "w": 80,
+            "h": 80
+          },
+          "label": {
+            "x": 410,
+            "y": 460
+          },
+          "path": "M 370 420 L 380 420 L 450 420 L 450 500 L 370 500 L 370 420 Z"
+        },
+        {
+          "id": "f1-wardrobe-l",
+          "code": "f1-wardrobe-l",
+          "name": "Гардероб",
+          "mapLabel": "Гардероб",
+          "type": "service",
+          "mapType": "storage",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": 12.54,
+          "bbox": {
+            "x": 370,
+            "y": 500,
+            "w": 80,
+            "h": 80
+          },
+          "label": {
+            "x": 410,
+            "y": 540
+          },
+          "path": "M 370 500 L 450 500 L 450 580 L 370 580 L 370 500 Z"
+        },
+        {
+          "id": "f1-office5a",
+          "code": "f1-office5a",
+          "name": "Кабинет на 5 человек",
+          "mapLabel": "Кабинет на 5 человек",
+          "type": "admin",
+          "mapType": "office",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": 5,
+          "area": 30.79,
+          "bbox": {
+            "x": 450,
+            "y": 420,
+            "w": 125,
+            "h": 160
+          },
+          "label": {
+            "x": 512.5,
+            "y": 500
+          },
+          "path": "M 450 420 L 460 420 L 540 420 L 575 420 L 575 580 L 450 580 L 450 500 L 450 420 Z"
+        },
+        {
+          "id": "f1-office5b",
+          "code": "f1-office5b",
+          "name": "Кабинет на 5 человек",
+          "mapLabel": "Кабинет на 5 человек",
+          "type": "admin",
+          "mapType": "office",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": 5,
+          "area": 30.19,
+          "bbox": {
+            "x": 575,
+            "y": 420,
+            "w": 125,
+            "h": 160
+          },
+          "label": {
+            "x": 637.5,
+            "y": 500
+          },
+          "path": "M 575 420 L 630 420 L 700 420 L 700 440 L 700 545 L 700 580 L 575 580 L 575 420 Z"
+        },
+        {
+          "id": "f1-wc-staff2",
+          "code": "f1-wc-staff2",
+          "name": "С/У персонала",
+          "mapLabel": "С/У персонала",
+          "type": "service",
+          "mapType": "wc",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": 3.78,
+          "bbox": {
+            "x": 370,
+            "y": 615,
+            "w": 60,
+            "h": 55
+          },
+          "label": {
+            "x": 400,
+            "y": 642.5
+          },
+          "path": "M 370 615 L 430 615 L 430 670 L 370 670 L 370 615 Z"
+        },
+        {
+          "id": "f1-wc-mgn-l",
+          "code": "f1-wc-mgn-l",
+          "name": "С/У МГН",
+          "mapLabel": "С/У МГН",
+          "type": "service",
+          "mapType": "wc",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": 4.75,
+          "bbox": {
+            "x": 370,
+            "y": 670,
+            "w": 60,
+            "h": 60
+          },
+          "label": {
+            "x": 400,
+            "y": 700
+          },
+          "path": "M 370 670 L 430 670 L 430 730 L 370 730 L 370 670 Z"
+        },
+        {
+          "id": "f1-wc-w-l",
+          "code": "f1-wc-w-l",
+          "name": "С/У женский",
+          "mapLabel": "С/У женский",
+          "type": "service",
+          "mapType": "wc",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": 21.7,
+          "bbox": {
+            "x": 430,
+            "y": 615,
+            "w": 130,
+            "h": 115
+          },
+          "label": {
+            "x": 495,
+            "y": 672.5
+          },
+          "path": "M 430 615 L 560 615 L 560 670 L 560 730 L 460 730 L 430 730 L 430 670 L 430 615 Z"
+        },
+        {
+          "id": "f1-locker-l",
+          "code": "f1-locker-l",
+          "name": "Раздевалка",
+          "mapLabel": "Раздевалка",
+          "type": "service",
+          "mapType": "wc",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": 3.48,
+          "bbox": {
+            "x": 560,
+            "y": 615,
+            "w": 50,
+            "h": 55
+          },
+          "label": {
+            "x": 585,
+            "y": 642.5
+          },
+          "path": "M 560 615 L 610 615 L 610 670 L 560 670 L 560 615 Z"
+        },
+        {
+          "id": "f1-shower-m",
+          "code": "f1-shower-m",
+          "name": "Душевая мужская",
+          "mapLabel": "Душевая мужская",
+          "type": "service",
+          "mapType": "wc",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": 5.56,
+          "bbox": {
+            "x": 560,
+            "y": 670,
+            "w": 50,
+            "h": 60
+          },
+          "label": {
+            "x": 585,
+            "y": 700
+          },
+          "path": "M 560 670 L 610 670 L 610 730 L 560 730 L 560 670 Z"
+        },
+        {
+          "id": "f1-wc-m-l",
+          "code": "f1-wc-m-l",
+          "name": "С/У мужской",
+          "mapLabel": "С/У мужской",
+          "type": "service",
+          "mapType": "wc",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": 18.33,
+          "bbox": {
+            "x": 610,
+            "y": 615,
+            "w": 90,
+            "h": 115
+          },
+          "label": {
+            "x": 655,
+            "y": 672.5
+          },
+          "path": "M 610 615 L 700 615 L 700 730 L 610 730 L 610 670 L 610 615 Z"
+        },
+        {
+          "id": "f1-tambour-n",
+          "code": "f1-tambour-n",
+          "name": "Тамбур",
+          "mapLabel": "Тамбур",
+          "type": "service",
+          "mapType": "lobby",
+          "wing": "core",
+          "schedulable": false,
+          "capacity": null,
+          "area": 24.18,
+          "bbox": {
+            "x": 740,
+            "y": 50,
+            "w": 120,
+            "h": 60
+          },
+          "label": {
+            "x": 800,
+            "y": 80
+          },
+          "path": "M 740 50 L 860 50 L 860 110 L 740 110 L 740 50 Z"
+        },
+        {
+          "id": "f1-hall-n",
+          "code": "f1-hall-n",
+          "name": "Коридор",
+          "mapLabel": "Коридор",
+          "type": "service",
+          "mapType": "corridor",
+          "wing": "core",
+          "schedulable": false,
+          "capacity": null,
+          "area": null,
+          "bbox": {
+            "x": 700,
+            "y": 50,
+            "w": 200,
+            "h": 390
+          },
+          "label": {
+            "x": 800,
+            "y": 280
+          },
+          "path": "M 700 50 L 740 50 L 740 110 L 860 110 L 860 50 L 900 50 L 900 190 L 900 420 L 900 440 L 700 440 L 700 420 L 700 190 L 700 50 Z"
+        },
+        {
+          "id": "f1-cafe-zone",
+          "code": "f1-cafe-zone",
+          "name": "Зона буфета",
+          "mapLabel": "Зона буфета",
+          "type": "service",
+          "mapType": "corridor",
+          "wing": "core",
+          "schedulable": false,
+          "capacity": null,
+          "area": 45.76,
+          "bbox": {
+            "x": 700,
+            "y": 440,
+            "w": 200,
+            "h": 105
+          },
+          "label": {
+            "x": 810.03,
+            "y": 488.2
+          },
+          "path": "M 700 440 L 900 440 L 900 500 L 900 540 L 900 545 L 825 545 L 825 510 L 825 455 L 740 455 L 740 510 L 740 545 L 700 545 L 700 440 Z"
+        },
+        {
+          "id": "f1-cafe",
+          "code": "f1-cafe",
+          "name": "Буфет",
+          "mapLabel": "Cafe",
+          "type": "service",
+          "mapType": "cafe",
+          "wing": "core",
+          "schedulable": false,
+          "capacity": null,
+          "area": 14.3,
+          "bbox": {
+            "x": 740,
+            "y": 455,
+            "w": 85,
+            "h": 55
+          },
+          "label": {
+            "x": 782.5,
+            "y": 482.5
+          },
+          "path": "M 740 455 L 825 455 L 825 510 L 740 510 L 740 455 Z"
+        },
+        {
+          "id": "f1-cafe-util",
+          "code": "f1-cafe-util",
+          "name": "Подсобное помещение",
+          "mapLabel": "Подсобное помещение",
+          "type": "service",
+          "mapType": "storage",
+          "wing": "core",
+          "schedulable": false,
+          "capacity": null,
+          "area": 3.39,
+          "bbox": {
+            "x": 740,
+            "y": 510,
+            "w": 85,
+            "h": 35
+          },
+          "label": {
+            "x": 782.5,
+            "y": 527.5
+          },
+          "path": "M 740 510 L 825 510 L 825 545 L 740 545 L 740 510 Z"
+        },
+        {
+          "id": "f1-hall-s",
+          "code": "f1-hall-s",
+          "name": "Коридор",
+          "mapLabel": "Коридор",
+          "type": "service",
+          "mapType": "corridor",
+          "wing": "core",
+          "schedulable": false,
+          "capacity": null,
+          "area": null,
+          "bbox": {
+            "x": 700,
+            "y": 545,
+            "w": 200,
+            "h": 355
+          },
+          "label": {
+            "x": 800,
+            "y": 680
+          },
+          "path": "M 700 545 L 740 545 L 825 545 L 900 545 L 900 600 L 900 720 L 900 790 L 855 790 L 855 900 L 745 900 L 745 790 L 700 790 L 700 730 L 700 615 L 700 580 L 700 545 Z"
+        },
+        {
+          "id": "f1-reception",
+          "code": "f1-reception",
+          "name": "Зона ресепшн",
+          "mapLabel": "Зона ресепшн",
+          "type": "service",
+          "mapType": "service",
+          "wing": "core",
+          "schedulable": false,
+          "capacity": null,
+          "area": 14.94,
+          "bbox": {
+            "x": 700,
+            "y": 790,
+            "w": 45,
+            "h": 168.62
+          },
+          "label": {
+            "x": 722,
+            "y": 860
+          },
+          "path": "M 700 790 L 745 790 L 745 900 L 745 958.62 A 1100.4 1100.4 0 0 1 700 955.45 L 700 790 Z"
+        },
+        {
+          "id": "f1-tambour-s",
+          "code": "f1-tambour-s",
+          "name": "Тамбур (главный вход)",
+          "mapLabel": "Тамбур (главный вход)",
+          "type": "service",
+          "mapType": "lobby",
+          "wing": "core",
+          "schedulable": false,
+          "capacity": null,
+          "area": 26.68,
+          "bbox": {
+            "x": 745,
+            "y": 900,
+            "w": 110,
+            "h": 60
+          },
+          "label": {
+            "x": 800,
+            "y": 929.76
+          },
+          "path": "M 745 900 L 855 900 L 855 958.62 A 1099.81 1099.81 0 0 1 745 958.62 L 745 900 Z"
+        },
+        {
+          "id": "f1-metal",
+          "code": "f1-metal",
+          "name": "Зона металлодетектора",
+          "mapLabel": "Зона металлодетектора",
+          "type": "service",
+          "mapType": "service",
+          "wing": "core",
+          "schedulable": false,
+          "capacity": null,
+          "area": null,
+          "bbox": {
+            "x": 855,
+            "y": 790,
+            "w": 45,
+            "h": 168.62
+          },
+          "label": {
+            "x": 878,
+            "y": 860
+          },
+          "path": "M 855 790 L 900 790 L 900 955.45 A 1100.4 1100.4 0 0 1 855 958.62 L 855 900 L 855 790 Z"
+        },
+        {
+          "id": "f1-security",
+          "code": "f1-security",
+          "name": "Пост охраны и пожарный пост",
+          "mapLabel": "Пост охраны и пожарный пост",
+          "type": "service",
+          "mapType": "service",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": 19.67,
+          "bbox": {
+            "x": 900,
+            "y": 50,
+            "w": 90,
+            "h": 140
+          },
+          "label": {
+            "x": 945,
+            "y": 120
+          },
+          "path": "M 900 50 L 990 50 L 990 125 L 990 190 L 900 190 L 900 50 Z"
+        },
+        {
+          "id": "f1-lifthall-r",
+          "code": "f1-lifthall-r",
+          "name": "Лифтовой холл",
+          "mapLabel": "Лифтовой холл",
+          "type": "service",
+          "mapType": "lobby",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": 17.98,
+          "bbox": {
+            "x": 900,
+            "y": 190,
+            "w": 90,
+            "h": 230
+          },
+          "label": {
+            "x": 945,
+            "y": 305
+          },
+          "path": "M 900 190 L 990 190 L 990 260 L 990 340 L 990 420 L 900 420 L 900 190 Z"
+        },
+        {
+          "id": "f1-tambour-e1",
+          "code": "f1-tambour-e1",
+          "name": "Тамбур",
+          "mapLabel": "Тамбур",
+          "type": "service",
+          "mapType": "lobby",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": 14.07,
+          "bbox": {
+            "x": 990,
+            "y": 50,
+            "w": 90,
+            "h": 75
+          },
+          "label": {
+            "x": 1035,
+            "y": 87.5
+          },
+          "path": "M 990 50 L 1080 50 L 1080 125 L 990 125 L 990 50 Z"
+        },
+        {
+          "id": "f1-stairs-2",
+          "code": "f1-stairs-2",
+          "name": "Лестничная клетка",
+          "mapLabel": "Лестничная клетка",
+          "type": "service",
+          "mapType": "stairs",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": null,
+          "bbox": {
+            "x": 990,
+            "y": 125,
+            "w": 90,
+            "h": 135
+          },
+          "label": {
+            "x": 1035,
+            "y": 192.5
+          },
+          "path": "M 990 125 L 1080 125 L 1080 190 L 1080 260 L 990 260 L 990 190 L 990 125 Z"
+        },
+        {
+          "id": "f1-lift-3",
+          "code": "f1-lift-3",
+          "name": "Лифт",
+          "mapLabel": "Лифт",
+          "type": "service",
+          "mapType": "lift",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": null,
+          "bbox": {
+            "x": 990,
+            "y": 260,
+            "w": 90,
+            "h": 80
+          },
+          "label": {
+            "x": 1035,
+            "y": 300
+          },
+          "path": "M 990 260 L 1080 260 L 1080 340 L 990 340 L 990 260 Z"
+        },
+        {
+          "id": "f1-lift-4",
+          "code": "f1-lift-4",
+          "name": "Лифт",
+          "mapLabel": "Лифт",
+          "type": "service",
+          "mapType": "lift",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": null,
+          "bbox": {
+            "x": 990,
+            "y": 340,
+            "w": 90,
+            "h": 80
+          },
+          "label": {
+            "x": 1035,
+            "y": 380
+          },
+          "path": "M 990 340 L 1080 340 L 1080 420 L 1060 420 L 1010 420 L 990 420 L 990 340 Z"
+        },
+        {
+          "id": "f1-tambour-e2",
+          "code": "f1-tambour-e2",
+          "name": "Тамбур",
+          "mapLabel": "Тамбур",
+          "type": "service",
+          "mapType": "lobby",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": 15.46,
+          "bbox": {
+            "x": 1080,
+            "y": 50,
+            "w": 90,
+            "h": 75
+          },
+          "label": {
+            "x": 1125,
+            "y": 87.5
+          },
+          "path": "M 1080 50 L 1170 50 L 1170 125 L 1080 125 L 1080 50 Z"
+        },
+        {
+          "id": "f1-isolator",
+          "code": "f1-isolator",
+          "name": "Изолятор",
+          "mapLabel": "Изолятор",
+          "type": "service",
+          "mapType": "service",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": 5.78,
+          "bbox": {
+            "x": 1080,
+            "y": 125,
+            "w": 90,
+            "h": 65
+          },
+          "label": {
+            "x": 1125,
+            "y": 157.5
+          },
+          "path": "M 1080 125 L 1170 125 L 1170 140 L 1170 190 L 1080 190 L 1080 125 Z"
+        },
+        {
+          "id": "f1-sf2",
+          "code": "f1-sf2",
+          "name": "Зона безопасности SF-2",
+          "mapLabel": "Зона безопасности SF-2",
+          "type": "service",
+          "mapType": "tech",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": null,
+          "bbox": {
+            "x": 1080,
+            "y": 190,
+            "w": 90,
+            "h": 70
+          },
+          "label": {
+            "x": 1125,
+            "y": 225
+          },
+          "path": "M 1080 190 L 1170 190 L 1170 200 L 1170 260 L 1080 260 L 1080 190 Z"
+        },
+        {
+          "id": "f1-lifthall-r2",
+          "code": "f1-lifthall-r2",
+          "name": "Лифтовой холл",
+          "mapLabel": "Лифтовой холл",
+          "type": "service",
+          "mapType": "lobby",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": 11.04,
+          "bbox": {
+            "x": 1080,
+            "y": 260,
+            "w": 90,
+            "h": 80
+          },
+          "label": {
+            "x": 1125,
+            "y": 300
+          },
+          "path": "M 1080 260 L 1170 260 L 1170 340 L 1080 340 L 1080 260 Z"
+        },
+        {
+          "id": "f1-telecom",
+          "code": "f1-telecom",
+          "name": "Телекоммуникационная",
+          "mapLabel": "Телекоммуникационная",
+          "type": "service",
+          "mapType": "tech",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": 7.51,
+          "bbox": {
+            "x": 1080,
+            "y": 340,
+            "w": 90,
+            "h": 80
+          },
+          "label": {
+            "x": 1125,
+            "y": 380
+          },
+          "path": "M 1080 340 L 1170 340 L 1170 420 L 1080 420 L 1080 340 Z"
+        },
+        {
+          "id": "f1-exam",
+          "code": "f1-exam",
+          "name": "Кабинет осмотра",
+          "mapLabel": "Кабинет осмотра",
+          "type": "admin",
+          "mapType": "office",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": 19.6,
+          "bbox": {
+            "x": 1170,
+            "y": 50,
+            "w": 190,
+            "h": 90
+          },
+          "label": {
+            "x": 1265,
+            "y": 95
+          },
+          "path": "M 1170 50 L 1360 50 L 1360 140 L 1240 140 L 1205 140 L 1170 140 L 1170 125 L 1170 50 Z"
+        },
+        {
+          "id": "f1-wc-med",
+          "code": "f1-wc-med",
+          "name": "С/У",
+          "mapLabel": "С/У",
+          "type": "service",
+          "mapType": "wc",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": 4.76,
+          "bbox": {
+            "x": 1170,
+            "y": 140,
+            "w": 35,
+            "h": 60
+          },
+          "label": {
+            "x": 1187.5,
+            "y": 170
+          },
+          "path": "M 1170 140 L 1205 140 L 1205 200 L 1170 200 L 1170 190 L 1170 140 Z"
+        },
+        {
+          "id": "f1-pui-r2",
+          "code": "f1-pui-r2",
+          "name": "ПУИ",
+          "mapLabel": "ПУИ",
+          "type": "service",
+          "mapType": "tech",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": 5.25,
+          "bbox": {
+            "x": 1205,
+            "y": 140,
+            "w": 35,
+            "h": 60
+          },
+          "label": {
+            "x": 1222.5,
+            "y": 170
+          },
+          "path": "M 1205 140 L 1240 140 L 1240 200 L 1205 200 L 1205 140 Z"
+        },
+        {
+          "id": "f1-lift-p1",
+          "code": "f1-lift-p1",
+          "name": "Лифт Р-1",
+          "mapLabel": "Лифт Р-1",
+          "type": "service",
+          "mapType": "lift",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": null,
+          "bbox": {
+            "x": 1170,
+            "y": 200,
+            "w": 35,
+            "h": 60
+          },
+          "label": {
+            "x": 1187.5,
+            "y": 230
+          },
+          "path": "M 1170 200 L 1205 200 L 1205 260 L 1170 260 L 1170 200 Z"
+        },
+        {
+          "id": "f1-chute-r",
+          "code": "f1-chute-r",
+          "name": "Мусоропровод",
+          "mapLabel": "Мусоропровод",
+          "type": "service",
+          "mapType": "tech",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": 4.87,
+          "bbox": {
+            "x": 1205,
+            "y": 200,
+            "w": 35,
+            "h": 60
+          },
+          "label": {
+            "x": 1222.5,
+            "y": 230
+          },
+          "path": "M 1205 200 L 1240 200 L 1240 260 L 1205 260 L 1205 200 Z"
+        },
+        {
+          "id": "f1-elec-r",
+          "code": "f1-elec-r",
+          "name": "Эл. щитовая",
+          "mapLabel": "Эл. щитовая",
+          "type": "service",
+          "mapType": "tech",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": 9.18,
+          "bbox": {
+            "x": 1170,
+            "y": 260,
+            "w": 70,
+            "h": 80
+          },
+          "label": {
+            "x": 1205,
+            "y": 300
+          },
+          "path": "M 1170 260 L 1205 260 L 1240 260 L 1240 340 L 1170 340 L 1170 260 Z"
+        },
+        {
+          "id": "f1-pui-r1",
+          "code": "f1-pui-r1",
+          "name": "ПУИ",
+          "mapLabel": "ПУИ",
+          "type": "service",
+          "mapType": "tech",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": 6.43,
+          "bbox": {
+            "x": 1170,
+            "y": 340,
+            "w": 70,
+            "h": 80
+          },
+          "label": {
+            "x": 1205,
+            "y": 380
+          },
+          "path": "M 1170 340 L 1240 340 L 1240 420 L 1180 420 L 1170 420 L 1170 340 Z"
+        },
+        {
+          "id": "f1-med",
+          "code": "f1-med",
+          "name": "Медпункт",
+          "mapLabel": "Медпункт",
+          "type": "admin",
+          "mapType": "office",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": 36.79,
+          "bbox": {
+            "x": 1280,
+            "y": 180,
+            "w": 80,
+            "h": 240
+          },
+          "label": {
+            "x": 1320,
+            "y": 300
+          },
+          "path": "M 1280 180 L 1360 180 L 1360 420 L 1280 420 L 1280 180 Z"
+        },
+        {
+          "id": "f1-wc-w-r",
+          "code": "f1-wc-w-r",
+          "name": "С/У женский",
+          "mapLabel": "WC",
+          "type": "service",
+          "mapType": "wc",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": 16.13,
+          "bbox": {
+            "x": 900,
+            "y": 420,
+            "w": 110,
+            "h": 80
+          },
+          "label": {
+            "x": 955,
+            "y": 460
+          },
+          "path": "M 900 420 L 990 420 L 1010 420 L 1010 480 L 1010 500 L 900 500 L 900 440 L 900 420 Z"
+        },
+        {
+          "id": "f1-wc-corr",
+          "code": "f1-wc-corr",
+          "name": "Коридор",
+          "mapLabel": "Коридор",
+          "type": "service",
+          "mapType": "corridor",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": 5.27,
+          "bbox": {
+            "x": 900,
+            "y": 500,
+            "w": 110,
+            "h": 40
+          },
+          "label": {
+            "x": 955,
+            "y": 520
+          },
+          "path": "M 900 500 L 1010 500 L 1010 540 L 900 540 L 900 500 Z"
+        },
+        {
+          "id": "f1-shower-w",
+          "code": "f1-shower-w",
+          "name": "Душевая женская",
+          "mapLabel": "Душевая женская",
+          "type": "service",
+          "mapType": "wc",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": 5.23,
+          "bbox": {
+            "x": 1010,
+            "y": 420,
+            "w": 50,
+            "h": 60
+          },
+          "label": {
+            "x": 1035,
+            "y": 450
+          },
+          "path": "M 1010 420 L 1060 420 L 1060 480 L 1010 480 L 1010 420 Z"
+        },
+        {
+          "id": "f1-locker-r",
+          "code": "f1-locker-r",
+          "name": "Раздевалка",
+          "mapLabel": "Раздевалка",
+          "type": "service",
+          "mapType": "wc",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": 4.2,
+          "bbox": {
+            "x": 1010,
+            "y": 480,
+            "w": 50,
+            "h": 60
+          },
+          "label": {
+            "x": 1035,
+            "y": 510
+          },
+          "path": "M 1010 480 L 1060 480 L 1060 540 L 1010 540 L 1010 500 L 1010 480 Z"
+        },
+        {
+          "id": "f1-wc-m-r",
+          "code": "f1-wc-m-r",
+          "name": "С/У мужской",
+          "mapLabel": "WC",
+          "type": "service",
+          "mapType": "wc",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": 25.05,
+          "bbox": {
+            "x": 1060,
+            "y": 420,
+            "w": 120,
+            "h": 120
+          },
+          "label": {
+            "x": 1120,
+            "y": 480
+          },
+          "path": "M 1060 420 L 1080 420 L 1170 420 L 1180 420 L 1180 480 L 1180 540 L 1060 540 L 1060 480 L 1060 420 Z"
+        },
+        {
+          "id": "f1-wc-mgn-r",
+          "code": "f1-wc-mgn-r",
+          "name": "С/У МГН",
+          "mapLabel": "С/У МГН",
+          "type": "service",
+          "mapType": "wc",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": 5.83,
+          "bbox": {
+            "x": 1180,
+            "y": 420,
+            "w": 60,
+            "h": 60
+          },
+          "label": {
+            "x": 1210,
+            "y": 450
+          },
+          "path": "M 1180 420 L 1240 420 L 1240 480 L 1180 480 L 1180 420 Z"
+        },
+        {
+          "id": "f1-wc-staff-r",
+          "code": "f1-wc-staff-r",
+          "name": "С/У персонала",
+          "mapLabel": "С/У персонала",
+          "type": "service",
+          "mapType": "wc",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": 6.52,
+          "bbox": {
+            "x": 1180,
+            "y": 480,
+            "w": 60,
+            "h": 60
+          },
+          "label": {
+            "x": 1210,
+            "y": 510
+          },
+          "path": "M 1180 480 L 1240 480 L 1240 540 L 1180 540 L 1180 480 Z"
+        },
+        {
+          "id": "f1-corr-r",
+          "code": "f1-corr-r",
+          "name": "Коридор",
+          "mapLabel": "Коридор",
+          "type": "service",
+          "mapType": "corridor",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": 121.78,
+          "bbox": {
+            "x": 900,
+            "y": 140,
+            "w": 460,
+            "h": 580
+          },
+          "label": {
+            "x": 1030,
+            "y": 570
+          },
+          "path": "M 900 540 L 1010 540 L 1060 540 L 1180 540 L 1240 540 L 1240 480 L 1240 420 L 1240 340 L 1240 260 L 1240 200 L 1240 140 L 1360 140 L 1360 180 L 1280 180 L 1280 420 L 1280 540 L 1360 540 L 1360 600 L 1240 600 L 1240 720 L 1160 720 L 1160 600 L 1010 600 L 900 600 L 900 545 L 900 540 Z"
+        },
+        {
+          "id": "f1-wardrobe-r",
+          "code": "f1-wardrobe-r",
+          "name": "Гардероб",
+          "mapLabel": "CR",
+          "type": "service",
+          "mapType": "storage",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": 31.36,
+          "bbox": {
+            "x": 900,
+            "y": 600,
+            "w": 110,
+            "h": 120
+          },
+          "label": {
+            "x": 955,
+            "y": 660
+          },
+          "path": "M 900 600 L 1010 600 L 1010 720 L 960 720 L 900 720 L 900 600 Z"
+        },
+        {
+          "id": "f1-lockers",
+          "code": "CINEMA",
+          "name": "Помещение для шкафчиков",
+          "mapLabel": "Cinema",
+          "type": "service",
+          "mapType": "hall",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": 42.47,
+          "bbox": {
+            "x": 1010,
+            "y": 600,
+            "w": 150,
+            "h": 120
+          },
+          "label": {
+            "x": 1085,
+            "y": 660
+          },
+          "path": "M 1010 600 L 1160 600 L 1160 720 L 1010 720 L 1010 600 Z"
+        },
+        {
+          "id": "f1-office-clerk",
+          "code": "f1-office-clerk",
+          "name": "Канцелярия",
+          "mapLabel": "Канцелярия",
+          "type": "admin",
+          "mapType": "office",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": 31.91,
+          "bbox": {
+            "x": 900,
+            "y": 720,
+            "w": 60,
+            "h": 235.45
+          },
+          "label": {
+            "x": 930,
+            "y": 830
+          },
+          "path": "M 900 720 L 960 720 L 960 948.3 A 1099.63 1099.63 0 0 1 900 955.45 L 900 790 L 900 720 Z"
+        },
+        {
+          "id": "f1-class25",
+          "code": "100",
+          "name": "Учебный класс на 25 уч.",
+          "mapLabel": "100",
+          "type": "seminar",
+          "mapType": "class",
+          "wing": "east",
+          "schedulable": true,
+          "capacity": 25,
+          "area": 128.72,
+          "bbox": {
+            "x": 960,
+            "y": 720,
+            "w": 280,
+            "h": 228.3
+          },
+          "label": {
+            "x": 1090.44,
+            "y": 818.81
+          },
+          "path": "M 960 720 L 1010 720 L 1160 720 L 1240 720 L 1240 868.17 A 1100.06 1100.06 0 0 1 960 948.3 L 960 720 Z"
+        },
+        {
+          "id": "f1-labassist",
+          "code": "102A",
+          "name": "Лаборантская",
+          "mapLabel": "102",
+          "type": "admin",
+          "mapType": "office",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": 17.65,
+          "bbox": {
+            "x": 1280,
+            "y": 420,
+            "w": 80,
+            "h": 120
+          },
+          "label": {
+            "x": 1320,
+            "y": 480
+          },
+          "path": "M 1280 420 L 1360 420 L 1360 540 L 1280 540 L 1280 420 Z"
+        },
+        {
+          "id": "f1-class20b",
+          "code": "102",
+          "name": "Учебный класс на 20 уч.",
+          "mapLabel": "102",
+          "type": "seminar",
+          "mapType": "class",
+          "wing": "east",
+          "schedulable": true,
+          "capacity": 20,
+          "area": 66.18,
+          "bbox": {
+            "x": 1360,
+            "y": 420,
+            "w": 164.38,
+            "h": 180
+          },
+          "label": {
+            "x": 1437.56,
+            "y": 508.17
+          },
+          "path": "M 1360 420 L 1524.38 420 L 1505.64 598.33 A 259.21 259.21 0 0 1 1505.46 600 L 1360 600 L 1360 540 L 1360 420 Z"
+        },
+        {
+          "id": "f1-class20a",
+          "code": "101",
+          "name": "Учебный класс на 20 уч.",
+          "mapLabel": "101",
+          "type": "seminar",
+          "mapType": "class",
+          "wing": "east",
+          "schedulable": true,
+          "capacity": 20,
+          "area": 61.3,
+          "bbox": {
+            "x": 1240,
+            "y": 600,
+            "w": 265.46,
+            "h": 268.17
+          },
+          "label": {
+            "x": 1347.44,
+            "y": 703.34
+          },
+          "path": "M 1240 600 L 1360 600 L 1505.46 600 A 260 260 0 0 1 1385.44 791.27 A 1100.09 1100.09 0 0 1 1240 868.17 L 1240 720 L 1240 600 Z"
+        },
+        {
+          "id": "f1-informatics",
+          "code": "103",
+          "name": "Кабинет информатики",
+          "mapLabel": "103",
+          "type": "lab",
+          "mapType": "class",
+          "wing": "east",
+          "schedulable": true,
+          "capacity": 24,
+          "area": 130.98,
+          "bbox": {
+            "x": 1360,
+            "y": 50,
+            "w": 189.76,
+            "h": 370
+          },
+          "label": {
+            "x": 1447.41,
+            "y": 237.76
+          },
+          "path": "M 1360 50 L 1430 50 A 120 120 0 0 1 1549.34 182.54 L 1524.38 420 L 1360 420 L 1360 180 L 1360 140 L 1360 50 Z"
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "planKey": "a-f2",
+      "name": "2 этаж",
+      "rooms": [
+        {
+          "id": "f2-214",
+          "code": "f2-214",
+          "name": "Кабинет ректора",
+          "mapLabel": "214",
+          "type": "admin",
+          "mapType": "office",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": 21.58,
+          "bbox": {
+            "x": 50.24,
+            "y": 50,
+            "w": 249.76,
+            "h": 140
+          },
+          "label": {
+            "x": 184.81,
+            "y": 124.23
+          },
+          "path": "M 300 50 L 300 190 L 260 190 L 51.44 190 L 50.66 182.54 A 120 120 0 0 1 170 50 L 300 50 Z"
+        },
+        {
+          "id": "f2-213",
+          "code": "f2-213",
+          "name": "Кабинет проректора",
+          "mapLabel": "213",
+          "type": "admin",
+          "mapType": "office",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": 25.66,
+          "bbox": {
+            "x": 51.44,
+            "y": 190,
+            "w": 208.56,
+            "h": 70
+          },
+          "label": {
+            "x": 157.55,
+            "y": 224.79
+          },
+          "path": "M 260 190 L 260 260 L 58.8 260 L 51.44 190 L 260 190 Z"
+        },
+        {
+          "id": "f2-212",
+          "code": "f2-212",
+          "name": "Кабинет",
+          "mapLabel": "212",
+          "type": "admin",
+          "mapType": "office",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": null,
+          "bbox": {
+            "x": 58.8,
+            "y": 260,
+            "w": 201.2,
+            "h": 70
+          },
+          "label": {
+            "x": 161.23,
+            "y": 294.78
+          },
+          "path": "M 260 260 L 260 330 L 170 330 L 66.16 330 L 58.8 260 L 260 260 Z"
+        },
+        {
+          "id": "f2-211",
+          "code": "f2-211",
+          "name": "Кабинет",
+          "mapLabel": "211",
+          "type": "admin",
+          "mapType": "office",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": null,
+          "bbox": {
+            "x": 66.16,
+            "y": 330,
+            "w": 103.84,
+            "h": 100
+          },
+          "label": {
+            "x": 120.66,
+            "y": 379.11
+          },
+          "path": "M 170 330 L 170 375 L 170 430 L 76.67 430 L 66.16 330 L 170 330 Z"
+        },
+        {
+          "id": "f2-209",
+          "code": "f2-209",
+          "name": "Кабинет",
+          "mapLabel": "209",
+          "type": "admin",
+          "mapType": "office",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": null,
+          "bbox": {
+            "x": 170,
+            "y": 330,
+            "w": 90,
+            "h": 45
+          },
+          "label": {
+            "x": 215,
+            "y": 352.5
+          },
+          "path": "M 170 330 L 260 330 L 260 375 L 170 375 L 170 330 Z"
+        },
+        {
+          "id": "f2-210",
+          "code": "f2-210",
+          "name": "Кабинет",
+          "mapLabel": "210",
+          "type": "admin",
+          "mapType": "office",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": null,
+          "bbox": {
+            "x": 170,
+            "y": 375,
+            "w": 90,
+            "h": 55
+          },
+          "label": {
+            "x": 215,
+            "y": 402.5
+          },
+          "path": "M 170 375 L 260 375 L 260 430 L 170 430 L 170 375 Z"
+        },
+        {
+          "id": "f2-208",
+          "code": "f2-208",
+          "name": "Кабинет",
+          "mapLabel": "208",
+          "type": "admin",
+          "mapType": "office",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": null,
+          "bbox": {
+            "x": 76.67,
+            "y": 430,
+            "w": 93.33,
+            "h": 90
+          },
+          "label": {
+            "x": 125.66,
+            "y": 474.2
+          },
+          "path": "M 170 430 L 170 520 L 86.13 520 L 76.67 430 L 170 430 Z"
+        },
+        {
+          "id": "f2-206",
+          "code": "f2-206",
+          "name": "Кабинет режиссёра",
+          "mapLabel": "206",
+          "type": "admin",
+          "mapType": "office",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": 24.57,
+          "bbox": {
+            "x": 170,
+            "y": 430,
+            "w": 90,
+            "h": 90
+          },
+          "label": {
+            "x": 215,
+            "y": 475
+          },
+          "path": "M 170 430 L 260 430 L 260 520 L 170 520 L 170 430 Z"
+        },
+        {
+          "id": "f2-207",
+          "code": "f2-207",
+          "name": "Кабинет продюсера",
+          "mapLabel": "207",
+          "type": "admin",
+          "mapType": "office",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": 36.99,
+          "bbox": {
+            "x": 86.13,
+            "y": 520,
+            "w": 173.87,
+            "h": 80
+          },
+          "label": {
+            "x": 175.15,
+            "y": 559.67
+          },
+          "path": "M 260 520 L 260 600 L 94.54 600 A 259.21 259.21 0 0 1 94.36 598.33 L 86.13 520 L 170 520 L 260 520 Z"
+        },
+        {
+          "id": "f2-203",
+          "code": "f2-203",
+          "name": "Кабинет",
+          "mapLabel": "203",
+          "type": "admin",
+          "mapType": "office",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": null,
+          "bbox": {
+            "x": 94.54,
+            "y": 600,
+            "w": 165.46,
+            "h": 90
+          },
+          "label": {
+            "x": 182.39,
+            "y": 643.69
+          },
+          "path": "M 260 600 L 260 690 L 121.69 690 A 260 260 0 0 1 94.54 600 L 260 600 Z"
+        },
+        {
+          "id": "f2-202",
+          "code": "202",
+          "name": "Аудитория",
+          "mapLabel": "202",
+          "type": "seminar",
+          "mapType": "class",
+          "wing": "west",
+          "schedulable": true,
+          "capacity": 30,
+          "area": null,
+          "bbox": {
+            "x": 121.69,
+            "y": 690,
+            "w": 138.31,
+            "h": 128.33
+          },
+          "label": {
+            "x": 208.69,
+            "y": 736.93
+          },
+          "path": "M 260 690 L 260 730 L 260 818.33 A 1100.14 1100.14 0 0 1 214.56 791.27 A 260 260 0 0 1 121.69 690 L 260 690 Z"
+        },
+        {
+          "id": "f2-201",
+          "code": "201",
+          "name": "Аудитория",
+          "mapLabel": "201",
+          "type": "seminar",
+          "mapType": "class",
+          "wing": "west",
+          "schedulable": true,
+          "capacity": 30,
+          "area": null,
+          "bbox": {
+            "x": 260,
+            "y": 730,
+            "w": 200,
+            "h": 176.14
+          },
+          "label": {
+            "x": 370.73,
+            "y": 800.43
+          },
+          "path": "M 260 730 L 370 730 L 430 730 L 460 730 L 460 906.14 A 1099.9 1099.9 0 0 1 260 818.33 L 260 730 Z"
+        },
+        {
+          "id": "f2-200",
+          "code": "200",
+          "name": "Преподавательская",
+          "mapLabel": "200",
+          "type": "admin",
+          "mapType": "class",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": 20,
+          "area": 73.45,
+          "bbox": {
+            "x": 460,
+            "y": 730,
+            "w": 200,
+            "h": 221.05
+          },
+          "label": {
+            "x": 563.7,
+            "y": 831.33
+          },
+          "path": "M 460 730 L 560 730 L 610 730 L 660 730 L 660 951.05 A 1099.95 1099.95 0 0 1 460 906.14 L 460 730 Z"
+        },
+        {
+          "id": "room-unknown-f2-01",
+          "code": "room-unknown-f2-01",
+          "name": "Кабинет",
+          "mapLabel": "Кабинет",
+          "type": "admin",
+          "mapType": "office",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": null,
+          "bbox": {
+            "x": 300,
+            "y": 50,
+            "w": 95,
+            "h": 195
+          },
+          "label": {
+            "x": 347.5,
+            "y": 147.5
+          },
+          "path": "M 300 50 L 395 50 L 395 165 L 395 245 L 300 245 L 300 190 L 300 50 Z"
+        },
+        {
+          "id": "f2-215",
+          "code": "f2-215",
+          "name": "Управление экономики и финансов",
+          "mapLabel": "215",
+          "type": "admin",
+          "mapType": "office",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": 38.71,
+          "bbox": {
+            "x": 395,
+            "y": 50,
+            "w": 215,
+            "h": 140
+          },
+          "label": {
+            "x": 507.76,
+            "y": 113.63
+          },
+          "path": "M 395 50 L 610 50 L 610 190 L 515 190 L 515 165 L 395 165 L 395 50 Z"
+        },
+        {
+          "id": "f2-archive",
+          "code": "f2-archive",
+          "name": "Архив",
+          "mapLabel": "Архив",
+          "type": "service",
+          "mapType": "storage",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": 38.82,
+          "bbox": {
+            "x": 610,
+            "y": 50,
+            "w": 90,
+            "h": 140
+          },
+          "label": {
+            "x": 655,
+            "y": 120
+          },
+          "path": "M 610 50 L 700 50 L 700 190 L 610 190 L 610 50 Z"
+        },
+        {
+          "id": "f2-sf1",
+          "code": "f2-sf1",
+          "name": "Зона безопасности SF-1",
+          "mapLabel": "Зона безопасности SF-1",
+          "type": "service",
+          "mapType": "tech",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": null,
+          "bbox": {
+            "x": 395,
+            "y": 165,
+            "w": 120,
+            "h": 80
+          },
+          "label": {
+            "x": 455,
+            "y": 205
+          },
+          "path": "M 395 165 L 515 165 L 515 190 L 515 245 L 395 245 L 395 165 Z"
+        },
+        {
+          "id": "f2-stairs-1",
+          "code": "f2-stairs-1",
+          "name": "Лестничная клетка",
+          "mapLabel": "Лестничная клетка",
+          "type": "service",
+          "mapType": "stairs",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": 20.05,
+          "bbox": {
+            "x": 515,
+            "y": 190,
+            "w": 95,
+            "h": 140
+          },
+          "label": {
+            "x": 562.5,
+            "y": 260
+          },
+          "path": "M 515 190 L 610 190 L 610 330 L 540 330 L 515 330 L 515 245 L 515 190 Z"
+        },
+        {
+          "id": "f2-corr-core-l",
+          "code": "f2-corr-core-l",
+          "name": "Коридор",
+          "mapLabel": "Коридор",
+          "type": "service",
+          "mapType": "corridor",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": 14.44,
+          "bbox": {
+            "x": 610,
+            "y": 190,
+            "w": 90,
+            "h": 230
+          },
+          "label": {
+            "x": 658.33,
+            "y": 298.33
+          },
+          "path": "M 610 190 L 700 190 L 700 380 L 700 420 L 630 420 L 630 330 L 610 330 L 610 190 Z"
+        },
+        {
+          "id": "f2-pui-l",
+          "code": "f2-pui-l",
+          "name": "ПУИ",
+          "mapLabel": "ПУИ",
+          "type": "service",
+          "mapType": "tech",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": 5.83,
+          "bbox": {
+            "x": 300,
+            "y": 245,
+            "w": 95,
+            "h": 45
+          },
+          "label": {
+            "x": 347.5,
+            "y": 267.5
+          },
+          "path": "M 300 245 L 395 245 L 395 290 L 300 290 L 300 245 Z"
+        },
+        {
+          "id": "f2-chute-l",
+          "code": "f2-chute-l",
+          "name": "Мусоропровод",
+          "mapLabel": "Мусоропровод",
+          "type": "service",
+          "mapType": "tech",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": 4.47,
+          "bbox": {
+            "x": 300,
+            "y": 290,
+            "w": 95,
+            "h": 40
+          },
+          "label": {
+            "x": 347.5,
+            "y": 310
+          },
+          "path": "M 300 290 L 395 290 L 395 330 L 380 330 L 300 330 L 300 290 Z"
+        },
+        {
+          "id": "f2-lifthall-l",
+          "code": "f2-lifthall-l",
+          "name": "Лифтовой холл",
+          "mapLabel": "Лифтовой холл",
+          "type": "service",
+          "mapType": "lobby",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": 12.14,
+          "bbox": {
+            "x": 395,
+            "y": 245,
+            "w": 120,
+            "h": 85
+          },
+          "label": {
+            "x": 455,
+            "y": 287.5
+          },
+          "path": "M 395 245 L 515 245 L 515 330 L 460 330 L 395 330 L 395 290 L 395 245 Z"
+        },
+        {
+          "id": "f2-lift-1",
+          "code": "f2-lift-1",
+          "name": "Лифт",
+          "mapLabel": "Лифт",
+          "type": "service",
+          "mapType": "lift",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": null,
+          "bbox": {
+            "x": 300,
+            "y": 330,
+            "w": 80,
+            "h": 90
+          },
+          "label": {
+            "x": 340,
+            "y": 375
+          },
+          "path": "M 300 330 L 380 330 L 380 420 L 370 420 L 300 420 L 300 330 Z"
+        },
+        {
+          "id": "f2-lift-2",
+          "code": "f2-lift-2",
+          "name": "Лифт",
+          "mapLabel": "Лифт",
+          "type": "service",
+          "mapType": "lift",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": null,
+          "bbox": {
+            "x": 380,
+            "y": 330,
+            "w": 80,
+            "h": 90
+          },
+          "label": {
+            "x": 420,
+            "y": 375
+          },
+          "path": "M 380 330 L 395 330 L 460 330 L 460 420 L 450 420 L 380 420 L 380 330 Z"
+        },
+        {
+          "id": "f2-elec-l",
+          "code": "f2-elec-l",
+          "name": "Эл. щитовая",
+          "mapLabel": "Эл. щитовая",
+          "type": "service",
+          "mapType": "tech",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": 8.13,
+          "bbox": {
+            "x": 460,
+            "y": 330,
+            "w": 80,
+            "h": 90
+          },
+          "label": {
+            "x": 500,
+            "y": 375
+          },
+          "path": "M 460 330 L 515 330 L 540 330 L 540 420 L 460 420 L 460 330 Z"
+        },
+        {
+          "id": "f2-wc-staff-l",
+          "code": "f2-wc-staff-l",
+          "name": "С/У служебный",
+          "mapLabel": "С/У служебный",
+          "type": "service",
+          "mapType": "wc",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": 5.47,
+          "bbox": {
+            "x": 540,
+            "y": 330,
+            "w": 90,
+            "h": 90
+          },
+          "label": {
+            "x": 585,
+            "y": 375
+          },
+          "path": "M 540 330 L 610 330 L 630 330 L 630 420 L 540 420 L 540 330 Z"
+        },
+        {
+          "id": "f2-corr-l",
+          "code": "f2-corr-l",
+          "name": "Коридор",
+          "mapLabel": "Коридор",
+          "type": "service",
+          "mapType": "corridor",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": null,
+          "bbox": {
+            "x": 260,
+            "y": 190,
+            "w": 440,
+            "h": 540
+          },
+          "label": {
+            "x": 280,
+            "y": 460
+          },
+          "path": "M 260 190 L 300 190 L 300 245 L 300 290 L 300 330 L 300 420 L 370 420 L 370 500 L 370 580 L 450 580 L 700 580 L 700 615 L 610 615 L 560 615 L 430 615 L 370 615 L 370 670 L 370 730 L 260 730 L 260 690 L 260 600 L 260 520 L 260 430 L 260 375 L 260 330 L 260 260 L 260 190 Z"
+        },
+        {
+          "id": "f2-204",
+          "code": "f2-204",
+          "name": "Кабинет",
+          "mapLabel": "204",
+          "type": "admin",
+          "mapType": "office",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": null,
+          "bbox": {
+            "x": 370,
+            "y": 420,
+            "w": 80,
+            "h": 80
+          },
+          "label": {
+            "x": 410,
+            "y": 460
+          },
+          "path": "M 370 420 L 380 420 L 450 420 L 450 500 L 370 500 L 370 420 Z"
+        },
+        {
+          "id": "f2-205",
+          "code": "f2-205",
+          "name": "Кабинет",
+          "mapLabel": "205",
+          "type": "admin",
+          "mapType": "office",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": null,
+          "bbox": {
+            "x": 370,
+            "y": 500,
+            "w": 80,
+            "h": 80
+          },
+          "label": {
+            "x": 410,
+            "y": 540
+          },
+          "path": "M 370 500 L 450 500 L 450 580 L 370 580 L 370 500 Z"
+        },
+        {
+          "id": "f2-226u",
+          "code": "226A",
+          "name": "Преподавательская",
+          "mapLabel": "226",
+          "type": "admin",
+          "mapType": "class",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": 16,
+          "area": 55.47,
+          "bbox": {
+            "x": 450,
+            "y": 420,
+            "w": 250,
+            "h": 160
+          },
+          "label": {
+            "x": 575,
+            "y": 500
+          },
+          "path": "M 450 420 L 460 420 L 540 420 L 630 420 L 700 420 L 700 580 L 450 580 L 450 500 L 450 420 Z"
+        },
+        {
+          "id": "f2-wc-staff2",
+          "code": "f2-wc-staff2",
+          "name": "С/У персонала",
+          "mapLabel": "С/У персонала",
+          "type": "service",
+          "mapType": "wc",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": null,
+          "bbox": {
+            "x": 370,
+            "y": 615,
+            "w": 60,
+            "h": 55
+          },
+          "label": {
+            "x": 400,
+            "y": 642.5
+          },
+          "path": "M 370 615 L 430 615 L 430 670 L 370 670 L 370 615 Z"
+        },
+        {
+          "id": "f2-wc-mgn-l",
+          "code": "f2-wc-mgn-l",
+          "name": "С/У МГН",
+          "mapLabel": "С/У МГН",
+          "type": "service",
+          "mapType": "wc",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": 3.26,
+          "bbox": {
+            "x": 370,
+            "y": 670,
+            "w": 60,
+            "h": 60
+          },
+          "label": {
+            "x": 400,
+            "y": 700
+          },
+          "path": "M 370 670 L 430 670 L 430 730 L 370 730 L 370 670 Z"
+        },
+        {
+          "id": "f2-wc-w-l",
+          "code": "f2-wc-w-l",
+          "name": "С/У женский",
+          "mapLabel": "С/У женский",
+          "type": "service",
+          "mapType": "wc",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": 18.66,
+          "bbox": {
+            "x": 430,
+            "y": 615,
+            "w": 130,
+            "h": 115
+          },
+          "label": {
+            "x": 495,
+            "y": 672.5
+          },
+          "path": "M 430 615 L 560 615 L 560 670 L 560 730 L 460 730 L 430 730 L 430 670 L 430 615 Z"
+        },
+        {
+          "id": "f2-locker-l",
+          "code": "f2-locker-l",
+          "name": "Раздевалка",
+          "mapLabel": "Раздевалка",
+          "type": "service",
+          "mapType": "wc",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": null,
+          "bbox": {
+            "x": 560,
+            "y": 615,
+            "w": 50,
+            "h": 55
+          },
+          "label": {
+            "x": 585,
+            "y": 642.5
+          },
+          "path": "M 560 615 L 610 615 L 610 670 L 560 670 L 560 615 Z"
+        },
+        {
+          "id": "f2-shower-l",
+          "code": "f2-shower-l",
+          "name": "Душевая",
+          "mapLabel": "Душевая",
+          "type": "service",
+          "mapType": "wc",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": null,
+          "bbox": {
+            "x": 560,
+            "y": 670,
+            "w": 50,
+            "h": 60
+          },
+          "label": {
+            "x": 585,
+            "y": 700
+          },
+          "path": "M 560 670 L 610 670 L 610 730 L 560 730 L 560 670 Z"
+        },
+        {
+          "id": "f2-wc-m-l",
+          "code": "f2-wc-m-l",
+          "name": "С/У мужской",
+          "mapLabel": "С/У мужской",
+          "type": "service",
+          "mapType": "wc",
+          "wing": "west",
+          "schedulable": false,
+          "capacity": null,
+          "area": 19.17,
+          "bbox": {
+            "x": 610,
+            "y": 615,
+            "w": 90,
+            "h": 115
+          },
+          "label": {
+            "x": 655,
+            "y": 672.5
+          },
+          "path": "M 610 615 L 700 615 L 700 620 L 700 730 L 660 730 L 610 730 L 610 670 L 610 615 Z"
+        },
+        {
+          "id": "f2-ailab",
+          "code": "AI-LAB",
+          "name": "AI LAB",
+          "mapLabel": "AI LAB",
+          "type": "lab",
+          "mapType": "class",
+          "wing": "core",
+          "schedulable": true,
+          "capacity": 20,
+          "area": null,
+          "bbox": {
+            "x": 700,
+            "y": 50,
+            "w": 200,
+            "h": 140
+          },
+          "label": {
+            "x": 800,
+            "y": 120
+          },
+          "path": "M 700 50 L 900 50 L 900 190 L 700 190 L 700 50 Z"
+        },
+        {
+          "id": "f2-hall-n",
+          "code": "f2-hall-n",
+          "name": "Коридор",
+          "mapLabel": "Коридор",
+          "type": "service",
+          "mapType": "corridor",
+          "wing": "core",
+          "schedulable": false,
+          "capacity": null,
+          "area": null,
+          "bbox": {
+            "x": 700,
+            "y": 190,
+            "w": 200,
+            "h": 190
+          },
+          "label": {
+            "x": 800,
+            "y": 290
+          },
+          "path": "M 700 190 L 900 190 L 900 380 L 700 380 L 700 190 Z"
+        },
+        {
+          "id": "f2-hall-mid",
+          "code": "f2-hall-mid",
+          "name": "Коридор",
+          "mapLabel": "Коридор",
+          "type": "service",
+          "mapType": "corridor",
+          "wing": "core",
+          "schedulable": false,
+          "capacity": null,
+          "area": null,
+          "bbox": {
+            "x": 700,
+            "y": 380,
+            "w": 200,
+            "h": 240
+          },
+          "label": {
+            "x": 800,
+            "y": 492.02
+          },
+          "path": "M 700 380 L 900 380 L 900 420 L 900 500 L 900 540 L 900 600 L 900 620 L 855 620 L 855 395 L 745 395 L 745 620 L 700 620 L 700 615 L 700 580 L 700 420 L 700 380 Z"
+        },
+        {
+          "id": "f2-void",
+          "code": "f2-void",
+          "name": "Атриумный проём",
+          "mapLabel": "Атриумный проём",
+          "type": "service",
+          "mapType": "tech",
+          "wing": "core",
+          "schedulable": false,
+          "capacity": null,
+          "area": null,
+          "bbox": {
+            "x": 745,
+            "y": 395,
+            "w": 110,
+            "h": 225
+          },
+          "label": {
+            "x": 800,
+            "y": 507.5
+          },
+          "path": "M 745 395 L 855 395 L 855 620 L 745 620 L 745 395 Z"
+        },
+        {
+          "id": "f2-hall-s",
+          "code": "f2-hall-s",
+          "name": "Коридор",
+          "mapLabel": "Коридор",
+          "type": "service",
+          "mapType": "corridor",
+          "wing": "core",
+          "schedulable": false,
+          "capacity": null,
+          "area": null,
+          "bbox": {
+            "x": 700,
+            "y": 620,
+            "w": 200,
+            "h": 110
+          },
+          "label": {
+            "x": 800,
+            "y": 675
+          },
+          "path": "M 700 620 L 745 620 L 855 620 L 900 620 L 900 730 L 700 730 L 700 620 Z"
+        },
+        {
+          "id": "f2-226",
+          "code": "226",
+          "name": "Библиотека",
+          "mapLabel": "226",
+          "type": "coworking",
+          "mapType": "hall",
+          "wing": "core",
+          "schedulable": false,
+          "capacity": 40,
+          "area": 103.44,
+          "bbox": {
+            "x": 660,
+            "y": 730,
+            "w": 300,
+            "h": 229.95
+          },
+          "label": {
+            "x": 809.7,
+            "y": 843.23
+          },
+          "path": "M 660 730 L 700 730 L 900 730 L 960 730 L 960 948.3 A 1100.07 1100.07 0 0 1 660 951.05 L 660 730 Z"
+        },
+        {
+          "id": "f2-225",
+          "code": "f2-225",
+          "name": "Преподавательская",
+          "mapLabel": "225",
+          "type": "admin",
+          "mapType": "office",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": 23.37,
+          "bbox": {
+            "x": 960,
+            "y": 730,
+            "w": 50,
+            "h": 218.3
+          },
+          "label": {
+            "x": 985,
+            "y": 800
+          },
+          "path": "M 960 730 L 1010 730 L 1010 939.77 A 1099.94 1099.94 0 0 1 960 948.3 L 960 730 Z"
+        },
+        {
+          "id": "f2-224",
+          "code": "224",
+          "name": "Лаборатория",
+          "mapLabel": "224",
+          "type": "lab",
+          "mapType": "class",
+          "wing": "east",
+          "schedulable": true,
+          "capacity": 20,
+          "area": 70.23,
+          "bbox": {
+            "x": 1010,
+            "y": 730,
+            "w": 230,
+            "h": 209.77
+          },
+          "label": {
+            "x": 1117.33,
+            "y": 820.46
+          },
+          "path": "M 1010 730 L 1160 730 L 1240 730 L 1240 868.17 A 1100.04 1100.04 0 0 1 1010 939.77 L 1010 730 Z"
+        },
+        {
+          "id": "f2-hr",
+          "code": "f2-hr",
+          "name": "Управление кадровой службы",
+          "mapLabel": "Управление кадровой службы",
+          "type": "admin",
+          "mapType": "office",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": 34.17,
+          "bbox": {
+            "x": 900,
+            "y": 50,
+            "w": 90,
+            "h": 140
+          },
+          "label": {
+            "x": 945,
+            "y": 120
+          },
+          "path": "M 900 50 L 990 50 L 990 125 L 990 190 L 900 190 L 900 50 Z"
+        },
+        {
+          "id": "f2-lifthall-r",
+          "code": "f2-lifthall-r",
+          "name": "Лифтовой холл",
+          "mapLabel": "Лифтовой холл",
+          "type": "service",
+          "mapType": "lobby",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": 10.71,
+          "bbox": {
+            "x": 900,
+            "y": 190,
+            "w": 90,
+            "h": 230
+          },
+          "label": {
+            "x": 945,
+            "y": 305
+          },
+          "path": "M 900 190 L 990 190 L 990 260 L 990 340 L 990 420 L 900 420 L 900 380 L 900 190 Z"
+        },
+        {
+          "id": "f2-217",
+          "code": "f2-217",
+          "name": "Кабинет",
+          "mapLabel": "217",
+          "type": "admin",
+          "mapType": "office",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": null,
+          "bbox": {
+            "x": 990,
+            "y": 50,
+            "w": 180,
+            "h": 140
+          },
+          "label": {
+            "x": 1093.6,
+            "y": 108.66
+          },
+          "path": "M 990 50 L 1170 50 L 1170 140 L 1170 190 L 1080 190 L 1080 125 L 990 125 L 990 50 Z"
+        },
+        {
+          "id": "f2-stairs-2",
+          "code": "f2-stairs-2",
+          "name": "Лестничная клетка",
+          "mapLabel": "Лестничная клетка",
+          "type": "service",
+          "mapType": "stairs",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": 20.06,
+          "bbox": {
+            "x": 990,
+            "y": 125,
+            "w": 90,
+            "h": 135
+          },
+          "label": {
+            "x": 1035,
+            "y": 192.5
+          },
+          "path": "M 990 125 L 1080 125 L 1080 190 L 1080 260 L 990 260 L 990 190 L 990 125 Z"
+        },
+        {
+          "id": "f2-lift-3",
+          "code": "f2-lift-3",
+          "name": "Лифт",
+          "mapLabel": "Лифт",
+          "type": "service",
+          "mapType": "lift",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": null,
+          "bbox": {
+            "x": 990,
+            "y": 260,
+            "w": 90,
+            "h": 80
+          },
+          "label": {
+            "x": 1035,
+            "y": 300
+          },
+          "path": "M 990 260 L 1080 260 L 1080 340 L 990 340 L 990 260 Z"
+        },
+        {
+          "id": "f2-lift-4",
+          "code": "f2-lift-4",
+          "name": "Лифт",
+          "mapLabel": "Лифт",
+          "type": "service",
+          "mapType": "lift",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": null,
+          "bbox": {
+            "x": 990,
+            "y": 340,
+            "w": 90,
+            "h": 80
+          },
+          "label": {
+            "x": 1035,
+            "y": 380
+          },
+          "path": "M 990 340 L 1080 340 L 1080 420 L 1060 420 L 1010 420 L 990 420 L 990 340 Z"
+        },
+        {
+          "id": "f2-sf2",
+          "code": "f2-sf2",
+          "name": "Зона безопасности SF-2",
+          "mapLabel": "Зона безопасности SF-2",
+          "type": "service",
+          "mapType": "tech",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": null,
+          "bbox": {
+            "x": 1080,
+            "y": 190,
+            "w": 90,
+            "h": 70
+          },
+          "label": {
+            "x": 1125,
+            "y": 225
+          },
+          "path": "M 1080 190 L 1170 190 L 1170 200 L 1170 260 L 1080 260 L 1080 190 Z"
+        },
+        {
+          "id": "f2-lifthall-r2",
+          "code": "f2-lifthall-r2",
+          "name": "Лифтовой холл",
+          "mapLabel": "Лифтовой холл",
+          "type": "service",
+          "mapType": "lobby",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": 8.03,
+          "bbox": {
+            "x": 1080,
+            "y": 260,
+            "w": 90,
+            "h": 80
+          },
+          "label": {
+            "x": 1125,
+            "y": 300
+          },
+          "path": "M 1080 260 L 1170 260 L 1170 340 L 1080 340 L 1080 260 Z"
+        },
+        {
+          "id": "f2-telecom",
+          "code": "f2-telecom",
+          "name": "Телекоммуникационная",
+          "mapLabel": "Телекоммуникационная",
+          "type": "service",
+          "mapType": "tech",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": null,
+          "bbox": {
+            "x": 1080,
+            "y": 340,
+            "w": 90,
+            "h": 80
+          },
+          "label": {
+            "x": 1125,
+            "y": 380
+          },
+          "path": "M 1080 340 L 1170 340 L 1170 420 L 1080 420 L 1080 340 Z"
+        },
+        {
+          "id": "f2-218",
+          "code": "f2-218",
+          "name": "Кафедра спорта высших достижений",
+          "mapLabel": "218",
+          "type": "admin",
+          "mapType": "office",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": 38.97,
+          "bbox": {
+            "x": 1170,
+            "y": 50,
+            "w": 190,
+            "h": 90
+          },
+          "label": {
+            "x": 1265,
+            "y": 95
+          },
+          "path": "M 1170 50 L 1360 50 L 1360 140 L 1240 140 L 1205 140 L 1170 140 L 1170 50 Z"
+        },
+        {
+          "id": "f2-wc-r-small",
+          "code": "f2-wc-r-small",
+          "name": "С/У",
+          "mapLabel": "С/У",
+          "type": "service",
+          "mapType": "wc",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": null,
+          "bbox": {
+            "x": 1170,
+            "y": 140,
+            "w": 35,
+            "h": 60
+          },
+          "label": {
+            "x": 1187.5,
+            "y": 170
+          },
+          "path": "M 1170 140 L 1205 140 L 1205 200 L 1170 200 L 1170 190 L 1170 140 Z"
+        },
+        {
+          "id": "f2-pui-r2",
+          "code": "f2-pui-r2",
+          "name": "ПУИ",
+          "mapLabel": "ПУИ",
+          "type": "service",
+          "mapType": "tech",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": 5.25,
+          "bbox": {
+            "x": 1205,
+            "y": 140,
+            "w": 35,
+            "h": 60
+          },
+          "label": {
+            "x": 1222.5,
+            "y": 170
+          },
+          "path": "M 1205 140 L 1240 140 L 1240 200 L 1205 200 L 1205 140 Z"
+        },
+        {
+          "id": "f2-lift-p1",
+          "code": "f2-lift-p1",
+          "name": "Лифт Р-1",
+          "mapLabel": "Лифт Р-1",
+          "type": "service",
+          "mapType": "lift",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": null,
+          "bbox": {
+            "x": 1170,
+            "y": 200,
+            "w": 35,
+            "h": 60
+          },
+          "label": {
+            "x": 1187.5,
+            "y": 230
+          },
+          "path": "M 1170 200 L 1205 200 L 1205 260 L 1170 260 L 1170 200 Z"
+        },
+        {
+          "id": "f2-chute-r",
+          "code": "f2-chute-r",
+          "name": "Мусоропровод",
+          "mapLabel": "Мусоропровод",
+          "type": "service",
+          "mapType": "tech",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": 4.87,
+          "bbox": {
+            "x": 1205,
+            "y": 200,
+            "w": 35,
+            "h": 60
+          },
+          "label": {
+            "x": 1222.5,
+            "y": 230
+          },
+          "path": "M 1205 200 L 1240 200 L 1240 260 L 1205 260 L 1205 200 Z"
+        },
+        {
+          "id": "f2-elec-r",
+          "code": "f2-elec-r",
+          "name": "Эл. щитовая",
+          "mapLabel": "Эл. щитовая",
+          "type": "service",
+          "mapType": "tech",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": 9.18,
+          "bbox": {
+            "x": 1170,
+            "y": 260,
+            "w": 70,
+            "h": 80
+          },
+          "label": {
+            "x": 1205,
+            "y": 300
+          },
+          "path": "M 1170 260 L 1205 260 L 1240 260 L 1240 340 L 1170 340 L 1170 260 Z"
+        },
+        {
+          "id": "f2-pui-r1",
+          "code": "f2-pui-r1",
+          "name": "ПУИ",
+          "mapLabel": "ПУИ",
+          "type": "service",
+          "mapType": "tech",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": 5.69,
+          "bbox": {
+            "x": 1170,
+            "y": 340,
+            "w": 70,
+            "h": 80
+          },
+          "label": {
+            "x": 1205,
+            "y": 380
+          },
+          "path": "M 1170 340 L 1240 340 L 1240 420 L 1180 420 L 1170 420 L 1170 340 Z"
+        },
+        {
+          "id": "f2-wc-w-r",
+          "code": "f2-wc-w-r",
+          "name": "С/У женский",
+          "mapLabel": "WC",
+          "type": "service",
+          "mapType": "wc",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": 19.84,
+          "bbox": {
+            "x": 900,
+            "y": 420,
+            "w": 110,
+            "h": 80
+          },
+          "label": {
+            "x": 955,
+            "y": 460
+          },
+          "path": "M 900 420 L 990 420 L 1010 420 L 1010 480 L 1010 500 L 900 500 L 900 420 Z"
+        },
+        {
+          "id": "f2-wc-corr",
+          "code": "f2-wc-corr",
+          "name": "Коридор",
+          "mapLabel": "Коридор",
+          "type": "service",
+          "mapType": "corridor",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": null,
+          "bbox": {
+            "x": 900,
+            "y": 500,
+            "w": 110,
+            "h": 40
+          },
+          "label": {
+            "x": 955,
+            "y": 520
+          },
+          "path": "M 900 500 L 1010 500 L 1010 540 L 900 540 L 900 500 Z"
+        },
+        {
+          "id": "f2-shower-r",
+          "code": "f2-shower-r",
+          "name": "Душевая",
+          "mapLabel": "Душевая",
+          "type": "service",
+          "mapType": "wc",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": null,
+          "bbox": {
+            "x": 1010,
+            "y": 420,
+            "w": 50,
+            "h": 60
+          },
+          "label": {
+            "x": 1035,
+            "y": 450
+          },
+          "path": "M 1010 420 L 1060 420 L 1060 480 L 1010 480 L 1010 420 Z"
+        },
+        {
+          "id": "f2-locker-r",
+          "code": "f2-locker-r",
+          "name": "Раздевалка",
+          "mapLabel": "Раздевалка",
+          "type": "service",
+          "mapType": "wc",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": null,
+          "bbox": {
+            "x": 1010,
+            "y": 480,
+            "w": 50,
+            "h": 60
+          },
+          "label": {
+            "x": 1035,
+            "y": 510
+          },
+          "path": "M 1010 480 L 1060 480 L 1060 540 L 1010 540 L 1010 500 L 1010 480 Z"
+        },
+        {
+          "id": "f2-wc-m-r",
+          "code": "f2-wc-m-r",
+          "name": "С/У мужской",
+          "mapLabel": "WC",
+          "type": "service",
+          "mapType": "wc",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": 19.51,
+          "bbox": {
+            "x": 1060,
+            "y": 420,
+            "w": 120,
+            "h": 120
+          },
+          "label": {
+            "x": 1120,
+            "y": 480
+          },
+          "path": "M 1060 420 L 1080 420 L 1170 420 L 1180 420 L 1180 480 L 1180 540 L 1060 540 L 1060 480 L 1060 420 Z"
+        },
+        {
+          "id": "f2-wc-mgn-r",
+          "code": "f2-wc-mgn-r",
+          "name": "С/У МГН",
+          "mapLabel": "С/У МГН",
+          "type": "service",
+          "mapType": "wc",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": 3.27,
+          "bbox": {
+            "x": 1180,
+            "y": 420,
+            "w": 60,
+            "h": 60
+          },
+          "label": {
+            "x": 1210,
+            "y": 450
+          },
+          "path": "M 1180 420 L 1240 420 L 1240 480 L 1180 480 L 1180 420 Z"
+        },
+        {
+          "id": "f2-wc-staff-r",
+          "code": "f2-wc-staff-r",
+          "name": "С/У персонала",
+          "mapLabel": "С/У персонала",
+          "type": "service",
+          "mapType": "wc",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": 5.93,
+          "bbox": {
+            "x": 1180,
+            "y": 480,
+            "w": 60,
+            "h": 60
+          },
+          "label": {
+            "x": 1210,
+            "y": 510
+          },
+          "path": "M 1180 480 L 1240 480 L 1240 540 L 1180 540 L 1180 480 Z"
+        },
+        {
+          "id": "f2-corr-r",
+          "code": "f2-corr-r",
+          "name": "Коридор",
+          "mapLabel": "Коридор",
+          "type": "service",
+          "mapType": "corridor",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": 149.03,
+          "bbox": {
+            "x": 900,
+            "y": 140,
+            "w": 460,
+            "h": 590
+          },
+          "label": {
+            "x": 1030,
+            "y": 570
+          },
+          "path": "M 900 540 L 1010 540 L 1060 540 L 1180 540 L 1240 540 L 1240 480 L 1240 420 L 1240 340 L 1240 260 L 1240 200 L 1240 140 L 1360 140 L 1360 180 L 1280 180 L 1280 250 L 1280 420 L 1280 600 L 1240 600 L 1240 730 L 1160 730 L 1160 600 L 900 600 L 900 540 Z"
+        },
+        {
+          "id": "f2-223",
+          "code": "f2-223",
+          "name": "Коворкинг",
+          "mapLabel": "223",
+          "type": "admin",
+          "mapType": "office",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": 66.67,
+          "bbox": {
+            "x": 900,
+            "y": 600,
+            "w": 260,
+            "h": 130
+          },
+          "label": {
+            "x": 1030,
+            "y": 665
+          },
+          "path": "M 900 600 L 1160 600 L 1160 730 L 1010 730 L 960 730 L 900 730 L 900 620 L 900 600 Z"
+        },
+        {
+          "id": "f2-219",
+          "code": "f2-219",
+          "name": "Кабинет",
+          "mapLabel": "219",
+          "type": "admin",
+          "mapType": "office",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": null,
+          "bbox": {
+            "x": 1280,
+            "y": 50,
+            "w": 269.76,
+            "h": 200
+          },
+          "label": {
+            "x": 1430.13,
+            "y": 164.28
+          },
+          "path": "M 1360 50 L 1430 50 A 120 120 0 0 1 1549.34 182.54 L 1542.25 250 L 1280 250 L 1280 180 L 1360 180 L 1360 140 L 1360 50 Z"
+        },
+        {
+          "id": "f2-220",
+          "code": "f2-220",
+          "name": "Кабинет мастера спорта",
+          "mapLabel": "220",
+          "type": "admin",
+          "mapType": "office",
+          "wing": "east",
+          "schedulable": false,
+          "capacity": null,
+          "area": 20.18,
+          "bbox": {
+            "x": 1280,
+            "y": 250,
+            "w": 262.25,
+            "h": 170
+          },
+          "label": {
+            "x": 1406.71,
+            "y": 334
+          },
+          "path": "M 1280 250 L 1542.25 250 L 1524.38 420 L 1280 420 L 1280 250 Z"
+        },
+        {
+          "id": "f2-221",
+          "code": "221",
+          "name": "Учебный класс на 15 уч.",
+          "mapLabel": "221",
+          "type": "seminar",
+          "mapType": "class",
+          "wing": "east",
+          "schedulable": true,
+          "capacity": 15,
+          "area": 51.17,
+          "bbox": {
+            "x": 1280,
+            "y": 420,
+            "w": 244.38,
+            "h": 180
+          },
+          "label": {
+            "x": 1397.52,
+            "y": 508.79
+          },
+          "path": "M 1280 420 L 1524.38 420 L 1505.64 598.33 A 259.21 259.21 0 0 1 1505.46 600 L 1280 600 L 1280 420 Z"
+        },
+        {
+          "id": "f2-222",
+          "code": "222",
+          "name": "Учебный класс на 15 уч.",
+          "mapLabel": "222",
+          "type": "seminar",
+          "mapType": "class",
+          "wing": "east",
+          "schedulable": true,
+          "capacity": 15,
+          "area": 58.99,
+          "bbox": {
+            "x": 1240,
+            "y": 600,
+            "w": 265.46,
+            "h": 268.17
+          },
+          "label": {
+            "x": 1347.44,
+            "y": 703.34
+          },
+          "path": "M 1240 600 L 1280 600 L 1505.46 600 A 260 260 0 0 1 1385.44 791.27 A 1100.09 1100.09 0 0 1 1240 868.17 L 1240 730 L 1240 600 Z"
+        }
+      ]
+    }
+  ]
+}

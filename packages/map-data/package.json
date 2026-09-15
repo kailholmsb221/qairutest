@@ -1,0 +1,26 @@
+{
+  "name": "@campuslive/map-data",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "main": "./index.ts",
+  "exports": {
+    ".": "./index.ts",
+    "./building-a.json": "./building-a.json",
+    "./vector-map.json": "./vector-map.json",
+    "./types": "./src/types.ts"
+  },
+  "scripts": {
+    "build": "tsx scripts/vector2map.ts",
+    "check": "tsx scripts/vector2map.ts --check",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "devDependencies": {
+    "ajv": "^8.17.1",
+    "tsx": "^4.23.13",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4",
+    "@types/node": "^22.20.2"
+  }
+}
