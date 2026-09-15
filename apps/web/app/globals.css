@@ -351,9 +351,6 @@ select {
 }
 .room:focus-visible {
   outline: none;
-  stroke: #fff;
-  stroke-width: 2px;
-  vector-effect: non-scaling-stroke;
 }
 
 .wall {
@@ -450,12 +447,6 @@ select {
   transition: opacity var(--dur-base);
 }
 
-.selection-outline {
-  fill: none;
-  stroke: #fff;
-  stroke-width: 2.5px;
-  filter: drop-shadow(0 0 5px #fff);
-}
 .highlight-outline {
   fill: none;
   stroke: var(--accent);
@@ -596,10 +587,10 @@ select {
   pointer-events: none;
   transform: translateZ(1px);
 }
-.floor-hit {
-  position: absolute;
-  inset: 0;
-  cursor: pointer;
+/* focus view: the flat floor must not stay a pre-rasterised compositor texture, or it goes soft on zoom */
+.stage[data-view='focus'] .scene,
+.floor-layer[data-mode='focus'] {
+  will-change: auto;
 }
 
 @keyframes cl-blink {

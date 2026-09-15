@@ -19,12 +19,19 @@ const FLOOR_GAP_MIN = 72;
 const SPRING = { stiffness: 120, damping: 18 };
 const PARALLAX = { stiffness: 60, damping: 20 };
 const BASE_VB: ViewBox = { x: VIEW_BOX.x, y: VIEW_BOX.y, w: VIEW_BOX.width, h: VIEW_BOX.height };
+/**
+ * Focus magnification lives in the viewBox (vector), not in a CSS scale: a scaled composited
+ * layer is rasterised once and stretched, which is what made the plan go soft on zoom.
+ */
+const FOCUS_ZOOM = 1.12;
+const FOCUS_VB: ViewBox = zoomCenter(BASE_VB, BASE_VB, 1 / FOCUS_ZOOM);
 
 /**
  * The 2.5D scene. Default exploded view: floors stacked with translateZ(i × 72px) under
- * rotateX(58°) rotateZ(−38°). Focus view (floor tab / slab click): rotateX(0) rotateZ(0), the
- * focused floor scale(1.12) on top, others fade to opacity .06 and move away on Z. In focus view
- * the plan keeps the editor's wheel-zoom + drag-pan. Pointer parallax tilts the scene ±2.5°.
+ * rotateX(58°) rotateZ(−38°). Focus view (floor tab / room click): rotateX(0) rotateZ(0), the
+ * focused floor flat and untransformed on top (magnified through its viewBox), others fade to
+ * opacity .06 and move away on Z. In focus view the plan keeps the editor's wheel-zoom + drag-pan.
+ * Pointer parallax tilts the scene ±2.5°.
  */
 export function MapStage({ className = '' }: { className?: string }) {
   const t = useTranslations('map');
@@ -104,7 +111,7 @@ export function MapStage({ className = '' }: { className?: string }) {
   // ---- zoom / pan (focus view only)
   const [view, setView] = useState<ViewBox>(BASE_VB);
   const svgRefs = useRef<Record<number, SVGSVGElement | null>>({});
-  useEffect(() => setView(BASE_VB), [focused]);
+  useEffect(() => setView(focused === null ? BASE_VB : FOCUS_VB), [focused]);
 
   const clientToSvg = useCallback((clientX: number, clientY: number) => {
     const svg = focused !== null ? svgRefs.current[focused] : null;
@@ -134,11 +141,8 @@ export function MapStage({ className = '' }: { className?: string }) {
     (code: string) => {
       const room = FLOORS.flatMap((f) => f.rooms.map((r) => ({ r, floor: f.number }))).find((x) => x.r.code === code);
       if (!room) return;
-      if (!room.r.schedulable) {
-        selectRoom(code);
-        return;
-      }
       selectRoom(code);
+      // any room click on the stack opens its floor — there is no separate slab button
       if (exploded) {
         setFocused(room.floor);
         setFilters({ floors: [room.floor] });
@@ -207,13 +211,6 @@ export function MapStage({ className = '' }: { className?: string }) {
     },
     [onParallax, hoverCode],
   );
-  const focusFloor = useCallback(
-    (n: number) => {
-      setFocused(n);
-      setFilters({ floors: [n] });
-    },
-    [setFocused, setFilters],
-  );
 
   const layers = useMemo(() => FLOORS.map((f, i) => ({ f, i })), []);
   const stageCls = ['stage', 'panel', className].filter(Boolean).join(' ');
@@ -235,7 +232,7 @@ export function MapStage({ className = '' }: { className?: string }) {
                 initial={false}
                 animate={{
                   z: exploded ? i * floorGap : isFocus ? 0 : -420,
-                  scale: exploded ? 1 : isFocus ? 1.12 : 0.9,
+                  scale: exploded || isFocus ? 1 : 0.9,
                   opacity: exploded || isFocus ? 1 : 0.06,
                 }}
                 transition={{ type: 'spring', ...SPRING }}
@@ -255,12 +252,7 @@ export function MapStage({ className = '' }: { className?: string }) {
                     onPointerMove={isFocus ? onPointerMove : undefined}
                     onPointerUp={isFocus ? onPointerUp : undefined}
                   />
-                  {exploded && (
-                    <>
-                      <button type="button" className="floor-hit" aria-label={`${t('floor', { n: f.number })} — ${t('clickToFocus')}`} title={t('clickToFocus')} onClick={() => focusFloor(f.number)} data-testid={`floor-slab-${f.number}`} style={{ background: 'transparent', zIndex: 0 }} />
-                      <span className="floor-tag">{t('floor', { n: f.number })}</span>
-                    </>
-                  )}
+                  {exploded && <span className="floor-tag">{t('floor', { n: f.number })}</span>}
                 </div>
               </motion.div>
             );
@@ -280,7 +272,7 @@ export function MapStage({ className = '' }: { className?: string }) {
         <button type="button" title={t('zoomOut')} aria-label={t('zoomOut')} disabled={exploded} onClick={() => setView((vb) => zoomCenter(vb, BASE_VB, 1.25))}>
           −
         </button>
-        <button type="button" title={t('fit')} aria-label={t('fit')} disabled={exploded} onClick={() => setView(BASE_VB)}>
+        <button type="button" title={t('fit')} aria-label={t('fit')} disabled={exploded} onClick={() => setView(FOCUS_VB)}>
           ⤢
         </button>
       </div>

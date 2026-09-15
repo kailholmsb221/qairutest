@@ -106,9 +106,8 @@ const Labels = memo(function Labels({ floor }: { floor: VmFloor }) {
   );
 });
 
-/** Selection outline (white), search highlight (accent) and the live glow (focus view only, a stroked path — no blur filter). */
+/** Search highlight (accent) and the live glow (focus view only, a stroked path — no blur filter). Selection has no outline: the fill brightens instead. */
 const Outlines = memo(function Outlines({ floor, focus }: { floor: VmFloor; focus: boolean }) {
-  const selected = useUiStore((s) => s.selectedRoomCode);
   const highlight = useUiStore(useShallow((s) => s.highlight?.roomCodes ?? null));
   const glowing = useBoardStore(
     useShallow((s) =>
@@ -120,7 +119,6 @@ const Outlines = memo(function Outlines({ floor, focus }: { floor: VmFloor; focu
     ),
   );
   const byCode = useMemo(() => new Map(floor.rooms.map((r) => [r.code, r])), [floor]);
-  const sel = selected ? byCode.get(selected) : undefined;
   return (
     <g className="selection" pointerEvents="none">
       {glowing.map((key) => {
@@ -132,7 +130,6 @@ const Outlines = memo(function Outlines({ floor, focus }: { floor: VmFloor; focu
         const r = byCode.get(code);
         return r ? <path key={code} d={r.path} className="highlight-outline" /> : null;
       })}
-      {sel && <path d={sel.path} className="selection-outline" vectorEffect="non-scaling-stroke" />}
     </g>
   );
 });
