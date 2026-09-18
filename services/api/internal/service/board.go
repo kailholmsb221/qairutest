@@ -10,6 +10,7 @@ import (
 	"errors"
 	"fmt"
 	"sort"
+	"strings"
 	"sync"
 	"time"
 
@@ -613,6 +614,264 @@ func (b *Board) buildingOfRoomID(ctx context.Context, roomID string) (string, er
 		}
 	}
 	return "", ErrNotFound
+}
+
+// ---------------------------------------------------------------- admin: weekly timetable
+
+// LessonInput is the admin request for a weekly lesson template.
+type LessonInput struct {
+	SemesterID *string
+	CourseCode string
+	TeacherID  string
+	RoomCode   string
+	SlotIdx    int
+	Weekday    int
+	Parity     domain.WeekParity
+	Type       domain.LessonType
+	Groups     []string
+}
+
+// ConflictError is a 409: the room, the teacher or a group already has a lesson in that slot.
+type ConflictError struct{ Msg string }
+
+func (e ConflictError) Error() string { return e.Msg }
+
+// LessonView is a lesson template resolved against the catalogue.
+type LessonView struct {
+	Lesson  domain.Lesson
+	Course  domain.Course
+	Teacher domain.Teacher
+	Room    domain.Room
+	Slot    domain.TimeSlot
+	Groups  []string // group codes
+}
+
+// AdminCatalog is the reference data for the schedule editor.
+type AdminCatalog struct {
+	Building  domain.Building
+	Semesters []domain.Semester
+	Current   domain.Semester
+	Slots     []domain.TimeSlot
+	Rooms     []domain.Room // schedulable only, by floor/code
+	Teachers  []domain.Teacher
+	Courses   []domain.Course
+	Groups    []domain.Group
+}
+
+// AdminCatalog returns the reference data of a building for the schedule editor.
+func (b *Board) AdminCatalog(ctx context.Context, code string) (AdminCatalog, error) {
+	c, err := b.catalog(ctx, code)
+	if err != nil {
+		return AdminCatalog{}, err
+	}
+	today := domain.DateIn(b.clock.Now(), c.building.Loc)
+	out := AdminCatalog{Building: c.building, Semesters: c.semesters, Current: c.semesterFor(today), Slots: c.slotList}
+	for _, r := range c.rooms {
+		if r.Schedulable {
+			out.Rooms = append(out.Rooms, r)
+		}
+	}
+	for _, t := range c.teachers {
+		out.Teachers = append(out.Teachers, t)
+	}
+	sort.Slice(out.Teachers, func(i, j int) bool { return out.Teachers[i].ShortName < out.Teachers[j].ShortName })
+	for _, x := range c.courses {
+		out.Courses = append(out.Courses, x)
+	}
+	sort.Slice(out.Courses, func(i, j int) bool { return out.Courses[i].Code < out.Courses[j].Code })
+	for _, g := range c.groups {
+		out.Groups = append(out.Groups, g)
+	}
+	sort.Slice(out.Groups, func(i, j int) bool { return out.Groups[i].Code < out.Groups[j].Code })
+	return out, nil
+}
+
+func (c *catalogCache) lessonView(l domain.Lesson) LessonView {
+	v := LessonView{Lesson: l, Course: c.courses[l.CourseID], Teacher: c.teachers[l.TeacherID], Room: c.roomMap[l.RoomID], Slot: c.slots[l.SlotID]}
+	for _, id := range l.GroupIDs {
+		if g, ok := c.groups[id]; ok {
+			v.Groups = append(v.Groups, g.Code)
+		}
+	}
+	sort.Strings(v.Groups)
+	return v
+}
+
+// ListLessons lists the lesson templates of a semester (default: the one containing today), optionally of one room.
+func (b *Board) ListLessons(ctx context.Context, code string, semesterID, roomCode *string) ([]LessonView, error) {
+	c, err := b.catalog(ctx, code)
+	if err != nil {
+		return nil, err
+	}
+	sem := c.semesterFor(domain.DateIn(b.clock.Now(), c.building.Loc))
+	if semesterID != nil && *semesterID != "" {
+		found := false
+		for _, s := range c.semesters {
+			if s.ID == *semesterID {
+				sem, found = s, true
+			}
+		}
+		if !found {
+			return nil, ErrNotFound
+		}
+	}
+	out := make([]LessonView, 0)
+	for _, l := range c.lessons[sem.ID] {
+		v := c.lessonView(l)
+		if roomCode != nil && *roomCode != "" && v.Room.Code != *roomCode {
+			continue
+		}
+		out = append(out, v)
+	}
+	sort.SliceStable(out, func(i, j int) bool {
+		a, bb := out[i], out[j]
+		if a.Lesson.Weekday != bb.Lesson.Weekday {
+			return a.Lesson.Weekday < bb.Lesson.Weekday
+		}
+		if a.Slot.Idx != bb.Slot.Idx {
+			return a.Slot.Idx < bb.Slot.Idx
+		}
+		return a.Room.Code < bb.Room.Code
+	})
+	return out, nil
+}
+
+func parityOverlap(a, bb domain.WeekParity) bool {
+	return a == domain.WeekAll || bb == domain.WeekAll || a == bb
+}
+
+// CreateLesson validates the request, refuses double bookings, stores the template and
+// invalidates the building so every open screen gets the new timetable over SSE.
+func (b *Board) CreateLesson(ctx context.Context, in LessonInput) (LessonView, error) {
+	if in.Weekday < 1 || in.Weekday > 7 {
+		return LessonView{}, ValidationError{"weekday must be 1..7"}
+	}
+	if in.Parity == "" {
+		in.Parity = domain.WeekAll
+	}
+	if in.Parity != domain.WeekAll && in.Parity != domain.WeekOdd && in.Parity != domain.WeekEven {
+		return LessonView{}, ValidationError{"parity must be all, odd or even"}
+	}
+	if in.Type == "" {
+		in.Type = domain.LessonPractice
+	}
+	if in.Type != domain.LessonLecture && in.Type != domain.LessonPractice && in.Type != domain.LessonLab {
+		return LessonView{}, ValidationError{"type must be lecture, practice or lab"}
+	}
+	room, buildingID, err := b.repo.RoomByCode(ctx, in.RoomCode)
+	if err != nil {
+		return LessonView{}, ValidationError{"roomCode not found"}
+	}
+	if !room.Schedulable {
+		return LessonView{}, ValidationError{"room " + room.Code + " is not schedulable"}
+	}
+	code, err := b.buildingCodeByID(ctx, buildingID)
+	if err != nil {
+		return LessonView{}, err
+	}
+	c, err := b.catalog(ctx, code)
+	if err != nil {
+		return LessonView{}, err
+	}
+	sem := c.semesterFor(domain.DateIn(b.clock.Now(), c.building.Loc))
+	if in.SemesterID != nil && *in.SemesterID != "" {
+		found := false
+		for _, s := range c.semesters {
+			if s.ID == *in.SemesterID {
+				sem, found = s, true
+			}
+		}
+		if !found {
+			return LessonView{}, ValidationError{"semesterId not found"}
+		}
+	}
+	course, err := b.repo.CourseByCode(ctx, in.CourseCode)
+	if err != nil {
+		return LessonView{}, ValidationError{"courseCode not found"}
+	}
+	teacher, ok := c.teachers[in.TeacherID]
+	if !ok {
+		if teacher, err = b.repo.Teacher(ctx, in.TeacherID); err != nil {
+			return LessonView{}, ValidationError{"teacherId not found"}
+		}
+	}
+	var slot *domain.TimeSlot
+	for i := range c.slotList {
+		if c.slotList[i].Idx == in.SlotIdx {
+			slot = &c.slotList[i]
+		}
+	}
+	if slot == nil {
+		return LessonView{}, ValidationError{"slotIdx not found"}
+	}
+	groupIDs := make([]string, 0, len(in.Groups))
+	groupSet := map[string]bool{}
+	for _, gc := range in.Groups {
+		g, err := b.repo.GroupByCode(ctx, gc)
+		if err != nil {
+			return LessonView{}, ValidationError{fmt.Sprintf("group %s not found", gc)}
+		}
+		if !groupSet[g.ID] {
+			groupSet[g.ID] = true
+			groupIDs = append(groupIDs, g.ID)
+		}
+	}
+	// double bookings: same semester, weekday, slot and overlapping parity
+	for _, l := range c.lessons[sem.ID] {
+		if l.Weekday != in.Weekday || l.SlotID != slot.ID || !parityOverlap(l.Parity, in.Parity) {
+			continue
+		}
+		v := c.lessonView(l)
+		where := fmt.Sprintf("%s %s", v.Course.Code, strings.Join(v.Groups, ","))
+		if l.RoomID == room.ID {
+			return LessonView{}, ConflictError{fmt.Sprintf("room %s is already booked in this slot (%s)", room.Code, where)}
+		}
+		if l.TeacherID == teacher.ID {
+			return LessonView{}, ConflictError{fmt.Sprintf("teacher %s already teaches in this slot (%s, room %s)", teacher.ShortName, where, v.Room.Code)}
+		}
+		for _, gid := range l.GroupIDs {
+			if groupSet[gid] {
+				return LessonView{}, ConflictError{fmt.Sprintf("group %s already has a lesson in this slot (%s, room %s)", c.groups[gid].Code, where, v.Room.Code)}
+			}
+		}
+	}
+	stored, err := b.repo.InsertLesson(ctx, domain.Lesson{
+		SemesterID: sem.ID, CourseID: course.ID, TeacherID: teacher.ID, RoomID: room.ID, SlotID: slot.ID,
+		Weekday: in.Weekday, Parity: in.Parity, Type: in.Type, GroupIDs: groupIDs,
+	})
+	if err != nil {
+		return LessonView{}, err
+	}
+	b.ReloadCatalog(code)
+	b.Invalidate(code)
+	c, err = b.catalog(ctx, code)
+	if err != nil {
+		return LessonView{}, err
+	}
+	return c.lessonView(stored), nil
+}
+
+// DeleteLesson removes a lesson template and invalidates its building.
+func (b *Board) DeleteLesson(ctx context.Context, id string) error {
+	l, err := b.repo.Lesson(ctx, id)
+	if err != nil {
+		return err
+	}
+	code, _ := b.buildingOfRoomID(ctx, l.RoomID)
+	if err := b.repo.DeleteLesson(ctx, id); err != nil {
+		return err
+	}
+	if code == "" {
+		codes, _ := b.BuildingCodes(ctx)
+		for _, c := range codes {
+			b.ReloadCatalog(c)
+			b.Invalidate(c)
+		}
+		return nil
+	}
+	b.ReloadCatalog(code)
+	b.Invalidate(code)
+	return nil
 }
 
 // CreateAnnouncement stores a ticker line and invalidates the building.

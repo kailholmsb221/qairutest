@@ -28,6 +28,8 @@ export interface UiStore {
   pageIntervalMs: number;
   searchOpen: boolean;
   adminOpen: boolean;
+  /** the weekly timetable editor (admin) */
+  scheduleOpen: boolean;
   mobileTab: 'map' | 'board';
   toast: string | null;
 
@@ -44,6 +46,7 @@ export interface UiStore {
   setPageIntervalMs: (ms: number) => void;
   setSearchOpen: (v: boolean) => void;
   setAdminOpen: (v: boolean) => void;
+  setScheduleOpen: (v: boolean) => void;
   setMobileTab: (t: 'map' | 'board') => void;
   setToast: (m: string | null) => void;
 }
@@ -61,6 +64,7 @@ export const useUiStore = create<UiStore>((set, get) => ({
   pageIntervalMs: 8000,
   searchOpen: false,
   adminOpen: false,
+  scheduleOpen: false,
   mobileTab: 'map',
   toast: null,
 
@@ -77,6 +81,7 @@ export const useUiStore = create<UiStore>((set, get) => ({
   setPageIntervalMs: (pageIntervalMs) => set({ pageIntervalMs }),
   setSearchOpen: (searchOpen) => set({ searchOpen }),
   setAdminOpen: (adminOpen) => set({ adminOpen }),
+  setScheduleOpen: (scheduleOpen) => set({ scheduleOpen }),
   setMobileTab: (mobileTab) => set({ mobileTab }),
   setToast: (toast) => set({ toast }),
 }));

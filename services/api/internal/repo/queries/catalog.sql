@@ -112,3 +112,6 @@ order by r.schedulable desc, r.code limit 5;
 select id, code, title, department from courses
 where code ilike '%' || sqlc.arg(q)::text || '%' or title ilike '%' || sqlc.arg(q)::text || '%'
 order by code limit 5;
+
+-- name: DeleteLesson :execrows
+delete from lessons where id = $1;

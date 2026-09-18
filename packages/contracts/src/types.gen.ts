@@ -20,6 +20,57 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/catalog": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Reference data for the schedule editor (semesters, slots, schedulable rooms, teachers, courses, groups) */
+        get: operations["getAdminCatalog"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/lessons": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Lesson templates (the weekly timetable) of a semester, optionally of one room */
+        get: operations["listLessons"];
+        put?: never;
+        /** Add a weekly lesson; the board of every open screen updates over SSE */
+        post: operations["createLesson"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/lessons/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["deleteLesson"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/admin/overrides": {
         parameters: {
             query?: never;
@@ -259,6 +310,21 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        AdminCatalog: {
+            building: string;
+            courses: components["schemas"]["CatalogCourse"][];
+            /**
+             * Format: uuid
+             * @description The semester containing today (or the closest one)
+             */
+            currentSemesterId: string;
+            groups: components["schemas"]["CatalogGroup"][];
+            /** @description Schedulable rooms only */
+            rooms: components["schemas"]["CatalogRoom"][];
+            semesters: components["schemas"]["CatalogSemester"][];
+            slots: components["schemas"]["CatalogSlot"][];
+            teachers: components["schemas"]["TeacherRef"][];
+        };
         Announcement: {
             /** Format: date-time */
             endsAt: string;
@@ -294,6 +360,44 @@ export interface components {
             name: string;
             timezone: string;
             viewBox: number[];
+        };
+        CatalogCourse: {
+            code: string;
+            department?: string | null;
+            title: string;
+        };
+        CatalogGroup: {
+            code: string;
+            courseYear?: number | null;
+            program?: string | null;
+        };
+        CatalogRoom: {
+            capacity?: number | null;
+            code: string;
+            floor: number;
+            name: string;
+        };
+        CatalogSemester: {
+            /** Format: date */
+            endsOn: string;
+            /** Format: uuid */
+            id: string;
+            name: string;
+            /** Format: date */
+            startsOn: string;
+        };
+        CatalogSlot: {
+            /**
+             * @description Local time HH:MM
+             * @example 10:50
+             */
+            endsAt: string;
+            idx: number;
+            /**
+             * @description Local time HH:MM
+             * @example 10:00
+             */
+            startsAt: string;
         };
         /** @enum {string} */
         ClockMode: "real" | "fixed" | "offset";
@@ -336,6 +440,45 @@ export interface components {
         Heartbeat: {
             /** Format: date-time */
             at: string;
+        };
+        Lesson: {
+            courseCode: string;
+            courseTitle: string;
+            /** @description Local time HH:MM */
+            endsAt: string;
+            floor: number;
+            groups: string[];
+            /** Format: uuid */
+            id: string;
+            parity: components["schemas"]["WeekParity"];
+            roomCode: string;
+            roomName: string;
+            /** Format: uuid */
+            semesterId: string;
+            slotIdx: number;
+            /** @description Local time HH:MM */
+            startsAt: string;
+            teacher: components["schemas"]["TeacherRef"];
+            type: components["schemas"]["LessonType"];
+            /** @description 1 = Monday */
+            weekday: number;
+        };
+        LessonRequest: {
+            courseCode: string;
+            groups?: string[];
+            parity?: components["schemas"]["WeekParity"];
+            roomCode: string;
+            /**
+             * Format: uuid
+             * @description Defaults to the semester containing today
+             */
+            semesterId?: string | null;
+            slotIdx: number;
+            /** Format: uuid */
+            teacherId: string;
+            type?: components["schemas"]["LessonType"];
+            /** @description 1 = Monday */
+            weekday: number;
         };
         /** @enum {string} */
         LessonType: "lecture" | "practice" | "lab";
@@ -562,6 +705,11 @@ export interface components {
             /** Format: date-time */
             startsAt: string;
         };
+        /**
+         * @description Which weeks a lesson template applies to
+         * @enum {string}
+         */
+        WeekParity: "all" | "odd" | "even";
         /** @enum {string} */
         Wing: "west" | "east" | "core";
     };
@@ -629,6 +777,114 @@ export interface operations {
             };
             400: components["responses"]["BadRequest"];
             401: components["responses"]["Unauthorized"];
+        };
+    };
+    getAdminCatalog: {
+        parameters: {
+            query?: {
+                building?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminCatalog"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            404: components["responses"]["NotFound"];
+        };
+    };
+    listLessons: {
+        parameters: {
+            query?: {
+                building?: string;
+                roomCode?: string;
+                /** @description Defaults to the semester containing today */
+                semesterId?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Lesson"][];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            404: components["responses"]["NotFound"];
+        };
+    };
+    createLesson: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LessonRequest"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Lesson"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            /** @description The room, teacher or a group is already busy in that slot */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    deleteLesson: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Deleted */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: components["responses"]["Unauthorized"];
+            404: components["responses"]["NotFound"];
         };
     };
     createOverride: {
@@ -1011,4 +1267,5 @@ export const roomPhaseValues: ReadonlyArray<FlattenedDeepRequired<components>["s
 export const roomTypeValues: ReadonlyArray<FlattenedDeepRequired<components>["schemas"]["RoomType"]> = ["lecture", "seminar", "lab", "coworking", "admin", "service", "void"];
 export const sessionStatusValues: ReadonlyArray<FlattenedDeepRequired<components>["schemas"]["SessionStatus"]> = ["scheduled", "cancelled", "moved", "delayed", "extra"];
 export const severityValues: ReadonlyArray<FlattenedDeepRequired<components>["schemas"]["Severity"]> = ["info", "warning", "alert"];
+export const weekParityValues: ReadonlyArray<FlattenedDeepRequired<components>["schemas"]["WeekParity"]> = ["all", "odd", "even"];
 export const wingValues: ReadonlyArray<FlattenedDeepRequired<components>["schemas"]["Wing"]> = ["west", "east", "core"];

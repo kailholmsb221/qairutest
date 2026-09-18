@@ -360,6 +360,43 @@ func (r *Repo) DeleteOverride(ctx context.Context, id string) error {
 	return nil
 }
 
+// InsertLesson stores a weekly lesson template with its groups in one transaction.
+func (r *Repo) InsertLesson(ctx context.Context, l domain.Lesson) (domain.Lesson, error) {
+	var id string
+	err := r.WithTx(ctx, func(q *db.Queries) error {
+		var err error
+		id, err = q.InsertLesson(ctx, db.InsertLessonParams{
+			SemesterID: l.SemesterID, CourseID: l.CourseID, TeacherID: l.TeacherID, RoomID: l.RoomID, SlotID: l.SlotID,
+			Weekday: int16(l.Weekday), Parity: db.WeekParity(l.Parity), Type: db.LessonType(l.Type),
+		})
+		if err != nil {
+			return err
+		}
+		for _, g := range l.GroupIDs {
+			if err := q.InsertLessonGroup(ctx, db.InsertLessonGroupParams{LessonID: id, GroupID: g}); err != nil {
+				return err
+			}
+		}
+		return nil
+	})
+	if err != nil {
+		return domain.Lesson{}, err
+	}
+	return r.Lesson(ctx, id)
+}
+
+// DeleteLesson removes a lesson template (its groups and overrides cascade); ErrNotFound when absent.
+func (r *Repo) DeleteLesson(ctx context.Context, id string) error {
+	n, err := r.q.DeleteLesson(ctx, id)
+	if err != nil {
+		return err
+	}
+	if n == 0 {
+		return ErrNotFound
+	}
+	return nil
+}
+
 func toOverride(o db.SessionOverride) domain.Override {
 	var delay *int
 	if o.DelayMinutes != nil {

@@ -11,6 +11,18 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+const deleteLesson = `-- name: DeleteLesson :execrows
+delete from lessons where id = $1
+`
+
+func (q *Queries) DeleteLesson(ctx context.Context, id string) (int64, error) {
+	result, err := q.db.Exec(ctx, deleteLesson, id)
+	if err != nil {
+		return 0, err
+	}
+	return result.RowsAffected(), nil
+}
+
 const deleteOverride = `-- name: DeleteOverride :execrows
 delete from session_overrides where id = $1
 `

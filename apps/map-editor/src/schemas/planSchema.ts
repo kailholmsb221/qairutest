@@ -32,7 +32,8 @@ export const roomSchema = z.object({
   type: roomTypeSchema,
   status: roomStatusSchema,
   boundary: z.array(boundaryRefSchema).min(3),
-  label: z.object({ x: finite, y: finite, angle: finite.optional(), fontSize: finite.optional() }),
+  holes: z.array(z.array(boundaryRefSchema).min(3)).optional(),
+  label: z.object({ x: finite, y: finite, angle: finite.optional(), fontSize: finite.optional(), numberOnly: z.boolean().optional() }),
   area: finite.optional(),
   planName: z.string().optional(),
   hideLabel: z.boolean().optional(),
@@ -53,6 +54,12 @@ export const specialZoneSchema = z.object({
   angle: finite.optional(),
 });
 
+export const strokeSchema = z.object({
+  id: z.string().min(1),
+  d: z.string().min(1),
+  exterior: z.boolean().optional(),
+});
+
 export const floorPlanSchema = z
   .object({
     id: z.string().min(1),
@@ -65,6 +72,7 @@ export const floorPlanSchema = z
     exterior: z.array(boundaryRefSchema).min(3),
     doors: z.array(doorSchema),
     specialZones: z.array(specialZoneSchema),
+    strokes: z.array(strokeSchema).optional(),
   })
   .superRefine((plan, ctx) => {
     // Ссылочная целостность: стены → точки, комнаты/двери/контур → стены.
@@ -81,6 +89,11 @@ export const floorPlanSchema = z
       r.boundary.forEach((b, j) => {
         if (!plan.walls[b.wallId]) ctx.addIssue({ code: 'custom', message: `Помещение ${r.id}: нет стены ${b.wallId}`, path: ['rooms', i, 'boundary', j] });
       });
+      r.holes?.forEach((h, k) =>
+        h.forEach((b, j) => {
+          if (!plan.walls[b.wallId]) ctx.addIssue({ code: 'custom', message: `Помещение ${r.id}: нет стены ${b.wallId}`, path: ['rooms', i, 'holes', k, j] });
+        }),
+      );
     });
     plan.exterior.forEach((b, j) => {
       if (!plan.walls[b.wallId]) ctx.addIssue({ code: 'custom', message: `Внешний контур: нет стены ${b.wallId}`, path: ['exterior', j] });

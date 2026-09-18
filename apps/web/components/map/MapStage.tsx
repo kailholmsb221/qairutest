@@ -22,9 +22,25 @@ const BASE_VB: ViewBox = { x: VIEW_BOX.x, y: VIEW_BOX.y, w: VIEW_BOX.width, h: V
 /**
  * Focus magnification lives in the viewBox (vector), not in a CSS scale: a scaled composited
  * layer is rasterised once and stretched, which is what made the plan go soft on zoom.
+ * The focus viewBox is the tightest box (in the viewBox aspect) around every floor's rooms plus
+ * a margin, so the plan is as large as it can be without cropping the building's edges.
  */
-const FOCUS_ZOOM = 1.12;
-const FOCUS_VB: ViewBox = zoomCenter(BASE_VB, BASE_VB, 1 / FOCUS_ZOOM);
+const FOCUS_PAD = 24;
+const FOCUS_VB: ViewBox = (() => {
+  const boxes = FLOORS.flatMap((f) => f.rooms.map((r) => r.bbox));
+  if (!boxes.length) return BASE_VB;
+  const x0 = Math.min(...boxes.map((b) => b.x)) - FOCUS_PAD;
+  const y0 = Math.min(...boxes.map((b) => b.y)) - FOCUS_PAD;
+  const x1 = Math.max(...boxes.map((b) => b.x + b.w)) + FOCUS_PAD;
+  const y1 = Math.max(...boxes.map((b) => b.y + b.h)) + FOCUS_PAD;
+  const aspect = BASE_VB.w / BASE_VB.h;
+  let w = x1 - x0;
+  let h = y1 - y0;
+  if (w / h < aspect) w = h * aspect;
+  else h = w / aspect;
+  if (w >= BASE_VB.w) return BASE_VB;
+  return { x: (x0 + x1) / 2 - w / 2, y: (y0 + y1) / 2 - h / 2, w, h };
+})();
 
 /**
  * The 2.5D scene. Default exploded view: floors stacked with translateZ(i × 72px) under

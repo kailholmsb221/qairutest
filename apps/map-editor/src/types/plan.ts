@@ -48,6 +48,8 @@ export interface RoomLabelPos {
   angle?: number;
   /** Принудительный размер шрифта. */
   fontSize?: number;
+  /** Показывать только номер (без второй строки с названием) — как на стенде. */
+  numberOnly?: boolean;
 }
 
 export interface Room {
@@ -57,6 +59,8 @@ export interface Room {
   type: RoomType;
   status: RoomStatus;
   boundary: BoundaryRef[];
+  /** Внутренние кольца (острова внутри помещения, например комнаты внутри коридора); обход противоположен внешнему. */
+  holes?: BoundaryRef[][];
   label: RoomLabelPos;
   /** Площадь с чертежа, м² (справочно). */
   area?: number;
@@ -95,6 +99,14 @@ export interface ViewBox {
   height: number;
 }
 
+/** Штрих чертежа дословно (SVG path data в координатах этажа) — то, что экран рисует как стену. */
+export interface Stroke {
+  id: string;
+  d: string;
+  /** Внешний контур здания — рисуется толще и со свечением. */
+  exterior?: boolean;
+}
+
 export interface FloorPlan {
   id: string;
   name: string;
@@ -107,6 +119,11 @@ export interface FloorPlan {
   exterior: BoundaryRef[];
   doors: Door[];
   specialZones: SpecialZone[];
+  /**
+   * Штрихи исходного чертежа (packages/map-data/plans/*.svg). Если заданы, стены на экране —
+   * это они; точки/стены выше — только топология для контуров помещений и редактора.
+   */
+  strokes?: Stroke[];
 }
 
 export interface Building {

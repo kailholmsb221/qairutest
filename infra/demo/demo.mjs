@@ -43,8 +43,11 @@ export function demoOffset(now = new Date()) {
   return `${sign}${h}h${m}m${s}s`;
 }
 
+/** With shell: true on Windows, args are joined verbatim — quote the ones with spaces (repo path may contain them). */
+const q = (a) => (isWin && /\s/.test(a) ? `"${a}"` : a);
+
 function run(cmd, args, opts) {
-  const r = spawnSync(cmd, args, { stdio: 'inherit', shell: isWin, ...opts });
+  const r = spawnSync(cmd, args.map(q), { stdio: 'inherit', shell: isWin, ...opts });
   if (r.status !== 0) {
     console.error(`✖ ${cmd} ${args.join(' ')} failed`);
     process.exit(r.status ?? 1);

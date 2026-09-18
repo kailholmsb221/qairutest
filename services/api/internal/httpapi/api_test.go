@@ -242,11 +242,19 @@ func TestBoard(t *testing.T) {
 	if snap.Building != "A" || snap.Date.Format("2006-01-02") != "2026-09-15" || !snap.At.Equal(clk.Now()) {
 		t.Fatalf("snapshot header: %+v", snap)
 	}
-	if len(snap.Now) == 0 || len(snap.Next) == 0 || snap.Stats.RoomsTotal != 14 || snap.Stats.RoomsBusy == 0 {
+	schedulable := 0
+	for _, f := range mapSpec.Floors {
+		for _, rm := range f.Rooms {
+			if rm.Schedulable {
+				schedulable++
+			}
+		}
+	}
+	if len(snap.Now) == 0 || len(snap.Next) == 0 || snap.Stats.RoomsTotal != schedulable || snap.Stats.RoomsBusy == 0 {
 		t.Fatalf("10:47 on a Tuesday must be busy: now=%d next=%d stats=%+v", len(snap.Now), len(snap.Next), snap.Stats)
 	}
-	if len(snap.Rooms) != 14 {
-		t.Fatalf("rooms: %d", len(snap.Rooms))
+	if len(snap.Rooms) != schedulable {
+		t.Fatalf("rooms: %d, schedulable in building-a.json: %d", len(snap.Rooms), schedulable)
 	}
 	for _, s := range snap.Now {
 		if s.Phase != "live" && s.Phase != "ending" {
@@ -467,13 +475,13 @@ func TestAdminAndRealtime(t *testing.T) {
 	if r := call(t, "POST", "/api/v1/admin/overrides", map[string]any{"kind": "reassign_teacher", "date": "2026-09-15", "lessonId": t2.LessonId.String(), "newTeacherId": target.Teacher.Id.String()}, key); r.status != 201 {
 		t.Fatalf("reassign: %d %s", r.status, r.body)
 	}
-	if r := call(t, "POST", "/api/v1/admin/overrides", map[string]any{"kind": "extra", "date": "2026-09-15", "courseCode": "OPEN100", "roomCode": "107", "teacherId": target.Teacher.Id.String(), "slotIdx": 9, "groups": []string{target.Groups[0]}, "note": "Гостевая лекция"}, key); r.status != 201 {
+	if r := call(t, "POST", "/api/v1/admin/overrides", map[string]any{"kind": "extra", "date": "2026-09-15", "courseCode": "OPEN100", "roomCode": "103", "teacherId": target.Teacher.Id.String(), "slotIdx": 9, "groups": []string{target.Groups[0]}, "note": "Гостевая лекция"}, key); r.status != 201 {
 		t.Fatalf("extra: %d %s", r.status, r.body)
 	}
 	final := decode[httpapi.Snapshot](t, call(t, "GET", "/api/v1/buildings/A/board?at=2026-09-15T16:00:00%2B05:00", nil, nil))
 	foundExtra := false
 	for _, s := range final.Now {
-		if s.Status == "extra" && s.CourseCode == "OPEN100" && s.RoomCode == "107" {
+		if s.Status == "extra" && s.CourseCode == "OPEN100" && s.RoomCode == "103" {
 			foundExtra = true
 		}
 	}
@@ -587,5 +595,120 @@ func TestSSEHeaders(t *testing.T) {
 	defer res.Body.Close()
 	if res.Header.Get("Cache-Control") != "no-cache, no-transform" || res.Header.Get("X-Accel-Buffering") != "no" {
 		t.Fatalf("sse headers: %v", res.Header)
+	}
+}
+
+func TestAdminLessons(t *testing.T) {
+	key := map[string]string{"X-Api-Key": adminKey}
+	if r := call(t, "GET", "/api/v1/admin/catalog?building=A", nil, nil); r.status != 401 {
+		t.Fatalf("catalog without key: %d", r.status)
+	}
+	cat := decode[httpapi.AdminCatalog](t, call(t, "GET", "/api/v1/admin/catalog?building=A", nil, key))
+	if len(cat.Rooms) == 0 || len(cat.Slots) == 0 || len(cat.Teachers) == 0 || len(cat.Courses) == 0 || len(cat.Groups) == 0 {
+		t.Fatalf("catalog is empty: %+v", cat)
+	}
+	schedulable := 0
+	for _, f := range mapSpec.Floors {
+		for _, rm := range f.Rooms {
+			if rm.Schedulable {
+				schedulable++
+			}
+		}
+	}
+	if len(cat.Rooms) != schedulable {
+		t.Fatalf("catalog rooms %d, schedulable in building-a.json %d", len(cat.Rooms), schedulable)
+	}
+	all := decode[[]httpapi.Lesson](t, call(t, "GET", "/api/v1/admin/lessons?building=A", nil, key))
+	if len(all) == 0 {
+		t.Fatalf("no lessons in the current semester")
+	}
+
+	// a free (room, weekday, slot) with a free teacher and group — Sunday is never seeded
+	room := cat.Rooms[0].Code
+	wd, slot := 7, cat.Slots[0].Idx
+	busyRoom, busyTeacher, busyGroup := map[string]bool{}, map[string]bool{}, map[string]bool{}
+	for _, l := range all {
+		if l.Weekday == wd && l.SlotIdx == slot {
+			busyRoom[l.RoomCode] = true
+			busyTeacher[l.Teacher.Id.String()] = true
+			for _, g := range l.Groups {
+				busyGroup[g] = true
+			}
+		}
+	}
+	if busyRoom[room] {
+		t.Fatalf("room %s unexpectedly busy on Sunday", room)
+	}
+	teacher, group := cat.Teachers[0], cat.Groups[0]
+	for _, x := range cat.Teachers {
+		if !busyTeacher[x.Id.String()] {
+			teacher = x
+			break
+		}
+	}
+	for _, g := range cat.Groups {
+		if !busyGroup[g.Code] {
+			group = g
+			break
+		}
+	}
+	body := map[string]any{"courseCode": cat.Courses[0].Code, "teacherId": teacher.Id.String(), "roomCode": room, "slotIdx": slot, "weekday": wd, "parity": "all", "type": "practice", "groups": []string{group.Code}}
+	r := call(t, "POST", "/api/v1/admin/lessons", body, key)
+	if r.status != 201 {
+		t.Fatalf("create lesson: %d %s", r.status, r.body)
+	}
+	created := decode[httpapi.Lesson](t, r)
+	if created.RoomCode != room || created.Weekday != wd || created.SlotIdx != slot || len(created.Groups) != 1 || created.Groups[0] != group.Code || created.Teacher.Id != teacher.Id {
+		t.Fatalf("created lesson differs from the request: %+v", created)
+	}
+	mine := decode[[]httpapi.Lesson](t, call(t, "GET", "/api/v1/admin/lessons?building=A&roomCode="+room, nil, key))
+	found := false
+	for _, l := range mine {
+		if l.Id == created.Id {
+			found = true
+		}
+		if l.RoomCode != room {
+			t.Fatalf("roomCode filter leaked %s", l.RoomCode)
+		}
+	}
+	if !found {
+		t.Fatalf("created lesson missing from the room list")
+	}
+	// double booking → 409; unknown room → 400
+	if r := call(t, "POST", "/api/v1/admin/lessons", body, key); r.status != 409 {
+		t.Fatalf("double booking: %d %s", r.status, r.body)
+	}
+	bad := map[string]any{"courseCode": cat.Courses[0].Code, "teacherId": teacher.Id.String(), "roomCode": "NOPE", "slotIdx": slot, "weekday": wd}
+	if r := call(t, "POST", "/api/v1/admin/lessons", bad, key); r.status != 400 {
+		t.Fatalf("unknown room: %d %s", r.status, r.body)
+	}
+	// the board materialises the template: next Sunday at slot start + 10 min (2026-09-15 is a Tuesday)
+	var hh, mm int
+	if _, err := fmt.Sscanf(cat.Slots[0].StartsAt, "%d:%d", &hh, &mm); err != nil {
+		t.Fatal(err)
+	}
+	at := time.Date(2026, 9, 15+(wd-2+7)%7, hh, mm+10, 0, 0, time.FixedZone("Almaty", 5*3600))
+	live := decode[httpapi.Snapshot](t, call(t, "GET", "/api/v1/buildings/A/board?at="+at.UTC().Format("2006-01-02T15:04:05Z"), nil, nil))
+	found = false
+	for _, s := range live.Now {
+		if s.LessonId != nil && *s.LessonId == created.Id && s.RoomCode == room {
+			found = true
+		}
+	}
+	if !found {
+		t.Fatalf("new lesson not on the board at %s (now=%d)", at, len(live.Now))
+	}
+	// delete → 204, then 404; the board forgets it
+	if r := call(t, "DELETE", "/api/v1/admin/lessons/"+created.Id.String(), nil, key); r.status != 204 {
+		t.Fatalf("delete: %d %s", r.status, r.body)
+	}
+	if r := call(t, "DELETE", "/api/v1/admin/lessons/"+created.Id.String(), nil, key); r.status != 404 {
+		t.Fatalf("delete twice: %d", r.status)
+	}
+	after := decode[httpapi.Snapshot](t, call(t, "GET", "/api/v1/buildings/A/board?at="+at.UTC().Format("2006-01-02T15:04:05Z"), nil, nil))
+	for _, s := range after.Now {
+		if s.LessonId != nil && *s.LessonId == created.Id {
+			t.Fatalf("deleted lesson still on the board")
+		}
 	}
 }

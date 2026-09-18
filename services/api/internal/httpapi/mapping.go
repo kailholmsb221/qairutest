@@ -2,6 +2,7 @@ package httpapi
 
 import (
 	"encoding/json"
+	"fmt"
 	"time"
 
 	"github.com/google/uuid"
@@ -97,6 +98,50 @@ func toRoomState(r domain.RoomState) RoomLiveState {
 		Next:      sessionPtr(r.Next),
 		FreeUntil: r.FreeUntil,
 	}
+}
+
+func hhmm(min int) string { return fmt.Sprintf("%02d:%02d", min/60, min%60) }
+
+func toLesson(v service.LessonView) Lesson {
+	groups := v.Groups
+	if groups == nil {
+		groups = []string{}
+	}
+	return Lesson{
+		Id: mustUUID(v.Lesson.ID), SemesterId: mustUUID(v.Lesson.SemesterID),
+		CourseCode: v.Course.Code, CourseTitle: v.Course.Title, Teacher: toTeacher(v.Teacher),
+		RoomCode: v.Room.Code, RoomName: v.Room.Name, Floor: v.Room.Floor,
+		SlotIdx: v.Slot.Idx, StartsAt: hhmm(v.Slot.StartMin), EndsAt: hhmm(v.Slot.EndMin),
+		Weekday: v.Lesson.Weekday, Parity: WeekParity(v.Lesson.Parity), Type: LessonType(v.Lesson.Type), Groups: groups,
+	}
+}
+
+func toAdminCatalog(c service.AdminCatalog) AdminCatalog {
+	out := AdminCatalog{
+		Building: c.Building.Code, CurrentSemesterId: mustUUID(c.Current.ID),
+		Semesters: make([]CatalogSemester, 0, len(c.Semesters)), Slots: make([]CatalogSlot, 0, len(c.Slots)),
+		Rooms: make([]CatalogRoom, 0, len(c.Rooms)), Teachers: make([]TeacherRef, 0, len(c.Teachers)),
+		Courses: make([]CatalogCourse, 0, len(c.Courses)), Groups: make([]CatalogGroup, 0, len(c.Groups)),
+	}
+	for _, s := range c.Semesters {
+		out.Semesters = append(out.Semesters, CatalogSemester{Id: mustUUID(s.ID), Name: s.Name, StartsOn: toDate(s.StartsOn), EndsOn: toDate(s.EndsOn)})
+	}
+	for _, s := range c.Slots {
+		out.Slots = append(out.Slots, CatalogSlot{Idx: s.Idx, StartsAt: hhmm(s.StartMin), EndsAt: hhmm(s.EndMin)})
+	}
+	for _, r := range c.Rooms {
+		out.Rooms = append(out.Rooms, CatalogRoom{Code: r.Code, Name: r.Name, Floor: r.Floor, Capacity: r.Capacity})
+	}
+	for _, t := range c.Teachers {
+		out.Teachers = append(out.Teachers, toTeacher(t))
+	}
+	for _, x := range c.Courses {
+		out.Courses = append(out.Courses, CatalogCourse{Code: x.Code, Title: x.Title, Department: x.Department})
+	}
+	for _, g := range c.Groups {
+		out.Groups = append(out.Groups, CatalogGroup{Code: g.Code, Program: g.Program, CourseYear: g.CourseYear})
+	}
+	return out
 }
 
 func toAnnouncement(a domain.Announcement) Announcement {

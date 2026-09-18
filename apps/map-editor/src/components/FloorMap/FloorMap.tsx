@@ -65,7 +65,7 @@ export function FloorMap({ plan, unitsPerPixel, clientToSvg }: Props) {
   const mainRooms = plan.rooms.filter((r) => !SERVICE_TYPES.has(r.type));
   const serviceRooms = plan.rooms.filter((r) => SERVICE_TYPES.has(r.type));
   const selectedRoom = plan.rooms.find((r) => r.id === selectedRoomId);
-  const selectedPath = selectedRoom ? buildRoomPath(plan, selectedRoom.boundary) : '';
+  const selectedPath = selectedRoom ? buildRoomPath(plan, selectedRoom.boundary, selectedRoom.holes) : '';
 
   // ---- перетаскивание точек
   const onHandleDown = (id: string, e: React.PointerEvent<SVGCircleElement>) => {

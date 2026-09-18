@@ -73,7 +73,7 @@ for (const plan of plans) {
   const vmRooms: VmRoom[] = [];
   for (const r of plan.rooms) {
     const poly = boundaryPolyline(plan, r.boundary);
-    const path = buildRoomPath(plan, r.boundary);
+    const path = buildRoomPath(plan, r.boundary, r.holes);
     if (poly.length < 3 || !path) {
       errors.push(`${plan.id}/${r.id}: пустой контур`);
       continue;
@@ -121,9 +121,14 @@ for (const plan of plans) {
     });
   }
 
-  const walls = Object.entries(plan.walls)
-    .map(([id, w]) => ({ id, path: wallPath(plan, w), exterior: !!w.exterior, virtual: !!w.virtual }))
-    .filter((w) => w.path);
+  // стены на экране: штрихи чертежа дословно, если они есть; иначе — топологические стены
+  // (виртуальные мостики через проёмы и разрезы дыр не рисуются никогда)
+  const walls = plan.strokes?.length
+    ? plan.strokes.map((s) => ({ id: s.id, path: s.d, exterior: !!s.exterior, virtual: false }))
+    : Object.entries(plan.walls)
+        .filter(([, w]) => !w.virtual)
+        .map(([id, w]) => ({ id, path: wallPath(plan, w), exterior: !!w.exterior, virtual: false }))
+        .filter((w) => w.path);
 
   const doors = plan.doors.flatMap((d) => {
     const g = doorGeometry(plan, d);

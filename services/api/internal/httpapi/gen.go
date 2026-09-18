@@ -137,16 +137,16 @@ func (e OverrideKind) Valid() bool {
 
 // Defines values for Parity.
 const (
-	Even Parity = "even"
-	Odd  Parity = "odd"
+	ParityEven Parity = "even"
+	ParityOdd  Parity = "odd"
 )
 
 // Valid indicates whether the value is a known member of the Parity enum.
 func (e Parity) Valid() bool {
 	switch e {
-	case Even:
+	case ParityEven:
 		return true
-	case Odd:
+	case ParityOdd:
 		return true
 	default:
 		return false
@@ -288,6 +288,27 @@ func (e Severity) Valid() bool {
 	}
 }
 
+// Defines values for WeekParity.
+const (
+	WeekParityAll  WeekParity = "all"
+	WeekParityEven WeekParity = "even"
+	WeekParityOdd  WeekParity = "odd"
+)
+
+// Valid indicates whether the value is a known member of the WeekParity enum.
+func (e WeekParity) Valid() bool {
+	switch e {
+	case WeekParityAll:
+		return true
+	case WeekParityEven:
+		return true
+	case WeekParityOdd:
+		return true
+	default:
+		return false
+	}
+}
+
 // Defines values for Wing.
 const (
 	Core Wing = "core"
@@ -307,6 +328,22 @@ func (e Wing) Valid() bool {
 	default:
 		return false
 	}
+}
+
+// AdminCatalog defines model for AdminCatalog.
+type AdminCatalog struct {
+	Building string          `json:"building"`
+	Courses  []CatalogCourse `json:"courses"`
+
+	// CurrentSemesterId The semester containing today (or the closest one)
+	CurrentSemesterId openapi_types.UUID `json:"currentSemesterId"`
+	Groups            []CatalogGroup     `json:"groups"`
+
+	// Rooms Schedulable rooms only
+	Rooms     []CatalogRoom     `json:"rooms"`
+	Semesters []CatalogSemester `json:"semesters"`
+	Slots     []CatalogSlot     `json:"slots"`
+	Teachers  []TeacherRef      `json:"teachers"`
 }
 
 // Announcement defines model for Announcement.
@@ -350,6 +387,50 @@ type BuildingMap struct {
 	Name     string     `json:"name"`
 	Timezone string     `json:"timezone"`
 	ViewBox  []float32  `json:"viewBox"`
+}
+
+// CatalogCourse defines model for CatalogCourse.
+type CatalogCourse struct {
+	Code       string  `json:"code"`
+	Department *string `json:"department,omitempty"`
+	Title      string  `json:"title"`
+}
+
+// CatalogGroup defines model for CatalogGroup.
+type CatalogGroup struct {
+	Code       string  `json:"code"`
+	CourseYear *int    `json:"courseYear,omitempty"`
+	Program    *string `json:"program,omitempty"`
+}
+
+// CatalogRoom defines model for CatalogRoom.
+type CatalogRoom struct {
+	Capacity *int   `json:"capacity,omitempty"`
+	Code     string `json:"code"`
+	Floor    int    `json:"floor"`
+	Name     string `json:"name"`
+}
+
+// CatalogSemester defines model for CatalogSemester.
+type CatalogSemester struct {
+	EndsOn   openapi_types.Date `json:"endsOn"`
+	Id       openapi_types.UUID `json:"id"`
+	Name     string             `json:"name"`
+	StartsOn openapi_types.Date `json:"startsOn"`
+}
+
+// CatalogSlot defines model for CatalogSlot.
+type CatalogSlot struct {
+	// EndsAt Local time HH:MM
+	//
+	// Example: 10:50
+	EndsAt string `json:"endsAt"`
+	Idx    int    `json:"idx"`
+
+	// StartsAt Local time HH:MM
+	//
+	// Example: 10:00
+	StartsAt string `json:"startsAt"`
 }
 
 // ClockMode defines model for ClockMode.
@@ -400,6 +481,52 @@ type HealthStatus string
 // Heartbeat defines model for Heartbeat.
 type Heartbeat struct {
 	At time.Time `json:"at"`
+}
+
+// Lesson defines model for Lesson.
+type Lesson struct {
+	CourseCode  string `json:"courseCode"`
+	CourseTitle string `json:"courseTitle"`
+
+	// EndsAt Local time HH:MM
+	EndsAt string             `json:"endsAt"`
+	Floor  int                `json:"floor"`
+	Groups []string           `json:"groups"`
+	Id     openapi_types.UUID `json:"id"`
+
+	// Parity Which weeks a lesson template applies to
+	Parity     WeekParity         `json:"parity"`
+	RoomCode   string             `json:"roomCode"`
+	RoomName   string             `json:"roomName"`
+	SemesterId openapi_types.UUID `json:"semesterId"`
+	SlotIdx    int                `json:"slotIdx"`
+
+	// StartsAt Local time HH:MM
+	StartsAt string     `json:"startsAt"`
+	Teacher  TeacherRef `json:"teacher"`
+	Type     LessonType `json:"type"`
+
+	// Weekday 1 = Monday
+	Weekday int `json:"weekday"`
+}
+
+// LessonRequest defines model for LessonRequest.
+type LessonRequest struct {
+	CourseCode string    `json:"courseCode"`
+	Groups     *[]string `json:"groups,omitempty"`
+
+	// Parity Which weeks a lesson template applies to
+	Parity   *WeekParity `json:"parity,omitempty"`
+	RoomCode string      `json:"roomCode"`
+
+	// SemesterId Defaults to the semester containing today
+	SemesterId *openapi_types.UUID `json:"semesterId,omitempty"`
+	SlotIdx    int                 `json:"slotIdx"`
+	TeacherId  openapi_types.UUID  `json:"teacherId"`
+	Type       *LessonType         `json:"type,omitempty"`
+
+	// Weekday 1 = Monday
+	Weekday int `json:"weekday"`
 }
 
 // LessonType defines model for LessonType.
@@ -658,6 +785,9 @@ type TimeSlot struct {
 	StartsAt time.Time `json:"startsAt"`
 }
 
+// WeekParity Which weeks a lesson template applies to
+type WeekParity string
+
 // Wing defines model for Wing.
 type Wing string
 
@@ -675,6 +805,20 @@ type NotFound = Error
 
 // Unauthorized defines model for Unauthorized.
 type Unauthorized = Error
+
+// GetAdminCatalogParams defines parameters for GetAdminCatalog.
+type GetAdminCatalogParams struct {
+	Building *string `form:"building,omitempty" json:"building,omitempty"`
+}
+
+// ListLessonsParams defines parameters for ListLessons.
+type ListLessonsParams struct {
+	Building *string `form:"building,omitempty" json:"building,omitempty"`
+
+	// SemesterId Defaults to the semester containing today
+	SemesterId *openapi_types.UUID `form:"semesterId,omitempty" json:"semesterId,omitempty"`
+	RoomCode   *string             `form:"roomCode,omitempty" json:"roomCode,omitempty"`
+}
 
 // GetBoardParams defines parameters for GetBoard.
 type GetBoardParams struct {
@@ -722,6 +866,9 @@ type GetTeacherDayParams struct {
 // CreateAnnouncementJSONRequestBody defines body for CreateAnnouncement for application/json ContentType.
 type CreateAnnouncementJSONRequestBody = AnnouncementRequest
 
+// CreateLessonJSONRequestBody defines body for CreateLesson for application/json ContentType.
+type CreateLessonJSONRequestBody = LessonRequest
+
 // CreateOverrideJSONRequestBody defines body for CreateOverride for application/json ContentType.
 type CreateOverrideJSONRequestBody = OverrideRequest
 
@@ -730,6 +877,18 @@ type ServerInterface interface {
 
 	// (POST /api/v1/admin/announcements)
 	CreateAnnouncement(w http.ResponseWriter, r *http.Request)
+	// GetAdminCatalog Reference data for the schedule editor (semesters, slots, schedulable rooms, teachers, courses, groups)
+	// (GET /api/v1/admin/catalog)
+	GetAdminCatalog(w http.ResponseWriter, r *http.Request, params GetAdminCatalogParams)
+	// ListLessons Lesson templates (the weekly timetable) of a semester, optionally of one room
+	// (GET /api/v1/admin/lessons)
+	ListLessons(w http.ResponseWriter, r *http.Request, params ListLessonsParams)
+	// CreateLesson Add a weekly lesson; the board of every open screen updates over SSE
+	// (POST /api/v1/admin/lessons)
+	CreateLesson(w http.ResponseWriter, r *http.Request)
+
+	// (DELETE /api/v1/admin/lessons/{id})
+	DeleteLesson(w http.ResponseWriter, r *http.Request, id openapi_types.UUID)
 
 	// (POST /api/v1/admin/overrides)
 	CreateOverride(w http.ResponseWriter, r *http.Request)
@@ -781,6 +940,29 @@ type Unimplemented struct{}
 
 // (POST /api/v1/admin/announcements)
 func (_ Unimplemented) CreateAnnouncement(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// GetAdminCatalog Reference data for the schedule editor (semesters, slots, schedulable rooms, teachers, courses, groups)
+// (GET /api/v1/admin/catalog)
+func (_ Unimplemented) GetAdminCatalog(w http.ResponseWriter, r *http.Request, params GetAdminCatalogParams) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// ListLessons Lesson templates (the weekly timetable) of a semester, optionally of one room
+// (GET /api/v1/admin/lessons)
+func (_ Unimplemented) ListLessons(w http.ResponseWriter, r *http.Request, params ListLessonsParams) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// CreateLesson Add a weekly lesson; the board of every open screen updates over SSE
+// (POST /api/v1/admin/lessons)
+func (_ Unimplemented) CreateLesson(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// (DELETE /api/v1/admin/lessons/{id})
+func (_ Unimplemented) DeleteLesson(w http.ResponseWriter, r *http.Request, id openapi_types.UUID) {
 	w.WriteHeader(http.StatusNotImplemented)
 }
 
@@ -877,6 +1059,138 @@ func (siw *ServerInterfaceWrapper) CreateAnnouncement(w http.ResponseWriter, r *
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.CreateAnnouncement(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetAdminCatalog operation middleware
+func (siw *ServerInterfaceWrapper) GetAdminCatalog(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetAdminCatalogParams
+
+	// ------------- Optional query parameter "building" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, false, "building", r.URL.Query(), &params.Building, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "building"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "building", Err: err})
+		}
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetAdminCatalog(w, r, params)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// ListLessons operation middleware
+func (siw *ServerInterfaceWrapper) ListLessons(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params ListLessonsParams
+
+	// ------------- Optional query parameter "building" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, false, "building", r.URL.Query(), &params.Building, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "building"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "building", Err: err})
+		}
+		return
+	}
+
+	// ------------- Optional query parameter "semesterId" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, false, "semesterId", r.URL.Query(), &params.SemesterId, runtime.BindQueryParameterOptions{Type: "string", Format: "uuid"})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "semesterId"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "semesterId", Err: err})
+		}
+		return
+	}
+
+	// ------------- Optional query parameter "roomCode" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, false, "roomCode", r.URL.Query(), &params.RoomCode, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "roomCode"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "roomCode", Err: err})
+		}
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.ListLessons(w, r, params)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// CreateLesson operation middleware
+func (siw *ServerInterfaceWrapper) CreateLesson(w http.ResponseWriter, r *http.Request) {
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.CreateLesson(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// DeleteLesson operation middleware
+func (siw *ServerInterfaceWrapper) DeleteLesson(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "id" -------------
+	var id openapi_types.UUID
+
+	err = runtime.BindStyledParameterWithOptions("simple", "id", chi.URLParam(r, "id"), &id, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "uuid", ValueIsUnescaped: r.URL.RawPath == ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.DeleteLesson(w, r, id)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -1455,6 +1769,18 @@ func HandlerWithOptions(si ServerInterface, options ChiServerOptions) http.Handl
 	r.Group(func(r chi.Router) {
 		r.Post(options.BaseURL+"/api/v1/admin/announcements", wrapper.CreateAnnouncement)
 	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/v1/admin/catalog", wrapper.GetAdminCatalog)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/v1/admin/lessons", wrapper.ListLessons)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/api/v1/admin/lessons", wrapper.CreateLesson)
+	})
+	r.Group(func(r chi.Router) {
+		r.Delete(options.BaseURL+"/api/v1/admin/lessons/{id}", wrapper.DeleteLesson)
+	})
 
 	return r
 }
@@ -1511,6 +1837,214 @@ func (response CreateAnnouncement401JSONResponse) VisitCreateAnnouncementRespons
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetAdminCatalogRequestObject struct {
+	Params GetAdminCatalogParams
+}
+
+type GetAdminCatalogResponseObject interface {
+	VisitGetAdminCatalogResponse(w http.ResponseWriter) error
+}
+
+type GetAdminCatalog200JSONResponse AdminCatalog
+
+func (response GetAdminCatalog200JSONResponse) VisitGetAdminCatalogResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetAdminCatalog401JSONResponse struct{ UnauthorizedJSONResponse }
+
+func (response GetAdminCatalog401JSONResponse) VisitGetAdminCatalogResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetAdminCatalog404JSONResponse struct{ NotFoundJSONResponse }
+
+func (response GetAdminCatalog404JSONResponse) VisitGetAdminCatalogResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListLessonsRequestObject struct {
+	Params ListLessonsParams
+}
+
+type ListLessonsResponseObject interface {
+	VisitListLessonsResponse(w http.ResponseWriter) error
+}
+
+type ListLessons200JSONResponse []Lesson
+
+func (response ListLessons200JSONResponse) VisitListLessonsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListLessons401JSONResponse struct{ UnauthorizedJSONResponse }
+
+func (response ListLessons401JSONResponse) VisitListLessonsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListLessons404JSONResponse struct{ NotFoundJSONResponse }
+
+func (response ListLessons404JSONResponse) VisitListLessonsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateLessonRequestObject struct {
+	Body *CreateLessonJSONRequestBody
+}
+
+type CreateLessonResponseObject interface {
+	VisitCreateLessonResponse(w http.ResponseWriter) error
+}
+
+type CreateLesson201JSONResponse Lesson
+
+func (response CreateLesson201JSONResponse) VisitCreateLessonResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(201)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateLesson400JSONResponse struct{ BadRequestJSONResponse }
+
+func (response CreateLesson400JSONResponse) VisitCreateLessonResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateLesson401JSONResponse struct{ UnauthorizedJSONResponse }
+
+func (response CreateLesson401JSONResponse) VisitCreateLessonResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateLesson409JSONResponse Error
+
+func (response CreateLesson409JSONResponse) VisitCreateLessonResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(409)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteLessonRequestObject struct {
+	Id openapi_types.UUID `json:"id"`
+}
+
+type DeleteLessonResponseObject interface {
+	VisitDeleteLessonResponse(w http.ResponseWriter) error
+}
+
+type DeleteLesson204Response struct {
+}
+
+func (response DeleteLesson204Response) VisitDeleteLessonResponse(w http.ResponseWriter) error {
+	w.WriteHeader(204)
+	return nil
+}
+
+type DeleteLesson401JSONResponse struct{ UnauthorizedJSONResponse }
+
+func (response DeleteLesson401JSONResponse) VisitDeleteLessonResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteLesson404JSONResponse struct{ NotFoundJSONResponse }
+
+func (response DeleteLesson404JSONResponse) VisitDeleteLessonResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
 	_, err := buf.WriteTo(w)
 	return err
 }
@@ -2154,6 +2688,18 @@ type StrictServerInterface interface {
 
 	// (POST /api/v1/admin/announcements)
 	CreateAnnouncement(ctx context.Context, request CreateAnnouncementRequestObject) (CreateAnnouncementResponseObject, error)
+	// GetAdminCatalog Reference data for the schedule editor (semesters, slots, schedulable rooms, teachers, courses, groups)
+	// (GET /api/v1/admin/catalog)
+	GetAdminCatalog(ctx context.Context, request GetAdminCatalogRequestObject) (GetAdminCatalogResponseObject, error)
+	// ListLessons Lesson templates (the weekly timetable) of a semester, optionally of one room
+	// (GET /api/v1/admin/lessons)
+	ListLessons(ctx context.Context, request ListLessonsRequestObject) (ListLessonsResponseObject, error)
+	// CreateLesson Add a weekly lesson; the board of every open screen updates over SSE
+	// (POST /api/v1/admin/lessons)
+	CreateLesson(ctx context.Context, request CreateLessonRequestObject) (CreateLessonResponseObject, error)
+
+	// (DELETE /api/v1/admin/lessons/{id})
+	DeleteLesson(ctx context.Context, request DeleteLessonRequestObject) (DeleteLessonResponseObject, error)
 
 	// (POST /api/v1/admin/overrides)
 	CreateOverride(ctx context.Context, request CreateOverrideRequestObject) (CreateOverrideResponseObject, error)
@@ -2262,6 +2808,115 @@ func (sh *strictHandler) CreateAnnouncement(w http.ResponseWriter, r *http.Reque
 		sh.options.ResponseErrorHandlerFunc(w, r, err)
 	} else if validResponse, ok := response.(CreateAnnouncementResponseObject); ok {
 		if err := validResponse.VisitCreateAnnouncementResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// GetAdminCatalog operation middleware
+func (sh *strictHandler) GetAdminCatalog(w http.ResponseWriter, r *http.Request, params GetAdminCatalogParams) {
+	var request GetAdminCatalogRequestObject
+
+	request.Params = params
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetAdminCatalog(ctx, request.(GetAdminCatalogRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetAdminCatalog")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetAdminCatalogResponseObject); ok {
+		if err := validResponse.VisitGetAdminCatalogResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// ListLessons operation middleware
+func (sh *strictHandler) ListLessons(w http.ResponseWriter, r *http.Request, params ListLessonsParams) {
+	var request ListLessonsRequestObject
+
+	request.Params = params
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.ListLessons(ctx, request.(ListLessonsRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ListLessons")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(ListLessonsResponseObject); ok {
+		if err := validResponse.VisitListLessonsResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// CreateLesson operation middleware
+func (sh *strictHandler) CreateLesson(w http.ResponseWriter, r *http.Request) {
+	var request CreateLessonRequestObject
+
+	var body CreateLessonJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.CreateLesson(ctx, request.(CreateLessonRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "CreateLesson")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(CreateLessonResponseObject); ok {
+		if err := validResponse.VisitCreateLessonResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// DeleteLesson operation middleware
+func (sh *strictHandler) DeleteLesson(w http.ResponseWriter, r *http.Request, id openapi_types.UUID) {
+	var request DeleteLessonRequestObject
+
+	request.Id = id
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.DeleteLesson(ctx, request.(DeleteLessonRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "DeleteLesson")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(DeleteLessonResponseObject); ok {
+		if err := validResponse.VisitDeleteLessonResponse(w); err != nil {
 			sh.options.ResponseErrorHandlerFunc(w, r, err)
 		}
 	} else if response != nil {
@@ -2640,70 +3295,82 @@ func (sh *strictHandler) Readyz(w http.ResponseWriter, r *http.Request) {
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"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",
+	"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",
+	"9W71twAAAP//",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

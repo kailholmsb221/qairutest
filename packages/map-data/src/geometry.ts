@@ -80,13 +80,26 @@ export function resolveBoundary(plan: VectorFloorPlan, boundary: BoundaryRef[]):
   return out;
 }
 
-export function buildRoomPath(plan: VectorFloorPlan, boundary: BoundaryRef[]): string {
+function ringPath(plan: VectorFloorPlan, boundary: BoundaryRef[]): string {
   const segs = resolveBoundary(plan, boundary);
   if (segs.length === 0) return '';
   const parts = [`M ${fmt(segs[0].from.x)} ${fmt(segs[0].from.y)}`];
   for (const s of segs) parts.push(s.bulge !== 0 ? arcSvgCommand(s.from, s.to, s.bulge) : `L ${fmt(s.to.x)} ${fmt(s.to.y)}`);
   parts.push('Z');
   return parts.join(' ');
+}
+
+/** Замкнутый path помещения: внешнее кольцо + кольца-дыры (обход дыр противоположен внешнему, заливка evenodd/nonzero равнозначны). */
+export function buildRoomPath(plan: VectorFloorPlan, boundary: BoundaryRef[], holes: BoundaryRef[][] = []): string {
+  const outer = ringPath(plan, boundary);
+  if (!outer) return '';
+  return [outer, ...holes.map((h) => ringPath(plan, h)).filter(Boolean)].join(' ');
+}
+
+/** Площадь помещения с учётом дыр (по полилиниям). */
+export function roomArea(plan: VectorFloorPlan, boundary: BoundaryRef[], holes: BoundaryRef[][] = []): number {
+  const outer = Math.abs(signedArea(boundaryPolyline(plan, boundary)));
+  return holes.reduce((s, h) => s - Math.abs(signedArea(boundaryPolyline(plan, h))), outer);
 }
 
 export function boundaryPolyline(plan: VectorFloorPlan, boundary: BoundaryRef[], arcSegments = 10): Point[] {
@@ -243,7 +256,7 @@ function shorten(name: string, maxChars: number): string {
 export interface LabelLayout { fs: number; secFs: number; primary: string; secondary: string; angle: number }
 export function labelLayout(
   plan: VectorFloorPlan,
-  room: { number: string; name: string; boundary: BoundaryRef[]; label: { angle?: number; fontSize?: number } },
+  room: { number: string; name: string; boundary: BoundaryRef[]; label: { angle?: number; fontSize?: number; numberOnly?: boolean } },
 ): LabelLayout | null {
   const poly = boundaryPolyline(plan, room.boundary);
   if (poly.length < 3) return null;
@@ -253,7 +266,7 @@ export function labelLayout(
   const availW = (rotated ? b.maxY - b.minY : b.maxX - b.minX) - 8;
   const availH = (rotated ? b.maxX - b.minX : b.maxY - b.minY) - 6;
   const primary = room.number || room.name;
-  const secondary = room.number && room.name.toLowerCase() !== room.number.toLowerCase() ? room.name : '';
+  const secondary = room.number && !room.label.numberOnly && room.name.toLowerCase() !== room.number.toLowerCase() ? room.name : '';
   let fs = room.label.fontSize ?? Math.min(14, Math.max(6, availH / 3.2));
   const fitFont = (text: string, base: number, min: number) => {
     const need = text.length * CHAR_W * base;

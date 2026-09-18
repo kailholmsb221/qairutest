@@ -11,17 +11,19 @@ import { useUiStore } from '@/lib/store/uiStore';
 import { SCHEDULABLE_CODES } from '@/lib/vector-map';
 import { useTimeStore } from '@/features/time/useNow';
 import { formatTime } from '@/features/time/derive';
-
-const API_KEY = process.env.NEXT_PUBLIC_ADMIN_API_KEY ?? '';
+import { useAdminKey } from '@/lib/admin-key';
 
 /**
  * Hidden behind the ⚙ button in the ticker: cancel / move / delay a session, post an
- * announcement. Talks to the admin API with the demo key; the board updates over SSE.
+ * announcement, open the weekly timetable editor. Talks to the admin API with the demo key;
+ * the board updates over SSE.
  */
 export function DemoAdminPanel() {
   const t = useTranslations('admin');
+  const API_KEY = useAdminKey();
   const open = useUiStore((s) => s.adminOpen);
   const setOpen = useUiStore((s) => s.setAdminOpen);
+  const setScheduleOpen = useUiStore((s) => s.setScheduleOpen);
   const setToast = useUiStore((s) => s.setToast);
   const tz = useTimeStore((s) => s.timezone);
   const sessions = useBoardStore(useShallow((s) => [...s.snapshot.now, ...s.snapshot.next].filter((x) => x.lessonId && x.status !== 'cancelled')));
@@ -64,6 +66,11 @@ export function DemoAdminPanel() {
             </button>
           </div>
           {!API_KEY && <div style={{ color: 'var(--status-delayed)', fontSize: 12 }}>{t('noKey')}</div>}
+          <div className="admin-row">
+            <button type="button" className="btn is-active" onClick={() => setScheduleOpen(true)} data-testid="admin-schedule-open">
+              📅 {t('schedule.open')}
+            </button>
+          </div>
           <label>
             {t('session')}
             <select value={picked?.sessionId ?? ''} onChange={(e) => setSessionId(e.target.value)} data-testid="admin-session">

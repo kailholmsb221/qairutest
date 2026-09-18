@@ -17,13 +17,14 @@ interface Props {
 
 /** Заливка помещения — настоящий SVG path, собранный из boundary. */
 export const RoomShape = memo(function RoomShape({ plan, room, hovered, selected, dimmed, invalid, interactive, onHover, onSelect }: Props) {
-  const d = buildRoomPath(plan, room.boundary);
+  const d = buildRoomPath(plan, room.boundary, room.holes);
   if (!d) return null;
   const cls = ['room', hovered ? 'is-hovered' : '', selected ? 'is-selected' : '', dimmed ? 'is-dimmed' : '', invalid ? 'is-invalid' : ''].filter(Boolean).join(' ');
   return (
     <path
       d={d}
       className={cls}
+      fillRule="evenodd"
       fill={roomFill(room)}
       data-room-id={room.id}
       data-room-type={room.type}

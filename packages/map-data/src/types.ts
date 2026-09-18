@@ -16,11 +16,16 @@ export type MapRoomType =
   | 'service' | 'tech' | 'lobby' | 'cafe' | 'storage';
 export type MapRoomStatus = 'free' | 'busy' | 'ending' | 'soon' | 'service';
 
-export interface RoomLabelPos { x: number; y: number; angle?: number; fontSize?: number }
+export interface RoomLabelPos { x: number; y: number; angle?: number; fontSize?: number; numberOnly?: boolean }
 export interface VectorRoom {
   id: string; number: string; name: string; type: MapRoomType; status: MapRoomStatus;
-  boundary: BoundaryRef[]; label: RoomLabelPos; area?: number; planName?: string; hideLabel?: boolean;
+  boundary: BoundaryRef[];
+  /** внутренние кольца (острова внутри помещения, например комнаты внутри коридора) */
+  holes?: BoundaryRef[][];
+  label: RoomLabelPos; area?: number; planName?: string; hideLabel?: boolean;
 }
+/** Штрих исходного чертежа (plans/*.svg) дословно — то, что экран рисует как стену. */
+export interface Stroke { id: string; d: string; exterior?: boolean }
 export type DoorSwing = 'left-in' | 'left-out' | 'right-in' | 'right-out' | 'double' | 'none';
 export interface Door { id: string; wallId: string; position: number; width: number; swing: DoorSwing }
 export type SpecialZoneKind = 'stairs' | 'lift' | 'wc' | 'tech' | 'shaft';
@@ -30,6 +35,8 @@ export interface VectorFloorPlan {
   id: string; name: string; level: number; viewBox: ViewBox;
   points: Record<string, Point>; walls: Record<string, Wall>; rooms: VectorRoom[];
   exterior: BoundaryRef[]; doors: Door[]; specialZones: SpecialZone[];
+  /** если заданы — стены на экране это они; points/walls — только топология контуров */
+  strokes?: Stroke[];
 }
 
 // ---------------------------------------------------------------- building-a.json

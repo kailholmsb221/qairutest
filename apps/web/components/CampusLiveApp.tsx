@@ -15,6 +15,7 @@ import { Board } from '@/components/board/Board';
 import { RoomDetailPanel } from '@/components/panels/RoomDetailPanel';
 import { SearchPalette } from '@/components/panels/SearchPalette';
 import { DemoAdminPanel } from '@/components/panels/DemoAdminPanel';
+import { SchedulePanel } from '@/components/panels/SchedulePanel';
 import { Toast } from '@/components/chrome/Toast';
 import { KioskDriver } from '@/components/chrome/KioskDriver';
 
@@ -75,7 +76,8 @@ function Shell({ kiosk: kioskProp }: { kiosk: boolean }) {
         setSearchOpen(true);
       } else if (e.key === 'Escape') {
         const ui = useUiStore.getState();
-        if (ui.selectedRoomCode) selectRoom(null);
+        if (ui.scheduleOpen) ui.setScheduleOpen(false);
+        else if (ui.selectedRoomCode) selectRoom(null);
         else if (ui.highlight) setHighlight(null);
         else if (ui.focusedFloor !== null) setFocusedFloor(null);
         else if (store.getState().mode === 'travel') goLive();
@@ -105,6 +107,7 @@ function Shell({ kiosk: kioskProp }: { kiosk: boolean }) {
       <Ticker />
       <SearchPalette />
       {!kiosk && <DemoAdminPanel />}
+      {!kiosk && <SchedulePanel />}
       <Toast />
       {kiosk && <KioskDriver />}
     </div>

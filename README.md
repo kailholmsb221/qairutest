@@ -2,14 +2,16 @@
 
 Живая карта университетского корпуса в стиле аэропортового табло: на одном экране без скролла видно,
 какие пары идут прямо сейчас, в каких аудиториях, кто их ведёт и что начнётся следующим. Статусы
-меняются на всех открытых экранах меньше чем за секунду. Карта — настоящие планы двух этажей,
-оцифрованные вручную и собранные в 2.5D-сцену.
+меняются на всех открытых экранах меньше чем за секунду. Карта — настоящие чертежи двух этажей
+(стены нарисованы в Illustrator и попадают на экран дословно), собранные в 2.5D-сцену.
 
 ![main screen](docs/screenshots/main-exploded.png)
 
 | Фокус этажа | Карточка аудитории |
 |---|---|
 | ![focus](docs/screenshots/main-focus-1.png) | ![room](docs/screenshots/room-panel.png) |
+| Машина времени | Редактор расписания (админ) |
+| ![time travel](docs/screenshots/time-travel.png) | ![schedule](docs/screenshots/schedule.png) |
 
 ## Стек
 
@@ -58,9 +60,10 @@ services/api: httpapi (oapi-codegen strict) → service.Board (кэш катал
 - **Расписание** хранится как шаблоны `lessons` + точечные `session_overrides`; конкретный день материализуется на лету.
 - **Время** идёт через `internal/clock` (`real` / `fixed` / `offset`) — e2e и демо детерминированы.
 - **Контракт** — `packages/contracts/openapi.yaml`; Go-сервер и TS-типы генерируются из него, контрактные тесты валидируют каждый ответ.
-- **Геометрия** — `packages/map-data/vector/*.json` (ручная оцифровка в `apps/map-editor`) → `vector-map.json` (что рисуем) и `building-a.json` (кто есть кто);
-  коды аудиторий задаются в `room-codes.json`, подписи на карте не меняются.
+- **Геометрия** — чертежи `packages/map-data/plans/*.svg` → `apps/map-editor/tools/svg2plan.py` (стены дословно, помещения между ними вычисляются)
+  → `vector/*.json` → `vector-map.json` (что рисуем) и `building-a.json` (кто есть кто); коды аудиторий задаются в `room-codes.json`, подписи на карте не меняются.
 - **2.5D** — стопка этажей в CSS 3D (`rotateX(58°) rotateZ(-38°)`, `translateZ(i×gap)`), фокус этажа — плоский вид с zoom/pan; анимируются только `transform`/`opacity`.
+- **Админ-панель** (⚙ в тикере, нужен `ADMIN_API_KEY`) — отмена/перенос/задержка занятия, объявления и 📅 редактор недельного расписания: сетка «пары × дни» по аудитории, «+» добавляет занятие, ✕ убирает; все экраны обновляются по SSE.
 
 Подробно: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) · программа помещений: [docs/BUILDING.md](docs/BUILDING.md) · статус фаз: [docs/STATUS.md](docs/STATUS.md).
 
@@ -70,12 +73,13 @@ services/api: httpapi (oapi-codegen strict) → service.Board (кэш катал
 |---|---|
 | `pnpm dev` / `pnpm api` | web (Next dev) / Go API |
 | `pnpm map:build` | пересобрать артефакты карты из `packages/map-data/vector` |
+| `python apps/map-editor/tools/svg2plan.py && pnpm --filter @campuslive/map-editor gen:floors` | пересобрать `vector/*.json` из чертежей `packages/map-data/plans/*.svg` (python: numpy, opencv, shapely, svgelements, Pillow) |
 | `pnpm contracts:gen` | TS-типы из `openapi.yaml`; Go: `cd services/api && go generate ./...` |
 | `pnpm seed` | миграции + демо-данные |
 | `pnpm test` | Vitest (web) + проверки пакетов; Go: `cd services/api && go test ./...` |
 | `pnpm e2e` | Playwright против запущенных api (fixed clock) + web |
 | `pnpm demo` / `pnpm demo:script` | демо-стек «вторник 10:47» и 90-секундный сценарий |
-| `pnpm --filter @campuslive/map-editor dev` | редактор планов (оцифровка) |
+| `pnpm --filter @campuslive/map-editor dev` | редактор топологии планов (просмотр/правка `vector/*.json`) |
 
 ## Подключить настоящее расписание
 

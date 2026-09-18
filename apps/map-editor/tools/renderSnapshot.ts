@@ -19,9 +19,14 @@ const vb = plan.viewBox;
 parts.push(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb.x} ${vb.y} ${vb.width} ${vb.height}" width="${vb.width * 1.4}" height="${vb.height * 1.4}" font-family="Segoe UI, Arial, sans-serif">`);
 parts.push(`<rect x="${vb.x}" y="${vb.y}" width="${vb.width}" height="${vb.height}" fill="#111c29"/>`);
 parts.push(`<path d="${buildRoomPath(plan, plan.exterior)}" fill="#15233299" stroke="#4fd1ff" stroke-width="7" opacity="0.4"/>`);
-for (const r of plan.rooms) parts.push(`<path d="${buildRoomPath(plan, r.boundary)}" fill="${roomFill(r)}"/>`);
-for (const [, w] of Object.entries(plan.walls)) {
-  parts.push(`<path d="${wallPath(plan, w)}" fill="none" stroke="${w.exterior ? '#4fd1ff' : '#7fc3e6'}" stroke-width="${w.exterior ? 2.6 : 1.3}" ${w.virtual ? 'stroke-dasharray="5 4"' : ''}/>`);
+for (const r of plan.rooms) parts.push(`<path d="${buildRoomPath(plan, r.boundary, r.holes)}" fill-rule="evenodd" fill="${roomFill(r)}"/>`);
+if (plan.strokes?.length) {
+  // стены — штрихи чертежа дословно (виртуальные мостики топологии не рисуются)
+  for (const s of plan.strokes) parts.push(`<path d="${s.d}" fill="none" stroke="${s.exterior ? '#4fd1ff' : '#7fc3e6'}" stroke-width="${s.exterior ? 2.6 : 1.3}" stroke-linecap="round" stroke-linejoin="round"/>`);
+} else {
+  for (const [, w] of Object.entries(plan.walls)) {
+    parts.push(`<path d="${wallPath(plan, w)}" fill="none" stroke="${w.exterior ? '#4fd1ff' : '#7fc3e6'}" stroke-width="${w.exterior ? 2.6 : 1.3}" ${w.virtual ? 'stroke-dasharray="5 4"' : ''}/>`);
+  }
 }
 for (const d of plan.doors) {
   const g = doorGeometry(plan, d);
@@ -44,7 +49,7 @@ for (const r of plan.rooms) {
   let fs = r.label.fontSize ?? Math.min(14, Math.max(6, ((r.label.angle ? b.maxX - b.minX : b.maxY - b.minY) - 6) / 3.2));
   const need = primary.length * 0.58 * fs;
   if (need > availW) fs = Math.max(5, availW / (primary.length * 0.58));
-  const sec = r.number ? r.name : '';
+  const sec = r.number && !r.label.numberOnly ? r.name : '';
   const secFs = fs * 0.62;
   const maxChars = Math.floor(availW / (0.58 * secFs));
   const secText = sec && maxChars >= 6 ? (sec.length > maxChars ? sec.slice(0, maxChars - 1) + '…' : sec) : '';

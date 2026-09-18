@@ -1,4 +1,5 @@
 import type {
+  AdminCatalog,
   Announcement,
   AnnouncementRequest,
   ApiError,
@@ -6,6 +7,8 @@ import type {
   BuildingMap,
   DaySchedule,
   DayTimeline,
+  Lesson,
+  LessonRequest,
   Override,
   OverrideRequest,
   SearchResult,
@@ -102,6 +105,20 @@ export const api = {
       request<void>(`/api/v1/admin/overrides/${encodeURIComponent(id)}`, { ...opts, method: 'DELETE', headers: { 'X-Api-Key': apiKey } }),
     createAnnouncement: (body: AnnouncementRequest, apiKey: string, opts?: Opts) =>
       request<Announcement>('/api/v1/admin/announcements', { ...opts, method: 'POST', body, headers: { 'X-Api-Key': apiKey } }),
+    /** reference data for the schedule editor */
+    catalog: (apiKey: string, building = BUILDING, opts?: Opts) =>
+      request<AdminCatalog>(`/api/v1/admin/catalog?building=${encodeURIComponent(building)}`, { ...opts, headers: { 'X-Api-Key': apiKey } }),
+    /** weekly lesson templates of the current semester (optionally of one room) */
+    lessons: (params: { building?: string; roomCode?: string; semesterId?: string }, apiKey: string, opts?: Opts) => {
+      const q = new URLSearchParams({ building: params.building ?? BUILDING });
+      if (params.roomCode) q.set('roomCode', params.roomCode);
+      if (params.semesterId) q.set('semesterId', params.semesterId);
+      return request<Lesson[]>(`/api/v1/admin/lessons?${q.toString()}`, { ...opts, headers: { 'X-Api-Key': apiKey } });
+    },
+    createLesson: (body: LessonRequest, apiKey: string, opts?: Opts) =>
+      request<Lesson>('/api/v1/admin/lessons', { ...opts, method: 'POST', body, headers: { 'X-Api-Key': apiKey } }),
+    deleteLesson: (id: string, apiKey: string, opts?: Opts) =>
+      request<void>(`/api/v1/admin/lessons/${encodeURIComponent(id)}`, { ...opts, method: 'DELETE', headers: { 'X-Api-Key': apiKey } }),
   },
   eventsUrl: (building = BUILDING) => `${publicApiUrl()}/api/v1/events?building=${encodeURIComponent(building)}`,
 };

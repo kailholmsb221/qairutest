@@ -21,7 +21,9 @@ export interface RoomShapeProps {
 
 /**
  * One room fill. Schedulable rooms colour by phase through `data-phase` (CSS variables), the rest
- * keep their static base fill from the plan. Subscribes only to its own RoomLiveState.
+ * keep their static base fill from the plan. Every labelled room (numbered or WC/CR/Cinema/Cafe)
+ * is a button that opens the detail panel; corridors and unnamed spaces stay static.
+ * Subscribes only to its own RoomLiveState.
  */
 export const RoomShape = memo(function RoomShape({ room, interactive, exploded, onHover, onSelect }: RoomShapeProps) {
   const state = useBoardStore(room.schedulable ? selectRoom(room.code) : () => undefined);
@@ -37,9 +39,10 @@ export const RoomShape = memo(function RoomShape({ room, interactive, exploded, 
 
   const phase = room.schedulable ? (state?.phase ?? 'free') : undefined;
   const conflict = !!state?.conflict;
+  const clickable = interactive && (room.schedulable || (!room.hideLabel && !!room.label));
   const cls = [
     'room',
-    interactive && room.schedulable ? '' : 'is-static',
+    clickable ? '' : 'is-static',
     hovered ? 'is-hovered' : '',
     selected ? 'is-selected' : '',
     dimState === 'muted' ? 'is-muted' : '',
@@ -69,13 +72,14 @@ export const RoomShape = memo(function RoomShape({ room, interactive, exploded, 
 
   const identity = roomIdentity(room.code);
   const aria = room.schedulable ? t('roomAria', { code: room.code, name: identity?.name ?? room.code, status: statusText(state, t, tz) }) : `${identity?.name ?? room.code}: ${t('notSchedulable')}`;
-  const focusable = interactive && room.schedulable && !exploded;
+  const focusable = clickable && !exploded;
 
   return (
     <>
       <path
         d={room.path}
         className={cls}
+        fillRule="evenodd"
         data-room-code={room.code}
         data-room-id={room.id}
         data-phase={phase}
@@ -85,9 +89,9 @@ export const RoomShape = memo(function RoomShape({ room, interactive, exploded, 
         role={focusable ? 'button' : undefined}
         tabIndex={focusable ? 0 : undefined}
         aria-label={focusable ? aria : undefined}
-        onPointerEnter={interactive ? onEnter : undefined}
-        onPointerLeave={interactive ? onLeave : undefined}
-        onClick={interactive ? onClick : undefined}
+        onPointerEnter={clickable ? onEnter : undefined}
+        onPointerLeave={clickable ? onLeave : undefined}
+        onClick={clickable ? onClick : undefined}
         onKeyDown={focusable ? onKey : undefined}
       />
       {room.schedulable && (phase === 'live' || phase === 'ending') && exploded && (

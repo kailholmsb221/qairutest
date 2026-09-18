@@ -61,7 +61,10 @@ export function validateFloor(plan: FloorPlan): GeometryIssue[] {
     u.owners.push(owner);
     usage.set(wallId, u);
   };
-  for (const r of plan.rooms) for (const b of r.boundary) addUse(r.id, b.wallId, b.direction);
+  for (const r of plan.rooms) {
+    for (const b of r.boundary) addUse(r.id, b.wallId, b.direction);
+    for (const h of r.holes ?? []) for (const b of h) addUse(r.id, b.wallId, b.direction);
+  }
   for (const b of plan.exterior) addUse('exterior', b.wallId, -b.direction);
   for (const [wallId, u] of usage) {
     const w = plan.walls[wallId];
@@ -82,6 +85,7 @@ export function validateFloor(plan: FloorPlan): GeometryIssue[] {
 
 export function validateRoom(plan: FloorPlan, room: Room): GeometryIssue[] {
   const issues = validateChain(plan, room.boundary, room.id, 'not-closed');
+  for (const h of room.holes ?? []) issues.push(...validateChain(plan, h, room.id, 'not-closed'));
   if (issues.some((i) => i.level === 'error')) return issues;
   const poly = boundaryPolyline(plan, room.boundary);
   const area = signedArea(poly);

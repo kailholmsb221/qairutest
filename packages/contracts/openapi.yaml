@@ -280,6 +280,91 @@ paths:
         '400': { $ref: '#/components/responses/BadRequest' }
         '401': { $ref: '#/components/responses/Unauthorized' }
 
+  /api/v1/admin/catalog:
+    get:
+      tags: [admin]
+      operationId: getAdminCatalog
+      summary: Reference data for the schedule editor (semesters, slots, schedulable rooms, teachers, courses, groups)
+      security: [{ ApiKey: [] }]
+      parameters:
+        - name: building
+          in: query
+          schema: { type: string, default: A }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/AdminCatalog' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /api/v1/admin/lessons:
+    get:
+      tags: [admin]
+      operationId: listLessons
+      summary: Lesson templates (the weekly timetable) of a semester, optionally of one room
+      security: [{ ApiKey: [] }]
+      parameters:
+        - name: building
+          in: query
+          schema: { type: string, default: A }
+        - name: semesterId
+          in: query
+          description: Defaults to the semester containing today
+          schema: { type: string, format: uuid }
+        - name: roomCode
+          in: query
+          schema: { type: string }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Lesson' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    post:
+      tags: [admin]
+      operationId: createLesson
+      summary: Add a weekly lesson; the board of every open screen updates over SSE
+      security: [{ ApiKey: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/LessonRequest' }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Lesson' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '409':
+          description: The room, teacher or a group is already busy in that slot
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  /api/v1/admin/lessons/{id}:
+    delete:
+      tags: [admin]
+      operationId: deleteLesson
+      security: [{ ApiKey: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '204': { description: Deleted }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
 components:
   securitySchemes:
     ApiKey:
@@ -693,3 +778,114 @@ components:
       required: [at]
       properties:
         at: { type: string, format: date-time }
+
+    WeekParity:
+      type: string
+      description: Which weeks a lesson template applies to
+      enum: [all, odd, even]
+
+    CatalogSemester:
+      type: object
+      required: [id, name, startsOn, endsOn]
+      properties:
+        id: { type: string, format: uuid }
+        name: { type: string }
+        startsOn: { type: string, format: date }
+        endsOn: { type: string, format: date }
+
+    CatalogSlot:
+      type: object
+      required: [idx, startsAt, endsAt]
+      properties:
+        idx: { type: integer }
+        startsAt: { type: string, description: 'Local time HH:MM', example: '10:00' }
+        endsAt: { type: string, description: 'Local time HH:MM', example: '10:50' }
+
+    CatalogRoom:
+      type: object
+      required: [code, name, floor]
+      properties:
+        code: { type: string }
+        name: { type: string }
+        floor: { type: integer }
+        capacity: { type: integer, nullable: true }
+
+    CatalogCourse:
+      type: object
+      required: [code, title]
+      properties:
+        code: { type: string }
+        title: { type: string }
+        department: { type: string, nullable: true }
+
+    CatalogGroup:
+      type: object
+      required: [code]
+      properties:
+        code: { type: string }
+        program: { type: string, nullable: true }
+        courseYear: { type: integer, nullable: true }
+
+    AdminCatalog:
+      type: object
+      required: [building, semesters, currentSemesterId, slots, rooms, teachers, courses, groups]
+      properties:
+        building: { type: string }
+        semesters:
+          type: array
+          items: { $ref: '#/components/schemas/CatalogSemester' }
+        currentSemesterId: { type: string, format: uuid, description: The semester containing today (or the closest one) }
+        slots:
+          type: array
+          items: { $ref: '#/components/schemas/CatalogSlot' }
+        rooms:
+          type: array
+          description: Schedulable rooms only
+          items: { $ref: '#/components/schemas/CatalogRoom' }
+        teachers:
+          type: array
+          items: { $ref: '#/components/schemas/TeacherRef' }
+        courses:
+          type: array
+          items: { $ref: '#/components/schemas/CatalogCourse' }
+        groups:
+          type: array
+          items: { $ref: '#/components/schemas/CatalogGroup' }
+
+    LessonRequest:
+      type: object
+      required: [courseCode, teacherId, roomCode, slotIdx, weekday]
+      properties:
+        semesterId: { type: string, format: uuid, nullable: true, description: Defaults to the semester containing today }
+        courseCode: { type: string }
+        teacherId: { type: string, format: uuid }
+        roomCode: { type: string }
+        slotIdx: { type: integer }
+        weekday: { type: integer, minimum: 1, maximum: 7, description: 1 = Monday }
+        parity: { $ref: '#/components/schemas/WeekParity' }
+        type: { $ref: '#/components/schemas/LessonType' }
+        groups:
+          type: array
+          items: { type: string }
+
+    Lesson:
+      type: object
+      required: [id, semesterId, courseCode, courseTitle, teacher, roomCode, roomName, floor, slotIdx, startsAt, endsAt, weekday, parity, type, groups]
+      properties:
+        id: { type: string, format: uuid }
+        semesterId: { type: string, format: uuid }
+        courseCode: { type: string }
+        courseTitle: { type: string }
+        teacher: { $ref: '#/components/schemas/TeacherRef' }
+        roomCode: { type: string }
+        roomName: { type: string }
+        floor: { type: integer }
+        slotIdx: { type: integer }
+        startsAt: { type: string, description: 'Local time HH:MM' }
+        endsAt: { type: string, description: 'Local time HH:MM' }
+        weekday: { type: integer, description: 1 = Monday }
+        parity: { $ref: '#/components/schemas/WeekParity' }
+        type: { $ref: '#/components/schemas/LessonType' }
+        groups:
+          type: array
+          items: { type: string }

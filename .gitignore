@@ -15,3 +15,4 @@ docs/status/traces/*.json
 *.log
 apps/web/e2e/_*.mjs
 services/api/bin
+__pycache__/

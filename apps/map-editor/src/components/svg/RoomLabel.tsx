@@ -34,7 +34,7 @@ export const RoomLabel = memo(function RoomLabel({ plan, room, forceShow, editab
     const availW = (rotated ? b.maxY - b.minY : b.maxX - b.minX) - 8;
     const availH = (rotated ? b.maxX - b.minX : b.maxY - b.minY) - 6;
     const primary = room.number || room.name;
-    const secondary = room.number && room.name.toLowerCase() !== room.number.toLowerCase() ? room.name : '';
+    const secondary = room.number && !room.label.numberOnly && room.name.toLowerCase() !== room.number.toLowerCase() ? room.name : '';
     let fs = room.label.fontSize ?? Math.min(14, Math.max(6, availH / 3.2));
     // уменьшить шрифт, чтобы номер/название влезли по ширине
     const fitFont = (text: string, base: number, min: number) => {

@@ -122,7 +122,7 @@ func timeoutExceptSSE(d time.Duration) func(http.Handler) http.Handler {
 // adminAuth guards /api/v1/admin/* with X-Api-Key.
 func (s *Server) adminAuth(f StrictHandlerFunc, operationID string) StrictHandlerFunc {
 	switch operationID {
-	case "CreateOverride", "DeleteOverride", "CreateAnnouncement":
+	case "CreateOverride", "DeleteOverride", "CreateAnnouncement", "GetAdminCatalog", "ListLessons", "CreateLesson", "DeleteLesson":
 	default:
 		return f
 	}
@@ -548,6 +548,90 @@ func (s *Server) DeleteOverride(ctx context.Context, req DeleteOverrideRequestOb
 		return nil, err
 	}
 	return DeleteOverride204Response{}, nil
+}
+
+// ---------------------------------------------------------------- admin: weekly timetable
+
+func buildingParam(p *string) string {
+	if p == nil || *p == "" {
+		return "A"
+	}
+	return *p
+}
+
+func (s *Server) GetAdminCatalog(ctx context.Context, req GetAdminCatalogRequestObject) (GetAdminCatalogResponseObject, error) {
+	cat, err := s.deps.Board.AdminCatalog(ctx, buildingParam(req.Params.Building))
+	if err != nil {
+		if errors.Is(err, service.ErrNotFound) {
+			return GetAdminCatalog404JSONResponse{notFound("building not found")}, nil
+		}
+		return nil, err
+	}
+	return GetAdminCatalog200JSONResponse(toAdminCatalog(cat)), nil
+}
+
+func (s *Server) ListLessons(ctx context.Context, req ListLessonsRequestObject) (ListLessonsResponseObject, error) {
+	var sem *string
+	if req.Params.SemesterId != nil {
+		id := req.Params.SemesterId.String()
+		sem = &id
+	}
+	views, err := s.deps.Board.ListLessons(ctx, buildingParam(req.Params.Building), sem, req.Params.RoomCode)
+	if err != nil {
+		if errors.Is(err, service.ErrNotFound) {
+			return ListLessons404JSONResponse{notFound("building or semester not found")}, nil
+		}
+		return nil, err
+	}
+	out := make(ListLessons200JSONResponse, 0, len(views))
+	for _, v := range views {
+		out = append(out, toLesson(v))
+	}
+	return out, nil
+}
+
+func (s *Server) CreateLesson(ctx context.Context, req CreateLessonRequestObject) (CreateLessonResponseObject, error) {
+	if req.Body == nil {
+		return CreateLesson400JSONResponse{badRequest("body required")}, nil
+	}
+	b := req.Body
+	in := service.LessonInput{CourseCode: b.CourseCode, TeacherID: b.TeacherId.String(), RoomCode: b.RoomCode, SlotIdx: b.SlotIdx, Weekday: b.Weekday}
+	if b.SemesterId != nil {
+		id := b.SemesterId.String()
+		in.SemesterID = &id
+	}
+	if b.Parity != nil {
+		in.Parity = domain.WeekParity(*b.Parity)
+	}
+	if b.Type != nil {
+		in.Type = domain.LessonType(*b.Type)
+	}
+	if b.Groups != nil {
+		in.Groups = *b.Groups
+	}
+	v, err := s.deps.Board.CreateLesson(ctx, in)
+	if err != nil {
+		var ve service.ValidationError
+		if errors.As(err, &ve) {
+			return CreateLesson400JSONResponse{badRequest(ve.Msg)}, nil
+		}
+		var ce service.ConflictError
+		if errors.As(err, &ce) {
+			return CreateLesson409JSONResponse(apiErr("conflict", ce.Msg)), nil
+		}
+		return nil, err
+	}
+	return CreateLesson201JSONResponse(toLesson(v)), nil
+}
+
+func (s *Server) DeleteLesson(ctx context.Context, req DeleteLessonRequestObject) (DeleteLessonResponseObject, error) {
+	if err := s.deps.Board.DeleteLesson(ctx, req.Id.String()); err != nil {
+		if errors.Is(err, service.ErrNotFound) {
+			return DeleteLesson404JSONResponse{notFound("lesson not found")}, nil
+		}
+		return nil, err
+	}
+	return DeleteLesson204Response{}, nil
 }
 
 func (s *Server) CreateAnnouncement(ctx context.Context, req CreateAnnouncementRequestObject) (CreateAnnouncementResponseObject, error) {

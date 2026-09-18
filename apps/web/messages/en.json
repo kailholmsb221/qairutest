@@ -167,7 +167,40 @@
     "noKey": "NEXT_PUBLIC_ADMIN_API_KEY is not set — the panel only works in the demo",
     "undo": "Undo last",
     "close": "Close",
-    "pick": "Pick a session from the board"
+    "pick": "Pick a session from the board",
+    "schedule": {
+      "open": "Timetable",
+      "title": "Weekly timetable",
+      "room": "Room",
+      "floor": "floor {n}",
+      "slot": "Slot",
+      "days": {
+        "1": "Mon",
+        "2": "Tue",
+        "3": "Wed",
+        "4": "Thu",
+        "5": "Fri",
+        "6": "Sat",
+        "7": "Sun"
+      },
+      "add": "Add a lesson",
+      "course": "Course",
+      "teacher": "Teacher",
+      "groups": "Groups",
+      "groupsHint": "(Ctrl — several)",
+      "type": "Type",
+      "parity": "Weeks",
+      "parity_all": "every week",
+      "parity_odd": "odd",
+      "parity_even": "even",
+      "save": "Add",
+      "cancelForm": "Cancel",
+      "delete": "Remove lesson",
+      "loading": "Loading…",
+      "hint": "Press “+” in a free cell to add a lesson; ✕ removes one. Every open board updates at once.",
+      "added": "Lesson added to the timetable",
+      "deleted": "Lesson removed from the timetable"
+    }
   },
   "state": {
     "loadingTitle": "Connecting…",

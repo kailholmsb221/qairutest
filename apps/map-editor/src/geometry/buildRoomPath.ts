@@ -30,8 +30,7 @@ export function resolveBoundary(plan: FloorPlan, boundary: BoundaryRef[]): Resol
   return out;
 }
 
-/** Замкнутый SVG path из boundary. Дуги — настоящими командами A. */
-export function buildRoomPath(plan: FloorPlan, boundary: BoundaryRef[]): string {
+function ringPath(plan: FloorPlan, boundary: BoundaryRef[]): string {
   const segs = resolveBoundary(plan, boundary);
   if (segs.length === 0) return '';
   const parts: string[] = [`M ${fmt(segs[0].from.x)} ${fmt(segs[0].from.y)}`];
@@ -43,6 +42,13 @@ export function buildRoomPath(plan: FloorPlan, boundary: BoundaryRef[]): string 
   return parts.join(' ');
 }
 
+/** Замкнутый SVG path из boundary (+ внутренние кольца-дыры). Дуги — настоящими командами A. */
+export function buildRoomPath(plan: FloorPlan, boundary: BoundaryRef[], holes: BoundaryRef[][] = []): string {
+  const outer = ringPath(plan, boundary);
+  if (!outer) return '';
+  return [outer, ...holes.map((h) => ringPath(plan, h)).filter(Boolean)].join(' ');
+}
+
 /** Полилиния (дуги аппроксимированы) — для площади, центроида, попадания. */
 export function boundaryPolyline(plan: FloorPlan, boundary: BoundaryRef[], arcSegments = 10): Point[] {
   const segs = resolveBoundary(plan, boundary);
@@ -52,6 +58,12 @@ export function boundaryPolyline(plan: FloorPlan, boundary: BoundaryRef[], arcSe
     if (s.bulge !== 0) pts.push(...sampleArc(s.from, s.to, s.bulge, arcSegments));
   }
   return pts;
+}
+
+/** Площадь помещения с учётом дыр (по полилиниям). */
+export function roomArea(plan: FloorPlan, boundary: BoundaryRef[], holes: BoundaryRef[][] = []): number {
+  const outer = Math.abs(signedArea(boundaryPolyline(plan, boundary)));
+  return holes.reduce((s, h) => s - Math.abs(signedArea(boundaryPolyline(plan, h))), outer);
 }
 
 /** SVG path одной стены (отрезок или дуга). */
