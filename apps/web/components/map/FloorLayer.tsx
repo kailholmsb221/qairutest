@@ -32,7 +32,8 @@ interface Props {
 /**
  * One <svg viewBox> per floor. Layer order is the editor's: background → room fills (main, then
  * service) → walls → doors → zones → labels → chips → selection. Everything static is memoised;
- * only RoomShape/RoomChip subscribe to live state.
+ * only RoomShape/RoomChip subscribe to live state. The exploded plates carry no text (only the
+ * live dots) — the floor tags beside the stack and the caption name them; labels appear in focus.
  */
 export const FloorLayer = memo(
   forwardRef<SVGSVGElement, Props>(function FloorLayer({ floor, viewBox, mode, interactive, onHover, onSelect, onPointerDown, onPointerMove, onPointerUp }, ref) {
@@ -78,7 +79,7 @@ export const FloorLayer = memo(
         <WallLayer floor={floor} />
         <DoorLayer floor={floor} />
         <ZoneLayer floor={floor} />
-        <Labels floor={floor} />
+        {!exploded && <Labels floor={floor} />}
         {focus && (
           <g className="chips">
             {schedulable.map((r) => (

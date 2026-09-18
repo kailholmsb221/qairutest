@@ -26,19 +26,21 @@ type Floor struct {
 
 // Room is the identity + geometry of one space.
 type Room struct {
-	ID          string   `json:"id"`
-	Code        string   `json:"code"`
-	Name        string   `json:"name"`
-	MapLabel    string   `json:"mapLabel"`
-	Type        string   `json:"type"`
-	MapType     string   `json:"mapType"`
-	Wing        string   `json:"wing"`
-	Schedulable bool     `json:"schedulable"`
-	Capacity    *int     `json:"capacity"`
-	Area        *float64 `json:"area"`
-	BBox        BBox     `json:"bbox"`
-	Label       Point    `json:"label"`
-	Path        string   `json:"path"`
+	ID   string `json:"id"`
+	Code string `json:"code"`
+	Name string `json:"name"`
+	// Names holds the name per UI locale (ru/kk/en); search matches all of them.
+	Names       map[string]string `json:"names"`
+	MapLabel    string            `json:"mapLabel"`
+	Type        string            `json:"type"`
+	MapType     string            `json:"mapType"`
+	Wing        string            `json:"wing"`
+	Schedulable bool              `json:"schedulable"`
+	Capacity    *int              `json:"capacity"`
+	Area        *float64          `json:"area"`
+	BBox        BBox              `json:"bbox"`
+	Label       Point             `json:"label"`
+	Path        string            `json:"path"`
 }
 
 type BBox struct{ X, Y, W, H float64 }

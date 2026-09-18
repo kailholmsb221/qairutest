@@ -425,7 +425,7 @@ LOG_LEVEL=info
 | GET | `/api/v1/rooms/{code}/day?date=` | Сессии аудитории за день |
 | GET | `/api/v1/teachers/{id}/day?date=` | Сессии преподавателя за день |
 | GET | `/api/v1/groups/{code}/day?date=` | Сессии группы за день |
-| GET | `/api/v1/search?q=` | Единый поиск: teachers / groups / rooms / courses (по 5 на тип) |
+| GET | `/api/v1/search?q=` | Единый поиск: teachers / groups / rooms / courses (по 5 на тип); аудитории — по коду и названию на ru/kk/en (`rooms.name`, `name_kk`, `name_en`) |
 | GET | `/api/v1/events?building=` | SSE-поток |
 | GET | `/api/v1/time` | Серверное «сейчас» + режим часов (для синхронизации клиентских часов) |
 | POST | `/api/v1/admin/overrides` | Демо-админ: cancel / move / delay / reassign / extra (`X-Api-Key`) |

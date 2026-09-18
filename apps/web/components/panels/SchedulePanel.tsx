@@ -8,6 +8,7 @@ import type { AdminCatalog, Lesson, LessonRequest, LessonType, WeekParity } from
 import { api, HttpError } from '@/lib/api/client';
 import { useUiStore } from '@/lib/store/uiStore';
 import { useAdminKey } from '@/lib/admin-key';
+import { useRoomName } from '@/lib/room-name';
 
 /** Monday..Saturday — the seed and the university week; Sunday stays possible through the API. */
 const DAYS = [1, 2, 3, 4, 5, 6] as const;
@@ -32,6 +33,7 @@ export function SchedulePanel() {
   const setOpen = useUiStore((s) => s.setScheduleOpen);
   const setToast = useUiStore((s) => s.setToast);
   const apiKey = useAdminKey();
+  const roomName = useRoomName();
   const qc = useQueryClient();
   const [room, setRoom] = useState('');
   const [cell, setCell] = useState<Cell | null>(null);
@@ -89,7 +91,7 @@ export function SchedulePanel() {
               <select value={roomCode} onChange={(e) => { setRoom(e.target.value); setCell(null); }} data-testid="sched-room">
                 {(cat?.rooms ?? []).map((r) => (
                   <option key={r.code} value={r.code}>
-                    {r.code} · {r.name} · {t('schedule.floor', { n: r.floor })}
+                    {r.code} · {roomName(r.code)} · {t('schedule.floor', { n: r.floor })}
                   </option>
                 ))}
               </select>

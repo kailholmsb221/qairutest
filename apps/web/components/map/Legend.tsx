@@ -45,15 +45,15 @@ export function Legend() {
         <span>{t('legendService')}</span>
       </div>
       <div className="legend-row legend-static">
-        <span className="swatch" style={{ background: '#172432' }} />
+        <span className="swatch" style={{ background: 'var(--fill-corridor)' }} />
         <span>{t('legendCorridors')}</span>
       </div>
       <div className="legend-row legend-static">
-        <span className="swatch" style={{ background: '#2b4766' }} />
+        <span className="swatch" style={{ background: 'var(--fill-wc)' }} />
         <span>{t('legendWc')}</span>
       </div>
       <div className="legend-row legend-static">
-        <span className="swatch swatch-hatch" style={{ background: '#293a51' }} />
+        <span className="swatch swatch-hatch" style={{ background: 'var(--fill-stairs)' }} />
         <span>{t('legendTech')}</span>
       </div>
       {active && (

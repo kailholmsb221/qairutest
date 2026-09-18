@@ -396,6 +396,8 @@ type Room struct {
 	Capacity    *int32
 	Area        *float64
 	Geometry    []byte
+	NameKk      string
+	NameEn      string
 }
 
 type Semester struct {

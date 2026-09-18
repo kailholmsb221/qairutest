@@ -8,9 +8,9 @@ pnpm dev · pnpm map:build · pnpm seed · pnpm test · pnpm e2e · pnpm demo ·
 - API types are generated from packages/contracts/openapi.yaml (oapi-codegen, openapi-typescript). Never hand-write DTOs.
 - Room identity (codes, names, types) comes only from packages/map-data/building-a.json; what the screen draws comes only from packages/map-data/vector-map.json. Both are built from packages/map-data/vector/ + room-codes.json by `pnpm map:build`. Never hard-code coordinates.
 - packages/map-data/vector/*.json is itself generated: the owner's Illustrator drawings packages/map-data/plans/floor-{1,2}.svg → `python apps/map-editor/tools/svg2plan.py` (walls verbatim as `strokes`, rooms polygonised between them) → `pnpm --filter @campuslive/map-editor gen:floors` (identity in tools/floor{1,2}.ts). Never redraw walls by hand — fix the SVG and rebuild.
-- The building is REAL and has two floors: docs/BUILDING.md (generated) is the authoritative room programme. Never invent a room code — codes come from packages/map-data/room-codes.json.
+- The building is REAL and has two floors: docs/BUILDING.md (generated) is the authoritative room programme. Never invent a room code — codes, `schedulable`, type and the ru/kk/en `names` come from packages/map-data/room-codes.json (the owner's programme). Room names shown in the UI go through `useRoomName()` (apps/web/lib/room-name.ts); the API search matches all three names.
 - The map's look is the owner's drawings in the project palette: wall strokes are drawn exactly as in the SVG, every labelled room is a button, corridors/unnamed spaces are static. 2.5D adds the scene around it, not changes inside it.
-- The page never scrolls. Animate transform/opacity only. Respect prefers-reduced-motion.
+- The page never scrolls. Animate transform/opacity only. Respect prefers-reduced-motion. Every colour on the stage is a token that both themes define (`[data-theme='light']`); never hard-code a stage colour.
 - Every phase ends with green quality gates and an updated docs/STATUS.md.
 
 ## Repo map

@@ -5,7 +5,7 @@ import { motion, useMotionValue, useSpring, useTransform } from 'motion/react';
 import { useTranslations } from 'next-intl';
 import { FLOORS, VIEW_BOX } from '@/lib/vector-map';
 import { useUiStore } from '@/lib/store/uiStore';
-import { useBoardStore } from '@/lib/store/boardStore';
+import { useBoardStore, useBusyByFloor } from '@/lib/store/boardStore';
 import { explodedScale, fitScale, panViewBox, zoomCenter, zoomViewBox, type ViewBox } from '@/lib/map-geometry/fit';
 import { FloorLayer } from './FloorLayer';
 import { Legend } from './Legend';
@@ -14,8 +14,9 @@ import { MapTooltip } from './MapTooltip';
 import { TimeTravelBar } from '@/components/panels/TimeTravelBar';
 
 const EXPLODED = { rx: 58, rz: -38 };
-/** the spec's 72 px gap, grown with the layer so two large landscape floors do not overlap */
+/** the spec's 72 px gap, grown with the layer so the lower floor stays readable beside the upper one */
 const FLOOR_GAP_MIN = 72;
+const FLOOR_GAP_RATIO = 0.46;
 const SPRING = { stiffness: 120, damping: 18 };
 const PARALLAX = { stiffness: 60, damping: 20 };
 const BASE_VB: ViewBox = { x: VIEW_BOX.x, y: VIEW_BOX.y, w: VIEW_BOX.width, h: VIEW_BOX.height };
@@ -64,6 +65,7 @@ export function MapStage({ className = '' }: { className?: string }) {
   const error = useBoardStore((s) => s.error);
   const hasData = useBoardStore((s) => s.snapshot.rooms.length > 0);
   const connection = useBoardStore((s) => s.connection);
+  const busyByFloor = useBusyByFloor();
   const exploded = focused === null;
 
   // ---- stage size
@@ -80,11 +82,13 @@ export function MapStage({ className = '' }: { className?: string }) {
   // ---- layer size (flat fit) and exploded scene scale
   const flat = fitScale(stage.w, stage.h - 14, VIEW_BOX.width, VIEW_BOX.height, 20);
   const layer = { w: VIEW_BOX.width * flat, h: VIEW_BOX.height * flat };
-  const floorGap = Math.max(FLOOR_GAP_MIN, Math.round(layer.h * 0.32));
+  const floorGap = Math.max(FLOOR_GAP_MIN, Math.round(layer.h * FLOOR_GAP_RATIO));
   const stack = floorGap * Math.max(0, FLOORS.length - 1);
   // rounded so the SSR transform string and the client's first render serialise identically
   const explScale = Math.round(explodedScale(stage, layer, EXPLODED.rx, EXPLODED.rz, stack) * 10000) / 10000;
   const explShift = Math.round(((stack * Math.sin((EXPLODED.rx * Math.PI) / 180)) / 2) * 100) / 100;
+  /** screen y of plate i's centre in the exploded stack (translateZ(i·gap) after rotateX, then scale + shift) */
+  const plateY = (i: number) => stage.h / 2 + explShift - explScale * i * floorGap * Math.sin((EXPLODED.rx * Math.PI) / 180);
 
   // ---- springs: base rotation + parallax
   const rotX = useSpring(exploded ? EXPLODED.rx : 0, SPRING);
@@ -208,9 +212,12 @@ export function MapStage({ className = '' }: { className?: string }) {
   const [tip, setTip] = useState<{ code: string; x: number; y: number } | null>(null);
   const tipPos = useRef({ x: 0, y: 0 });
   const onHover = useCallback(
-    (code: string | null) => {
+    (code: string | null, ev?: React.PointerEvent) => {
       hoverRoom(code);
       hoverCode.set(code);
+      // a plate can slide under a resting pointer (focus/exploded transition): take the position from the event itself
+      const r = ev && stageRef.current?.getBoundingClientRect();
+      if (ev && r) tipPos.current = { x: ev.clientX - r.left, y: ev.clientY - r.top };
       if (!code) setTip(null);
       else setTip({ code, ...tipPos.current });
     },
@@ -268,7 +275,6 @@ export function MapStage({ className = '' }: { className?: string }) {
                     onPointerMove={isFocus ? onPointerMove : undefined}
                     onPointerUp={isFocus ? onPointerUp : undefined}
                   />
-                  {exploded && <span className="floor-tag">{t('floor', { n: f.number })}</span>}
                 </div>
               </motion.div>
             );
@@ -276,6 +282,35 @@ export function MapStage({ className = '' }: { className?: string }) {
         </motion.div>
       </div>
 
+      {/* caption — the reference's text chip: what you are looking at and what a click does; in focus it is the way back */}
+      {exploded ? (
+        <div className="stage-caption" data-testid="stage-caption">
+          <b>{t('allFloors')}</b>
+          <span>{t('explodedHint')}</span>
+        </div>
+      ) : (
+        <button type="button" className="stage-caption" onClick={() => { setFocused(null); setFilters({ floors: [] }); }} data-testid="stage-caption" title={t('exploded')}>
+          <b>{t('floor', { n: focused! })}</b>
+          <span>{t('focusHint')}</span>
+          <span className="kbd">{t('backToAll')}</span>
+        </button>
+      )}
+      {/* floor tags beside the stack: «— F2 · занято 7», each a button that opens its floor */}
+      {exploded &&
+        layers.map(({ f, i }) => (
+          <button
+            key={f.id}
+            type="button"
+            className="floor-tag"
+            style={{ top: Math.round(plateY(i)) }}
+            onClick={() => { setFocused(f.number); setFilters({ floors: [f.number] }); }}
+            aria-label={`${t('floor', { n: f.number })} · ${t('busyShort', { n: busyByFloor[f.number] ?? 0 })}`}
+            data-testid={`floor-tag-${f.number}`}
+          >
+            <b>{t('floorTag', { n: f.number })}</b>
+            <span>· {t('busyShort', { n: busyByFloor[f.number] ?? 0 })}</span>
+          </button>
+        ))}
       <Legend />
       <StatsChip />
       <div className="map-controls" role="toolbar" aria-label="Map controls">

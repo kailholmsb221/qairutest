@@ -6,7 +6,7 @@ import type { VmRoom } from '@campuslive/map-data/types';
 import type { RoomLiveState } from '@campuslive/contracts';
 import { useBoardStore, selectRoom } from '@/lib/store/boardStore';
 import { useUiStore } from '@/lib/store/uiStore';
-import { roomIdentity } from '@/lib/vector-map';
+import { useRoomName } from '@/lib/room-name';
 import { formatTime } from '@/features/time/derive';
 import { useTimeStore } from '@/features/time/useNow';
 
@@ -36,6 +36,7 @@ export const RoomShape = memo(function RoomShape({ room, interactive, exploded, 
   });
   const t = useTranslations('map');
   const tz = useTimeStore((s) => s.timezone);
+  const name = useRoomName();
 
   const phase = room.schedulable ? (state?.phase ?? 'free') : undefined;
   const conflict = !!state?.conflict;
@@ -70,8 +71,7 @@ export const RoomShape = memo(function RoomShape({ room, interactive, exploded, 
     [onSelect, room.code],
   );
 
-  const identity = roomIdentity(room.code);
-  const aria = room.schedulable ? t('roomAria', { code: room.code, name: identity?.name ?? room.code, status: statusText(state, t, tz) }) : `${identity?.name ?? room.code}: ${t('notSchedulable')}`;
+  const aria = room.schedulable ? t('roomAria', { code: room.code, name: name(room.code), status: statusText(state, t, tz) }) : `${name(room.code)}: ${t('notSchedulable')}`;
   const focusable = clickable && !exploded;
 
   return (

@@ -43,11 +43,16 @@ export interface VectorFloorPlan {
 export type RoomType = 'lecture' | 'seminar' | 'lab' | 'coworking' | 'admin' | 'service' | 'void';
 export type Wing = 'west' | 'east' | 'core';
 export interface BBox { x: number; y: number; w: number; h: number }
+export type Locale = 'ru' | 'kk' | 'en';
+export type RoomNames = Record<Locale, string>;
 export interface BuildingRoom {
   /** id из vector/*.json — стабильный ключ между building-a.json и vector-map.json */
   id: string;
   code: string;
+  /** название по умолчанию (русское) — то же, что names.ru */
   name: string;
+  /** название на трёх языках интерфейса (room-codes.json); поиск в API ищет по всем трём */
+  names: RoomNames;
   /** подпись на чертеже (как на карте) */
   mapLabel: string;
   type: RoomType;

@@ -25,12 +25,18 @@
             "minItems": 1,
             "items": {
               "type": "object",
-              "required": ["id", "code", "name", "mapLabel", "type", "mapType", "wing", "schedulable", "capacity", "area", "bbox", "label", "path"],
+              "required": ["id", "code", "name", "names", "mapLabel", "type", "mapType", "wing", "schedulable", "capacity", "area", "bbox", "label", "path"],
               "additionalProperties": false,
               "properties": {
                 "id": { "type": "string", "minLength": 1 },
                 "code": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$" },
                 "name": { "type": "string", "minLength": 1 },
+                "names": {
+                  "type": "object",
+                  "required": ["ru", "kk", "en"],
+                  "additionalProperties": false,
+                  "properties": { "ru": { "type": "string", "minLength": 1 }, "kk": { "type": "string", "minLength": 1 }, "en": { "type": "string", "minLength": 1 } }
+                },
                 "mapLabel": { "type": "string" },
                 "type": { "enum": ["lecture", "seminar", "lab", "coworking", "admin", "service", "void"] },
                 "mapType": { "enum": ["office", "class", "hall", "corridor", "wc", "stairs", "lift", "service", "tech", "lobby", "cafe", "storage"] },

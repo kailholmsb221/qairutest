@@ -38,6 +38,18 @@
   --slab-top: rgba(79, 209, 255, 0.18);
   --wall: #9cd8f5;
   --wall-inner: #7fc3e6;
+  /* static fills by map type (TYPE_COLORS of the editor); rooms without a timetable use --status-service */
+  --fill-corridor: #172432;
+  --fill-wc: #2b4766;
+  --fill-stairs: #293a51;
+  --fill-lift: #2f4059;
+  --fill-tech: #2a3443;
+  --plan-label: #e6f1fb;
+  --plan-label-stroke: #0d152088;
+  --stage-glass: rgba(13, 21, 32, 0.8);
+  --stage-fade: rgba(13, 21, 32, 0.92);
+  --stage-fade-0: rgba(13, 21, 32, 0);
+  --row-hover: #1b2c40;
 
   --font-ui: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
   --font-board: 'JetBrains Mono', 'Cascadia Mono', 'IBM Plex Mono', ui-monospace, Consolas, monospace;
@@ -70,6 +82,26 @@
   --status-soon-text: #8a6a0c;
   --status-ending-text: #a84e12;
   --status-free-text: #1f5bb8;
+  --status-service: #9aa5b2;
+  /* the map keeps the same drawing in daylight: pale slab, dark walls, light static fills */
+  --map-bg: #dfe6ef;
+  --floor-fill: rgba(255, 255, 255, 0.72);
+  --slab: #c3ccda;
+  --slab-edge: #aab5c6;
+  --slab-top: rgba(11, 15, 23, 0.18);
+  --wall: #23384f;
+  --wall-inner: #3b5270;
+  --fill-corridor: #cbd5e1;
+  --fill-wc: #b3c4d8;
+  --fill-stairs: #bcc7d5;
+  --fill-lift: #b9c3d2;
+  --fill-tech: #c4ccd7;
+  --plan-label: #0f1a27;
+  --plan-label-stroke: rgba(255, 255, 255, 0.55);
+  --stage-glass: rgba(255, 255, 255, 0.82);
+  --stage-fade: rgba(233, 238, 245, 0.94);
+  --stage-fade-0: rgba(233, 238, 245, 0);
+  --row-hover: #dde6f0;
   color-scheme: light;
 }
 
@@ -325,8 +357,24 @@ select {
   fill: var(--status-soon);
   animation: cl-blink 1s steps(2, jump-none) infinite;
 }
-.room[data-phase='none'] {
+.room[data-phase='none'],
+.room:not([data-phase]) {
   fill: var(--status-service);
+}
+.room:not([data-phase])[data-type='corridor'] {
+  fill: var(--fill-corridor);
+}
+.room:not([data-phase])[data-type='wc'] {
+  fill: var(--fill-wc);
+}
+.room:not([data-phase])[data-type='stairs'] {
+  fill: var(--fill-stairs);
+}
+.room:not([data-phase])[data-type='lift'] {
+  fill: var(--fill-lift);
+}
+.room:not([data-phase])[data-type='tech'] {
+  fill: var(--fill-tech);
 }
 .room[data-conflict='true'] {
   fill: url(#cl-conflict);
@@ -427,9 +475,9 @@ select {
 }
 
 .room-label text {
-  fill: #e6f1fb;
+  fill: var(--plan-label);
   paint-order: stroke;
-  stroke: #0d152088;
+  stroke: var(--plan-label-stroke);
   stroke-width: 0.35px;
   user-select: none;
   font-family: var(--font-ui);
@@ -438,7 +486,8 @@ select {
   font-weight: 600;
 }
 .room-label-secondary {
-  fill: #cfe0f0;
+  fill: var(--plan-label);
+  opacity: 0.85;
 }
 .label-dimmed {
   opacity: 0.25;
@@ -482,14 +531,14 @@ select {
   pointer-events: none;
 }
 .room-chip rect {
-  fill: rgba(13, 21, 32, 0.86);
-  stroke: rgba(255, 255, 255, 0.12);
+  fill: var(--stage-glass);
+  stroke: var(--line);
   stroke-width: 0.6px;
 }
 .room-chip text {
   font-family: var(--font-board);
   font-weight: 600;
-  fill: #e6f1fb;
+  fill: var(--text);
 }
 .room-chip .chip-course {
   fill: #9fb3c8;
@@ -575,17 +624,87 @@ select {
 }
 .floor-tag {
   position: absolute;
-  left: 2.5%;
-  top: 46%;
-  padding: 4px 10px;
-  border-radius: 999px;
-  background: rgba(13, 21, 32, 0.8);
-  border: 1px solid var(--line);
+  right: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 26px;
+  padding: 0 10px 0 0;
+  transform: translateY(-50%);
   font-family: var(--font-board);
   font-size: 12px;
   color: var(--text-dim);
-  pointer-events: none;
-  transform: translateZ(1px);
+  white-space: nowrap;
+  z-index: 3;
+  cursor: pointer;
+  transition: color var(--dur-fast);
+}
+.floor-tag::before {
+  content: '';
+  width: 22px;
+  height: 1px;
+  background: var(--text-faint);
+}
+.floor-tag b {
+  color: var(--text);
+  font-weight: 700;
+}
+.floor-tag:hover,
+.floor-tag:focus-visible {
+  color: var(--text);
+  outline: none;
+}
+.floor-tag:hover b {
+  color: var(--accent);
+}
+.stage-caption {
+  position: absolute;
+  left: 14px;
+  top: 14px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 9px;
+  background: var(--stage-glass);
+  border: 1px solid var(--line);
+  backdrop-filter: blur(6px);
+  color: var(--text-dim);
+  font-size: 12px;
+  max-width: calc(100% - 260px);
+  text-align: left;
+}
+.stage-caption b {
+  font-family: var(--font-board);
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--text);
+  white-space: nowrap;
+}
+.stage-caption .kbd {
+  font-size: 11px;
+}
+button.stage-caption {
+  cursor: pointer;
+}
+button.stage-caption:hover {
+  border-color: var(--accent-soft);
+}
+.busy-bar {
+  position: relative;
+  width: 56px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--line);
+  overflow: hidden;
+}
+.busy-bar i {
+  position: absolute;
+  inset: 0;
+  transform-origin: left;
+  background: var(--status-live-text);
+  transition: transform var(--dur-slow) var(--ease-out);
 }
 /* focus view: the flat floor must not stay a pre-rasterised compositor texture, or it goes soft on zoom */
 .stage[data-view='focus'] .scene,
@@ -1123,7 +1242,7 @@ select {
   flex-direction: column;
   gap: 3px;
   padding: 8px 10px;
-  background: #0d1520cc;
+  background: var(--stage-glass);
   border: 1px solid var(--line);
   border-radius: 8px;
   backdrop-filter: blur(6px);
@@ -1140,10 +1259,11 @@ select {
   color: var(--text);
 }
 .legend-row:not(.legend-static):hover {
-  background: #1b2c40;
+  background: var(--row-hover);
 }
 .legend-row.is-active {
-  background: #1f3b52;
+  background: var(--row-hover);
+  box-shadow: inset 0 0 0 1px var(--accent-soft);
 }
 .legend-row.is-muted {
   opacity: 0.5;
@@ -1180,7 +1300,7 @@ select {
   height: 36px;
   border-radius: 8px;
   border: 1px solid var(--line);
-  background: #14243699;
+  background: var(--stage-glass);
   backdrop-filter: blur(6px);
   color: var(--text);
   font-size: 15px;
@@ -1248,7 +1368,7 @@ select {
   position: absolute;
   inset: 0;
   padding: 10px 16px 12px;
-  background: linear-gradient(180deg, rgba(13, 21, 32, 0) 0%, rgba(13, 21, 32, 0.92) 30%);
+  background: linear-gradient(180deg, var(--stage-fade-0) 0%, var(--stage-fade) 30%);
   opacity: 0;
   transition: opacity var(--dur-base);
 }
@@ -1520,7 +1640,7 @@ select {
   cursor: pointer;
 }
 .cmd [cmdk-item][data-selected='true'] {
-  background: #1b2c40;
+  background: var(--row-hover);
 }
 .cmd [cmdk-item] .ci-kind {
   font-size: 0.76em;

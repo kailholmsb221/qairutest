@@ -51,6 +51,7 @@ export function Header() {
             <TooltipTrigger asChild>
               <button type="button" className="btn" onClick={() => setSearchOpen(true)} data-testid="search-trigger" aria-label={t('search')}>
                 <span aria-hidden>⌕</span>
+                <span className="btn-text">{t('search')}</span>
                 <span className="kbd">⌘K</span>
               </button>
             </TooltipTrigger>

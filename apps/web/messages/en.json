@@ -15,7 +15,8 @@
     "odd": "odd",
     "even": "even",
     "simulated": "SIMULATED",
-    "busyOnFloor": "{n} busy"
+    "busyOnFloor": "{n} busy",
+    "busyAll": "{n} busy"
   },
   "board": {
     "now": "NOW",
@@ -85,7 +86,13 @@
     },
     "notSchedulable": "not schedulable",
     "conflict": "conflict",
-    "clickToFocus": "Click to open the floor"
+    "clickToFocus": "Click to open the floor",
+    "explodedHint": "exploded view · click a plate to zoom in",
+    "focusHint": "click a room for its card",
+    "backToAll": "Esc — all floors",
+    "floorTag": "F{n}",
+    "busyShort": "{n} busy",
+    "busyBar": "{busy} of {total} busy"
   },
   "room": {
     "type": "Type",

@@ -825,6 +825,7 @@ func (q *Queries) SearchGroups(ctx context.Context, q_ string) ([]StudentGroup, 
 const searchRooms = `-- name: SearchRooms :many
 select r.id, r.code, r.name, f.number as floor, r.type from rooms r join floors f on f.id = r.floor_id
 where r.code ilike '%' || $1::text || '%' or r.name ilike '%' || $1::text || '%'
+   or r.name_kk ilike '%' || $1::text || '%' or r.name_en ilike '%' || $1::text || '%'
 order by r.schedulable desc, r.code limit 5
 `
 

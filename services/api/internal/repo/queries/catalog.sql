@@ -106,6 +106,7 @@ order by code limit 5;
 -- name: SearchRooms :many
 select r.id, r.code, r.name, f.number as floor, r.type from rooms r join floors f on f.id = r.floor_id
 where r.code ilike '%' || sqlc.arg(q)::text || '%' or r.name ilike '%' || sqlc.arg(q)::text || '%'
+   or r.name_kk ilike '%' || sqlc.arg(q)::text || '%' or r.name_en ilike '%' || sqlc.arg(q)::text || '%'
 order by r.schedulable desc, r.code limit 5;
 
 -- name: SearchCourses :many

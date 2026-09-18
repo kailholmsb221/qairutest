@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl';
 import { useBoardStore, selectRoom } from '@/lib/store/boardStore';
 import { roomIdentity } from '@/lib/vector-map';
+import { useRoomName } from '@/lib/room-name';
 import { useTimeStore } from '@/features/time/useNow';
 import { formatTime } from '@/features/time/derive';
 
@@ -13,7 +14,9 @@ export function MapTooltip({ code, x, y, stage }: { code: string; x: number; y: 
   const tz = useTimeStore((s) => s.timezone);
   const state = useBoardStore(selectRoom(code));
   const id = roomIdentity(code);
+  const name = useRoomName();
   if (!id) return null;
+  const title = name(code);
   const left = Math.min(x + 14, stage.w - 270);
   const top = y + 16 > stage.h - 90 ? y - 80 : y + 16;
   let line: string;
@@ -24,7 +27,7 @@ export function MapTooltip({ code, x, y, stage }: { code: string; x: number; y: 
   else line = t(`phase.${state.phase}`);
   return (
     <div className="map-tooltip" style={{ left, top }} role="tooltip" data-testid="map-tooltip">
-      <b>{id.schedulable ? code : id.mapLabel}</b> {id.name !== id.mapLabel && <span>· {id.name}</span>}
+      <b>{id.schedulable ? code : id.mapLabel}</b> {title !== id.mapLabel && <span>· {title}</span>}
       <div style={{ color: 'var(--text-dim)', marginTop: 2 }}>
         {line}
         {state?.conflict ? ` · ⚠ ${t('conflict')}` : ''}

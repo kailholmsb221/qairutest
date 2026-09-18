@@ -15613,8 +15613,8 @@
     {
       "id": "f1-100",
       "number": "100",
-      "name": "Учебный класс на 25 уч.",
-      "type": "class",
+      "name": "Актовый зал",
+      "type": "hall",
       "status": "free",
       "boundary": [
         {
@@ -15800,8 +15800,8 @@
     {
       "id": "f1-103",
       "number": "103",
-      "name": "Кабинет информатики",
-      "type": "class",
+      "name": "Медицинский пункт",
+      "type": "office",
       "status": "free",
       "boundary": [
         {
@@ -16137,8 +16137,8 @@
     {
       "id": "f1-102",
       "number": "102",
-      "name": "Учебный класс на 20 уч.",
-      "type": "class",
+      "name": "Библиотека",
+      "type": "hall",
       "status": "free",
       "boundary": [
         {
@@ -16458,7 +16458,7 @@
     {
       "id": "f1-101",
       "number": "101",
-      "name": "Учебный класс на 20 уч.",
+      "name": "Учебная лаборатория",
       "type": "class",
       "status": "free",
       "boundary": [
@@ -16605,8 +16605,8 @@
     {
       "id": "f1-102a",
       "number": "102",
-      "name": "Лаборантская",
-      "type": "office",
+      "name": "Библиотека",
+      "type": "hall",
       "status": "free",
       "boundary": [
         {

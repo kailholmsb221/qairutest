@@ -10,6 +10,9 @@ export function StatsChip() {
     <div className="chip stats-chip" data-testid="stats-chip">
       <span style={{ width: 8, height: 8, borderRadius: 4, background: 'var(--status-live-text)', boxShadow: '0 0 8px var(--status-live-text)' }} aria-hidden />
       {t('busy', { busy: stats.roomsBusy, total: stats.roomsTotal })}
+      <span className="busy-bar" aria-hidden>
+        <i style={{ transform: `scaleX(${stats.roomsTotal ? (stats.roomsBusy / stats.roomsTotal).toFixed(3) : 0})` }} />
+      </span>
     </div>
   );
 }

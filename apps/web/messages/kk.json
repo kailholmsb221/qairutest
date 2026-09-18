@@ -15,7 +15,8 @@
     "odd": "тақ",
     "even": "жұп",
     "simulated": "SIMULATED",
-    "busyOnFloor": "{n} бос емес"
+    "busyOnFloor": "{n} бос емес",
+    "busyAll": "{n} бос емес"
   },
   "board": {
     "now": "ҚАЗІР",
@@ -85,7 +86,13 @@
     },
     "notSchedulable": "кестесіз бөлме",
     "conflict": "қайшылық",
-    "clickToFocus": "Қабатты ашу үшін басыңыз"
+    "clickToFocus": "Қабатты ашу үшін басыңыз",
+    "explodedHint": "жайылған көрініс · жақындату үшін қабатты басыңыз",
+    "focusHint": "аудиторияны басу — карточка",
+    "backToAll": "Esc — барлық қабат",
+    "floorTag": "F{n}",
+    "busyShort": "{n} бос емес",
+    "busyBar": "{total} ішінен {busy} бос емес"
   },
   "room": {
     "type": "Түрі",

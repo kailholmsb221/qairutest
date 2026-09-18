@@ -9,7 +9,7 @@ import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import Ajv from 'ajv';
 import type {
-  BuildingData, BuildingFloor, BuildingRoom, MapRoomType, RoomType, VectorFloorPlan, VectorMap, VmFloor, VmRoom, VmZone, Wing,
+  BuildingData, BuildingFloor, BuildingRoom, MapRoomType, RoomNames, RoomType, VectorFloorPlan, VectorMap, VmFloor, VmRoom, VmZone, Wing,
 } from '../src/types';
 import { bbox, boundaryPolyline, buildRoomPath, centroid, doorGeometry, doorLeaves, labelLayout, stairPaths, wallPath } from '../src/geometry';
 
@@ -20,7 +20,7 @@ const check = process.argv.includes('--check');
 
 interface RoomCodes {
   building: { code: string; name: string; timezone: string };
-  rooms: Record<string, { code: string; schedulable: boolean; type?: RoomType; capacity?: number; name?: string }>;
+  rooms: Record<string, { code: string; schedulable: boolean; type?: RoomType; capacity?: number; names?: Partial<RoomNames> }>;
 }
 
 /** Служебные типы карты: рисуются отдельным слоем и красятся по типу (как в редакторе). */
@@ -89,10 +89,13 @@ for (const plan of plans) {
     if (schedulable && !override) errors.push(`${r.id}: schedulable без записи в room-codes.json`);
     const r2 = (n: number) => Math.round(n * 100) / 100;
     const bboxOut = { x: r2(b.minX), y: r2(b.minY), w: r2(b.maxX - b.minX), h: r2(b.maxY - b.minY) };
+    // названия: room-codes.json (ru/kk/en) поверх русского названия из vector/*.json
+    const names: RoomNames = { ru: override?.names?.ru ?? r.name, kk: override?.names?.kk ?? override?.names?.ru ?? r.name, en: override?.names?.en ?? override?.names?.ru ?? r.name };
     rooms.push({
       id: r.id,
       code,
-      name: override?.name ?? r.name,
+      name: names.ru,
+      names,
       mapLabel: r.number || r.name,
       type,
       mapType: r.type,
@@ -112,7 +115,7 @@ for (const plan of plans) {
       mapType: r.type,
       service: SERVICE_TYPES.has(r.type),
       typeFill: TYPE_FILL[r.type] ?? null,
-      baseFill: TYPE_FILL[r.type] ?? (FREE_TYPES.has(r.type) ? FILL_FREE : FILL_SERVICE),
+      baseFill: TYPE_FILL[r.type] ?? (schedulable && FREE_TYPES.has(r.type) ? FILL_FREE : FILL_SERVICE),
       schedulable,
       label: layout ? { x: r.label.x, y: r.label.y, angle: layout.angle, fs: layout.fs, secFs: layout.secFs, primary: layout.primary, secondary: layout.secondary } : null,
       hideLabel: r.hideLabel ?? false,
@@ -206,9 +209,9 @@ const md: string[] = [
   '',
 ];
 for (const f of building.floors) {
-  md.push(`## Этаж ${f.number} — ${f.name}`, '', '| Код | На карте | Название | Тип | Крыло | Вмест. | Пары |', '|---|---|---|---|---|---|---|');
+  md.push(`## Этаж ${f.number} — ${f.name}`, '', '| Код | На карте | Название | Қазақша | English | Тип | Крыло | Вмест. | Пары |', '|---|---|---|---|---|---|---|---|---|');
   const sorted = [...f.rooms].sort((a, b) => Number(b.schedulable) - Number(a.schedulable) || a.code.localeCompare(b.code, 'ru', { numeric: true }));
-  for (const r of sorted) md.push(`| ${r.code} | ${r.mapLabel} | ${r.name} | ${r.type} | ${r.wing} | ${r.capacity ?? '—'} | ${r.schedulable ? 'да' : 'нет'} |`);
+  for (const r of sorted) md.push(`| ${r.code} | ${r.mapLabel} | ${r.name} | ${r.names.kk} | ${r.names.en} | ${r.type} | ${r.wing} | ${r.capacity ?? '—'} | ${r.schedulable ? 'да' : 'нет'} |`);
   md.push('');
 }
 

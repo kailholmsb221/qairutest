@@ -61,8 +61,8 @@ services/api: httpapi (oapi-codegen strict) → service.Board (кэш катал
 - **Время** идёт через `internal/clock` (`real` / `fixed` / `offset`) — e2e и демо детерминированы.
 - **Контракт** — `packages/contracts/openapi.yaml`; Go-сервер и TS-типы генерируются из него, контрактные тесты валидируют каждый ответ.
 - **Геометрия** — чертежи `packages/map-data/plans/*.svg` → `apps/map-editor/tools/svg2plan.py` (стены дословно, помещения между ними вычисляются)
-  → `vector/*.json` → `vector-map.json` (что рисуем) и `building-a.json` (кто есть кто); коды аудиторий задаются в `room-codes.json`, подписи на карте не меняются.
-- **2.5D** — стопка этажей в CSS 3D (`rotateX(58°) rotateZ(-38°)`, `translateZ(i×gap)`), фокус этажа — плоский вид с zoom/pan; анимируются только `transform`/`opacity`.
+  → `vector/*.json` → `vector-map.json` (что рисуем) и `building-a.json` (кто есть кто); коды, расписуемость и названия на ru/kk/en задаются в `room-codes.json` (программа помещений владельца), подписи на карте не меняются. Поиск ⌘K находит аудиторию по коду и названию на любом из трёх языков.
+- **2.5D** — стопка этажей в CSS 3D (`rotateX(58°) rotateZ(-38°)`, `translateZ(i×gap)`); на плитах только точки идущих занятий, рядом — теги «F2 · занято 7» (кнопки), фокус этажа — плоский вид с подписями, zoom/pan; анимируются только `transform`/`opacity`. Светлая тема (◐) перекрашивает и карту.
 - **Админ-панель** (⚙ в тикере, нужен `ADMIN_API_KEY`) — отмена/перенос/задержка занятия, объявления и 📅 редактор недельного расписания: сетка «пары × дни» по аудитории, «+» добавляет занятие, ✕ убирает; все экраны обновляются по SSE.
 
 Подробно: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) · программа помещений: [docs/BUILDING.md](docs/BUILDING.md) · статус фаз: [docs/STATUS.md](docs/STATUS.md).

@@ -143,8 +143,8 @@ func (q *Queries) InsertLessonGroup(ctx context.Context, arg InsertLessonGroupPa
 }
 
 const insertRoom = `-- name: InsertRoom :one
-insert into rooms (floor_id, map_id, code, name, map_label, type, map_type, wing, schedulable, capacity, area, geometry)
-values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) returning id
+insert into rooms (floor_id, map_id, code, name, name_kk, name_en, map_label, type, map_type, wing, schedulable, capacity, area, geometry)
+values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) returning id
 `
 
 type InsertRoomParams struct {
@@ -152,6 +152,8 @@ type InsertRoomParams struct {
 	MapID       string
 	Code        string
 	Name        string
+	NameKk      string
+	NameEn      string
 	MapLabel    string
 	Type        RoomType
 	MapType     string
@@ -168,6 +170,8 @@ func (q *Queries) InsertRoom(ctx context.Context, arg InsertRoomParams) (string,
 		arg.MapID,
 		arg.Code,
 		arg.Name,
+		arg.NameKk,
+		arg.NameEn,
 		arg.MapLabel,
 		arg.Type,
 		arg.MapType,

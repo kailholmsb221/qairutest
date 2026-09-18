@@ -475,13 +475,13 @@ func TestAdminAndRealtime(t *testing.T) {
 	if r := call(t, "POST", "/api/v1/admin/overrides", map[string]any{"kind": "reassign_teacher", "date": "2026-09-15", "lessonId": t2.LessonId.String(), "newTeacherId": target.Teacher.Id.String()}, key); r.status != 201 {
 		t.Fatalf("reassign: %d %s", r.status, r.body)
 	}
-	if r := call(t, "POST", "/api/v1/admin/overrides", map[string]any{"kind": "extra", "date": "2026-09-15", "courseCode": "OPEN100", "roomCode": "103", "teacherId": target.Teacher.Id.String(), "slotIdx": 9, "groups": []string{target.Groups[0]}, "note": "Гостевая лекция"}, key); r.status != 201 {
+	if r := call(t, "POST", "/api/v1/admin/overrides", map[string]any{"kind": "extra", "date": "2026-09-15", "courseCode": "OPEN100", "roomCode": "101", "teacherId": target.Teacher.Id.String(), "slotIdx": 9, "groups": []string{target.Groups[0]}, "note": "Гостевая лекция"}, key); r.status != 201 {
 		t.Fatalf("extra: %d %s", r.status, r.body)
 	}
 	final := decode[httpapi.Snapshot](t, call(t, "GET", "/api/v1/buildings/A/board?at=2026-09-15T16:00:00%2B05:00", nil, nil))
 	foundExtra := false
 	for _, s := range final.Now {
-		if s.Status == "extra" && s.CourseCode == "OPEN100" && s.RoomCode == "103" {
+		if s.Status == "extra" && s.CourseCode == "OPEN100" && s.RoomCode == "101" {
 			foundExtra = true
 		}
 	}

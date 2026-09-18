@@ -8,6 +8,7 @@ import { api } from '@/lib/api/client';
 import { useBoardStore, selectRoom } from '@/lib/store/boardStore';
 import { useUiStore } from '@/lib/store/uiStore';
 import { roomIdentity, vmRoomByCode } from '@/lib/vector-map';
+import { useRoomName } from '@/lib/room-name';
 import { useNow, useTimeStore } from '@/features/time/useNow';
 import { deriveProgress, formatCountdown, formatTime } from '@/features/time/derive';
 import { StatusPill } from '@/components/board/StatusPill';
@@ -52,6 +53,7 @@ function Content({ code }: { code: string }) {
   const setFilters = useUiStore((s) => s.setFilters);
   const id = roomIdentity(code);
   const vm = vmRoomByCode(code);
+  const name = useRoomName()(code);
   const { data: day } = useQuery({
     queryKey: ['room-day', code, date],
     queryFn: () => api.roomDay(code, date && date !== '1970-01-01' ? date : undefined),
@@ -71,8 +73,8 @@ function Content({ code }: { code: string }) {
         <span className="room-swatch" style={{ background: swatch }} aria-hidden />
         <div style={{ minWidth: 0, flex: 1 }}>
           <div className="room-code">{id.schedulable ? code : id.mapLabel}</div>
-          <div style={{ color: 'var(--text-dim)' }}>{id.name}</div>
-          {id.mapLabel !== id.name && id.mapLabel !== code && <div style={{ color: 'var(--text-faint)', fontSize: 12 }}>{t('onPlan', { label: id.mapLabel })}</div>}
+          <div style={{ color: 'var(--text-dim)' }}>{name}</div>
+          {id.mapLabel !== name && id.mapLabel !== code && <div style={{ color: 'var(--text-faint)', fontSize: 12 }}>{t('onPlan', { label: id.mapLabel })}</div>}
         </div>
         <button type="button" className="btn icon" onClick={() => selectRoomCode(null)} aria-label={t('close')} data-testid="room-panel-close">
           ✕

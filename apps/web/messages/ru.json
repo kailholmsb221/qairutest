@@ -15,7 +15,8 @@
     "odd": "нечёт.",
     "even": "чёт.",
     "simulated": "SIMULATED",
-    "busyOnFloor": "{n} занято"
+    "busyOnFloor": "{n} занято",
+    "busyAll": "{n} занято"
   },
   "board": {
     "now": "СЕЙЧАС",
@@ -85,7 +86,13 @@
     },
     "notSchedulable": "помещение без расписания",
     "conflict": "конфликт",
-    "clickToFocus": "Клик — открыть этаж"
+    "clickToFocus": "Клик — открыть этаж",
+    "explodedHint": "разнесённый вид · нажмите на плиту, чтобы приблизить",
+    "focusHint": "клик по аудитории — карточка",
+    "backToAll": "Esc — все этажи",
+    "floorTag": "F{n}",
+    "busyShort": "занято {n}",
+    "busyBar": "занято {busy} из {total}"
   },
   "room": {
     "type": "Тип",

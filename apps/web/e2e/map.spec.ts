@@ -20,7 +20,7 @@ test('floor tab focuses a floor, room click opens the detail panel, keyboard wor
   await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
   await expect(page.getByTestId('room-panel')).toBeVisible();
   await expect(page.getByTestId('room-panel')).toContainText('101');
-  await expect(page.getByTestId('room-panel')).toContainText('Учебный класс');
+  await expect(page.getByTestId('room-panel')).toContainText('Учебная лаборатория');
   // rooms are keyboard focusable buttons with an aria-label
   await expect(room).toHaveAttribute('role', 'button');
   await expect(room).toHaveAttribute('tabindex', '0');

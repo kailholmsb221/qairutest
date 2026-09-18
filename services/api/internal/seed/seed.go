@@ -97,7 +97,7 @@ func generate(ctx context.Context, q *db.Queries, b mapdata.Building, clk clock.
 				cap = &c
 			}
 			id, err := q.InsertRoom(ctx, db.InsertRoomParams{
-				FloorID: floorID, MapID: rm.ID, Code: rm.Code, Name: rm.Name, MapLabel: rm.MapLabel,
+				FloorID: floorID, MapID: rm.ID, Code: rm.Code, Name: rm.Name, NameKk: rm.Names["kk"], NameEn: rm.Names["en"], MapLabel: rm.MapLabel,
 				Type: db.RoomType(rm.Type), MapType: rm.MapType, Wing: db.Wing(rm.Wing), Schedulable: rm.Schedulable,
 				Capacity: cap, Area: rm.Area, Geometry: geom,
 			})

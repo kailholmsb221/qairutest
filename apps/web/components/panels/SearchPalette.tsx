@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useUiStore } from '@/lib/store/uiStore';
 import { useHighlighter, useSearch } from '@/features/search/useSearch';
 import { roomIdentity } from '@/lib/vector-map';
+import { useRoomName } from '@/lib/room-name';
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 
@@ -24,6 +25,7 @@ export function SearchPalette() {
   const [q, setQ] = useState('');
   const { result, loading } = useSearch(q);
   const highlightBy = useHighlighter();
+  const roomName = useRoomName();
 
   useEffect(() => {
     if (!open) setQ('');
@@ -74,10 +76,11 @@ export function SearchPalette() {
               <CommandGroup heading={t('rooms')}>
                 {result.rooms.map((r) => {
                   const id = roomIdentity(r.code);
+                  const name = id ? roomName(r.code) : r.name;
                   return (
-                    <CommandItem key={`r-${r.code}`} value={`room:${r.code}`} onSelect={() => choose('room', r.code, `${id?.schedulable ? r.code + ' · ' : ''}${r.name}`, r.floor)} data-testid="search-item">
-                      <b className="mono">{id?.schedulable ? r.code : id?.mapLabel ?? r.code}</b>
-                      <span>{r.name}</span>
+                    <CommandItem key={`r-${r.code}`} value={`room:${r.code}`} onSelect={() => choose('room', r.code, `${id?.schedulable ? r.code + ' · ' : ''}${name}`, r.floor)} data-testid="search-item">
+                      <b className="mono">{r.code}</b>
+                      <span>{name}</span>
                       <span className="ci-kind">
                         {t('kind.room')} · {r.floor}
                       </span>

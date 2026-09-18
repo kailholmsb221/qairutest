@@ -11,8 +11,8 @@ insert into buildings (code, name, timezone) values ($1, $2, $3) returning id;
 insert into floors (building_id, number, plan_key, name) values ($1, $2, $3, $4) returning id;
 
 -- name: InsertRoom :one
-insert into rooms (floor_id, map_id, code, name, map_label, type, map_type, wing, schedulable, capacity, area, geometry)
-values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) returning id;
+insert into rooms (floor_id, map_id, code, name, name_kk, name_en, map_label, type, map_type, wing, schedulable, capacity, area, geometry)
+values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) returning id;
 
 -- name: InsertTeacher :one
 insert into teachers (full_name, short_name, department) values ($1, $2, $3) returning id;
